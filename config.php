@@ -51,7 +51,7 @@ function init_db() :void {
         id INT AUTO_INCREMENT PRIMARY KEY,
         winner TINYINT NOT NULL,
         FOREIGN KEY (winner) REFERENCES leaders(id),
-        loser INT NOT NULL,
+        loser TINYINT NOT NULL,
         FOREIGN KEY (loser) REFERENCES leaders(id),
         LeandreWon BOOL NOT NULL
     );');
