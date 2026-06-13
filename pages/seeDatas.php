@@ -24,6 +24,7 @@ try {
     <title>Parties SWU, Voir les données</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/seeDatas.css">
+    <script src="/js/seeDatas.js" defer></script>
 </head>
 <body>
     <button class="btn btn2" type="button" id="back-btn">BACK</button>

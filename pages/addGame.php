@@ -24,6 +24,7 @@ try {
     <title>Parties SWU, Ajouter une partie</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/addGame.css">
+    <script src="/js/addGame.js" defer></script>
 </head>
 <body>
     <button class="btn btn2" type="button" id="back-btn">BACK</button>
