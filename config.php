@@ -60,26 +60,10 @@ function init_db() :void {
 
     $leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
     if ((int) $leaders['total'] === 0) {
-        $leader_names = [
-            1 => 'Directeur Krennic',
-            2 => 'Iden Versio',
-            3 => 'Chewbacca',
-            4 => 'Chirrut Îmwe',
-            5 => 'Luke Skywalker',
-            6 => 'Empeureur Palpatine',
-            7 => 'Grand Moff Tarkin',
-            8 => 'Hera Syndulla',
-            9 => 'Leia Organa',
-            10 => 'Dark Vador',
-            11 => 'Grand Inquisiteur',
-            12 => 'IG-88',
-            13 => 'Cassian Andor',
-            14 => 'Sabine Wren',
-            15 => 'Boba Fett',
-            16 => 'Grand Amiral Thrawn',
-            17 => 'Han Solo',
-            18 => 'Jyn Erso'
-        ];
+        // Lire la liste des leaders depuis /datas.json
+        $datas = file_get_contents('/datas.json');
+        $decoded_datas = json_decode($datas, false);
+        $leader_names = $decoded_datas->leaders;
         foreach ($leader_names as $id => $name) {
             $stmt = $pdo->prepare('INSERT INTO leaders (id, name) VALUES (:id, :name)');
             $stmt->execute([

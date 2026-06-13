@@ -14,6 +14,11 @@ try {
     echo '<div class="error">' . htmlspecialchars($error->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
     exit;
 }
+
+// Obtenir la liste des leaders depuis /datas.json
+$datas = file_get_contents('/datas.json');
+$decoded_datas = json_decode($datas, false);
+$leader_names = $decoded_datas->leaders;
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +33,26 @@ try {
 </head>
 <body>
     <button class="btn btn2" type="button" id="back-btn">BACK</button>
-    Oui, ca marche. (TODO: à virer);
+    <form action="/traitement.php" method="POST">
+        <select name="winner" id="winner">
+            <?php
+            foreach ($leader_names as $id => $name) {
+                echo "<option value=\"$id\">$name</option>";
+            }
+            ?>
+        </select>
+        <select name="loser" id="loser">
+            <?php
+            foreach ($leader_names as $id => $name) {
+                echo "<option value=\"$id\">$name</option>";
+            }
+            ?>
+        </select>
+        <input type="radio" name="winningPlayer" id="Léandre" value="Léandre">
+            <label for="Leandre">Léandre</label>
+        <input type="radio" name="winningPlayer" id="Lancelot" value="Lancelot">
+            <label for="Lancelot">Lancelot</label>
+        <button type="submit" id="submitBtn" class="btn btn3">Ajouter la partie</button>
+    </form>
 </body>
 </html>

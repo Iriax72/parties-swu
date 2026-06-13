@@ -3,3 +3,37 @@
     top: 20px;
     left: 20px;
 }
+
+form {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+    "selW selL"
+    "rad1 rad2"
+    "btn btn";
+}
+
+#winner {grid-area: selW;}
+#loser {grid-area: selL;}
+
+#leandre {grid-area: rad1;}
+#lancelot {grid-area: rad2;}
+
+#submitBtn {grid-area: btn;}
+
+form select {
+    margin: 50px;
+    /*TODO: à completer*/
+}
+
+/*
+form input {
+    TODO
+}
+*/
+
+form label {
+    font-size: 1rem;
+    /*TODO: à completer*/
+}
