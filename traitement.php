@@ -1,13 +1,4 @@
 <?php
-// Fonction utilitaire
-function logInJs (string $message) :void {
-    $output = $message;
-    if (isarray($output)) {
-        $output = implode(',', $output);
-    }
-    echo "<script>console.log('log depuis php: $message');</script>";
-}
-
 // Vérifier que tous les champs sont remplis
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (
@@ -15,12 +6,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         || !isset($_POST['loser'])
         || !isset($_POST['winningPlayer'])
     ) {
-        logInJs("
+        echo "
             Formulaire incomplet reçu par traitement.php:
             \nwinner: {$_POST['winner']}
             \nloser: {$_POST['loser']}
             \nwinningPlayer: {$_POST['winningPlayer']}.
-        ");
+        ";
         exit;
     }
 }
@@ -32,5 +23,10 @@ require_once __DIR__ . '/config.php';
 $pdo = get_db_connection();
 
 // Insérer les nouvelles données dans la db
-$stmt = $pdo->prepare('INSERT INTO games (winner, loser, LeandreWon) VALUES (?, ?, ?);');
-$stmt->execute([$winner, $loser, $LeandreWon]);
+try {
+    $stmt = $pdo->prepare('INSERT INTO games (winner, loser, LeandreWon) VALUES (?, ?, ?);');
+    $stmt->execute([$winner, $loser, $LeandreWon]);
+    header('Location: /pages/addGame.php');
+} catch (Throwable $error) {
+    echo "Erreur lors de l'insertion de la partie: $error";
+}

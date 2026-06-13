@@ -19,6 +19,8 @@ try {
 $datas = file_get_contents('/datas.json');
 $decoded_datas = json_decode($datas, false);
 $leader_names = $decoded_datas->leaders;
+// test:
+echo $leader_names;
 ?>
 
 <!DOCTYPE html>
