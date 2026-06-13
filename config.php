@@ -49,7 +49,7 @@ function init_db() :void {
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        winner INT NOT NULL,
+        winner TINYINT NOT NULL,
         FOREIGN KEY (winner) REFERENCES leaders(id),
         loser INT NOT NULL,
         FOREIGN KEY (loser) REFERENCES leaders(id),
@@ -62,18 +62,22 @@ function init_db() :void {
     if ((int) $leaders['total'] === 0) {
         $leader_names = [
             1 => 'Directeur Krennic',
+            2 => 'Iden Versio',
             3 => 'Chewbacca',
             4 => 'Chirrut Îmwe',
             5 => 'Luke Skywalker',
             6 => 'Empeureur Palpatine',
             7 => 'Grand Moff Tarkin',
+            8 => 'Hera Syndulla',
             9 => 'Leia Organa',
             10 => 'Dark Vador',
             11 => 'Grand Inquisiteur',
             12 => 'IG-88',
+            13 => 'Cassian Andor',
             14 => 'Sabine Wren',
             15 => 'Boba Fett',
             16 => 'Grand Amiral Thrawn',
+            17 => 'Han Solo',
             18 => 'Jyn Erso'
         ];
         foreach ($leader_names as $id => $name) {
