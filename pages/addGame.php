@@ -6,14 +6,12 @@ Permet d'ajouter des parties à la db
 */
 
 // Vérifie que la db soit correctement initialisée pour le cas où cette page ait directement été appelée sans passer par l'index
-require_once '/config.php';
+require_once __DIR__ . '/../config.php';
 try {
     init_db();
 } catch (Throwable $error) {
-    echo "
-        <link rel=\"stylesheet\" href=\"/css/main.js\">\n
-        <div class=\"error\">$error</div>
-    ";
+    echo '<link rel="stylesheet" href="/css/main.css">';
+    echo '<div class="error">' . htmlspecialchars($error->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
     exit;
 }
 ?>

@@ -47,7 +47,7 @@ function init_db() :void {
     );');
 
     $pdo->exec('
-    CREATE TABLE IF NOT EXIST games (
+    CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
         winner INT NOT NULL,
         FOREIGN KEY (winner) REFERENCES leaders(id),
@@ -58,8 +58,8 @@ function init_db() :void {
 
     // Remplir les tables
 
-    $leaders = $pdo->query('SELECT * FROM leaders');
-    if (count($leaders) === 0) {
+    $leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
+    if ((int) $leaders['total'] === 0) {
         $leader_names = [
             1 => 'Directeur Krennic',
             3 => 'Chewbacca',
@@ -77,7 +77,11 @@ function init_db() :void {
             18 => 'Jyn Erso'
         ];
         foreach ($leader_names as $id => $name) {
-            $pdo->exec("INSERT INTO leaders (id, name) VALUES ($id, $name)");
+            $stmt = $pdo->prepare('INSERT INTO leaders (id, name) VALUES (:id, :name)');
+            $stmt->execute([
+                ':id' => $id,
+                ':name' => $name,
+            ]);
         }
     }
 }
