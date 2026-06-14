@@ -35,11 +35,13 @@ backBtn.addEventListener('click', () => {
 });
 
 leadersWinrateBtn.addEventListener('click', () => {
-    createPopup(['Classement des leaders par winrate:']);
+    const popup = createPopup(['Classement des leaders par winrate:']);
+    document.addChild(popup);
 });
 
 playersWinrateBtn.addEventListener('click', () => {
-    createPopup(['Winrate des joueurs:'])
+    const popup = createPopup(['Winrate des joueurs:'])
+    document.addChild(popup);
 });
 
 searchGamesBtn.addEventListener('click', () => {
