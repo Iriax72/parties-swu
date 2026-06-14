@@ -44,12 +44,3 @@ form label {
     color: #ee5555;
     /*TODO: à completer*/
 }
-
-form button {
-    width: 60vw;
-    height: 25vh;
-    background-color: #ee5555;
-    border-radius: 2px;
-    color: black;
-    font-size: 1.65rem;
-}
