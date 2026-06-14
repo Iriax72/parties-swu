@@ -5,7 +5,7 @@
 }
 
 form {
-    margin: 10vw;
+    margin: 5vw;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, 1fr);
@@ -25,12 +25,13 @@ form {
 #submitBtn {grid-area: btn;}
 
 form select {
-    min-width: 250px;
-    height: 100px;
+    min-width: 200px;
+    height: 60px;
     margin: 50px;
     border: 5px solid #ee5555;
     border-radius: 4px;
-    /*TODO: à completer*/
+    font-size: 1.4rem;
+    color: #ee5555;
 }
 
 /*
@@ -40,7 +41,7 @@ form input {
 */
 
 form label {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #ee5555;
     /*TODO: à completer*/
 }
