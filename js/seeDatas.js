@@ -35,13 +35,33 @@ backBtn.addEventListener('click', () => {
 });
 
 leadersWinrateBtn.addEventListener('click', () => {
-    const popup = createPopup(['Classement des leaders par winrate:']);
+    const popup = createPopup(['Classement des leaders par winrate:', 'Chargement des données...']);
     document.body.append(popup);
+    fetch('/api.php?action=get_leaders_winrate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json)
+    .then(data => {
+        alert(data);
+    });
 });
 
 playersWinrateBtn.addEventListener('click', () => {
-    const popup = createPopup(['Winrate des joueurs:'])
+    const popup = createPopup(['Winrate des joueurs:', 'Chargement des données...'])
     document.body.append(popup);
+    fetch('/api.php?action=get_players_winrate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data);
+    });
 });
 
 searchGamesBtn.addEventListener('click', () => {
