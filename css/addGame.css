@@ -25,9 +25,11 @@ form {
 #submitBtn {grid-area: btn;}
 
 form select {
+    min-width: 250px;
+    height: 100px;
     margin: 50px;
     border: 5px solid #ee5555;
-    border-radius: 2px;
+    border-radius: 4px;
     /*TODO: à completer*/
 }
 
@@ -41,4 +43,13 @@ form label {
     font-size: 1rem;
     color: #ee5555;
     /*TODO: à completer*/
+}
+
+form button {
+    width: 60vw;
+    height: 25vh;
+    background-color: #ee5555;
+    border-radius: 2px;
+    color: black;
+    font-size: 1.65rem;
 }
