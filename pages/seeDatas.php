@@ -28,6 +28,8 @@ try {
 </head>
 <body>
     <button class="btn btn2" type="button" id="back-btn">BACK</button>
-    Oui, ça marche (TODO: virer ça)
+    <button class="btn btn3" type="button" id="leaders-winrate-btn">Classement des leaders par winrate</button>
+    <button class="btn btn3" type="button" id="players-winrate-btn">Classement des joueurs par winrate</button>
+    <button class="btn btn3" type="button" id="search-games-btn">Rechercher des parties</button>
 </body>
 </html>

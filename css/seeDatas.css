@@ -3,3 +3,28 @@
     top: 20px;
     left: 20px;
 }
+
+body {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    grid-template-areas: 
+    "leaders players"
+    "search search";
+}
+
+#leaders-winrate-btn {grid-area: leaders;}
+#players-winrate-btn {grid-area: players;}
+#search-games-btn {grid-area: search;}
+
+.popup {
+    margin: 5vw;
+    padding: 30px;
+    background-color: blueviolet;
+    border: 8px solid yellow;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 1.5rem;
+    color: yellow;
+}
