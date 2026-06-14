@@ -60,8 +60,8 @@ function init_db() :void {
 
     $leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
     if ((int) $leaders['total'] === 0) {
-        // Lire la liste des leaders depuis /datas.json
-        $datas = file_get_contents('/datas.json');
+        // Lire la liste des leaders depuis ./datas.json
+        $datas = file_get_contents('./datas.json');
         $decoded_datas = json_decode($datas, false);
         $leader_names = $decoded_datas->leaders;
         foreach ($leader_names as $id => $name) {
