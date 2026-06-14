@@ -6,7 +6,7 @@
 const backBtn = document.querySelector("#back-btn");
 const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
 const playersWinrateBtn = document.querySelector('#players-winrate-btn');
-const searchGamesBtn = document.quetySelector('#search-games-btn');
+const searchGamesBtn = document.querySelector('#search-games-btn');
 
 // Fonctions utilitaires
 function createPopup (content) {
@@ -23,7 +23,7 @@ function createPopup (content) {
     popup.append(crossBtn);
 
     content.forEach((element) => {
-        popup.append(element);
+        popup.append(element); // TODO : sécuriser ça contre le XSS
     });
 
     return popup;
@@ -36,12 +36,12 @@ backBtn.addEventListener('click', () => {
 
 leadersWinrateBtn.addEventListener('click', () => {
     const popup = createPopup(['Classement des leaders par winrate:']);
-    document.append(popup);
+    document.body.append(popup);
 });
 
 playersWinrateBtn.addEventListener('click', () => {
     const popup = createPopup(['Winrate des joueurs:'])
-    document.append(popup);
+    document.body.append(popup);
 });
 
 searchGamesBtn.addEventListener('click', () => {
