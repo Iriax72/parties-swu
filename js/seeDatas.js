@@ -45,7 +45,7 @@ leadersWinrateBtn.addEventListener('click', () => {
     })
     .then(response => response.json)
     .then(data => {
-        alert(data);
+        alert(json_decode(data));
     });
 });
 
@@ -60,7 +60,7 @@ playersWinrateBtn.addEventListener('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        alert(data);
+        alert(json_decode(data));
     });
 });
 
