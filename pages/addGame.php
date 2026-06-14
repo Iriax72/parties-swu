@@ -15,8 +15,8 @@ try {
     exit;
 }
 
-// Obtenir la liste des leaders depuis ./datas.json
-$datas = file_get_contents('./datas.json');
+// Obtenir la liste des leaders depuis le JSON du projet
+$datas = file_get_contents(__DIR__ . '/../datas.json');
 $decoded_datas = json_decode($datas, false);
 $leader_names = $decoded_datas->leaders;
 ?>

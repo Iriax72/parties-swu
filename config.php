@@ -56,12 +56,12 @@ function init_db() :void {
         LeandreWon BOOL NOT NULL
     );');
 
-    // Remplir les tables
+    // Remplir les tables si elles sont vides
 
     $leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
     if ((int) $leaders['total'] === 0) {
-        // Lire la liste des leaders depuis ./datas.json
-        $datas = file_get_contents('./datas.json');
+        // Lire la liste des leaders depuis le JSON du projet
+        $datas = file_get_contents(__DIR__ . '/datas.json');
         $decoded_datas = json_decode($datas, false);
         $leader_names = $decoded_datas->leaders;
         foreach ($leader_names as $id => $name) {
