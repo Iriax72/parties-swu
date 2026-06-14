@@ -22,7 +22,8 @@ body {
     top: 50vh;
     left: 50vw;
     transform: translate(-50%, -50%);
-    margin: 5vw;
+    width: 90vw;
+    height: 90vh;
     padding: 30px;
     background-color: blueviolet;
     border: 8px solid yellow;
