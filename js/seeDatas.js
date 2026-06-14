@@ -20,10 +20,10 @@ function createPopup (content) {
     crossBtn.addEventListener('click', () => {
         popup.remove();
     });
-    popup.addChild(crossBtn);
+    popup.append(crossBtn);
 
     content.forEach((element) => {
-        popup.addChild(element);
+        popup.append(element);
     });
 
     return popup;
@@ -36,12 +36,12 @@ backBtn.addEventListener('click', () => {
 
 leadersWinrateBtn.addEventListener('click', () => {
     const popup = createPopup(['Classement des leaders par winrate:']);
-    document.addChild(popup);
+    document.append(popup);
 });
 
 playersWinrateBtn.addEventListener('click', () => {
     const popup = createPopup(['Winrate des joueurs:'])
-    document.addChild(popup);
+    document.append(popup);
 });
 
 searchGamesBtn.addEventListener('click', () => {
