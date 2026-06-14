@@ -5,6 +5,7 @@
 }
 
 form {
+    margin: 10vw;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, 1fr);
@@ -12,6 +13,7 @@ form {
     "selW selL"
     "rad1 rad2"
     "btn btn";
+    background-color: black;
 }
 
 #winner {grid-area: selW;}
@@ -24,6 +26,8 @@ form {
 
 form select {
     margin: 50px;
+    border: 5px solid #ee5555;
+    border-radius: 2px;
     /*TODO: à completer*/
 }
 
@@ -35,5 +39,6 @@ form input {
 
 form label {
     font-size: 1rem;
+    color: #ee5555;
     /*TODO: à completer*/
 }

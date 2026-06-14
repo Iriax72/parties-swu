@@ -19,8 +19,6 @@ try {
 $datas = file_get_contents('/datas.json');
 $decoded_datas = json_decode($datas, false);
 $leader_names = $decoded_datas->leaders;
-// test:
-echo $leader_names;
 ?>
 
 <!DOCTYPE html>
@@ -56,5 +54,6 @@ echo $leader_names;
             <label for="Lancelot">Lancelot</label>
         <button type="submit" id="submitBtn" class="btn btn3">Ajouter la partie</button>
     </form>
+    <?= $leader_names; // Test?>
 </body>
 </html>
