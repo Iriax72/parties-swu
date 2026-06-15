@@ -32,7 +32,7 @@ $leader_names = $decoded_datas->leaders;
     <script src="/js/searchGame.js"></script>
 </head>
 <body>
-    <button type="button" id="back-btn">BACK</button>
+    <button type="button" id="back-btn" class="btn btn2">BACK</button>
     <form class="form">
         <label for="leader1" class="label">Selectionner un leader</label>
         <select name="leader1" id="select1" class="select">

@@ -51,7 +51,9 @@ function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
     elements.forEach(element => {
-        box.textContent += element; // TODO : sécuriser contre le XSS
+        const span = document.createElement('span');
+        span.textContent = String(element);
+        box.append(span);
     });
     return box;
 }
@@ -63,31 +65,34 @@ function createBox(elements) {
  * @returns {boolean} false en cas d'erreur, true dans les autres cas
  */
 function requestApi(action, params = {}, callback = (data) => { }) {
-    const uri = `/api?action=${action}`;
-    for (let i = 0 ; i < params.length ; i++) {
-        uri = uri.concat(`&${params.keys()[i]}=${params[i]}`);
+    if (typeof params === 'function') {
+        callback = params;
+        params = {};
     }
-    fetch(uri, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            callback(data);
-            return true;
-        } else {
-            const error = data.error ?? "L'api n'a pas spécifié l'erreur";
-            alert("Erreur lors de la requete: " + error);
-            return false;
-        }
-    })
-    .catch(error => {
-        alert('Erreur lors de la requete: ' + error.message);
-        return false;
+    let uri = `/api.php?action=${encodeURIComponent(action)}`;
+    Object.keys(params).forEach(key => {
+        uri += `&${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
     });
+
+    return fetch(uri, { method: 'GET' })
+        .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                callback(data);
+                return true;
+            } else {
+                const error = data.error ?? "L'api n'a pas spécifié l'erreur";
+                alert("Erreur lors de la requete: " + error);
+                return false;
+            }
+        })
+        .catch(error => {
+            alert('Erreur lors de la requete: ' + error.message);
+            return false;
+        });
 }
 
 /**
@@ -120,7 +125,7 @@ leadersWinrateBtn.addEventListener('click', () => {
         const sortedWinrates = data.winrates
             .map((winrate, index) => ({ winrate, index }))
             .filter((item) => item.winrate !== -1)
-            .toSorted((a, b) => b.winrate - a.winrate);
+            .sort((a, b) => b.winrate - a.winrate);
         for (const item of sortedWinrates) {
             const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
             const box = createBox([
