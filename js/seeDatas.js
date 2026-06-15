@@ -24,6 +24,7 @@ function createPopup (content) {
 
     content.forEach((element) => {
         popup.append(element); // TODO : sécuriser ça contre le XSS
+        popup.append(document.createElement('br'));
     });
 
     return popup;
@@ -43,9 +44,9 @@ leadersWinrateBtn.addEventListener('click', () => {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json)
+    .then(response => response.json())
     .then(data => {
-        alert(json_decode(data));
+        alert(JSON.stringify(data, null, 2));
     });
 });
 
@@ -60,7 +61,7 @@ playersWinrateBtn.addEventListener('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        alert(json_decode(data));
+        alert(JSON.stringify(data, null, 2));
     });
 });
 
