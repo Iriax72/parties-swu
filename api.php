@@ -25,7 +25,7 @@ $pdo = get_db_connection();
 // Fonctions utilitaires
 function repeat($value, int $times) {
     $array = [];
-    for ($i = 0 ; $i < $value ; $i++) {
+    for ($i = 0 ; $i < $times ; $i++) {
         $array[] = $value;
     }
     return $array;
@@ -42,12 +42,6 @@ switch ($action) {
             exit;
         }
         $wins = repeat(0, 18);
-        $games = repeat(0, 18);
-        foreach ($games as $game) {
-            $winner = (int) $game['winner'];
-            $loser = (int) $game['loser'];
-            $wins[$winner - 1] ++;
-        }
         $gamesPlayed = repeat(0, 18);
         foreach ($games as $game) {
             $winner = (int) $game['winner'];
