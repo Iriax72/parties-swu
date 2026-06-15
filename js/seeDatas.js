@@ -109,26 +109,24 @@ leadersWinrateBtn.addEventListener('click', () => {
     waitingText.innerText = 'Chargement des données...';
     const popup = createPopup(['Classement des leaders par winrate:', waitingText]);
     document.body.append(popup);
-    datasPromise
-        .then(() => requestApi('/api.php?action=get_leaders_winrate', (data) => {
-            waitingText.remove();
-            const leaderNames = datas.leaders;
-            const sortedWinrates = data.winrates
-                .map((winrate, index) => ({ winrate, index }))
-                .filter((item) => item.winrate !== -1)
-                .toSorted((a, b) => b.winrate - a.winrate);
-
-            for (const item of sortedWinrates) {
-                const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
-                const box = createBox([
-                    leaderName,
-                    ' : ',
-                    String(Math.round(item.winrate * 100)),
-                    '%'
-                ]);
-                popup.append(box);
-            }
-        }));
+    datasPromise.then(() => requestApi('/api.php?action=get_leaders_winrate', (data) => {
+        waitingText.remove();
+        const leaderNames = datas.leaders;
+        const sortedWinrates = data.winrates
+            .map((winrate, index) => ({ winrate, index }))
+            .filter((item) => item.winrate !== -1)
+            .toSorted((a, b) => b.winrate - a.winrate);
+        for (const item of sortedWinrates) {
+            const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
+            const box = createBox([
+                leaderName,
+                ' : ',
+                String(Math.round(item.winrate * 100)),
+                '%'
+            ]);
+            popup.append(box);
+        }
+    }));
 });
 
 playersWinrateBtn.addEventListener('click', () => {
