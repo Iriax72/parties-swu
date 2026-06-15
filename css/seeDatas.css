@@ -2,6 +2,7 @@
     position: absolute;
     top: 20px;
     left: 20px;
+    font-size: 0.6rem;
 }
 
 body {
@@ -25,13 +26,14 @@ body {
     width: 90vw;
     height: 90vh;
     padding: 30px;
-    background-color: blueviolet;
-    border: 8px solid yellow;
+    background-color: #502090;
+    border: 8px solid #ee5555;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     font-size: 1.5rem;
-    color: yellow;
+    color: #ee5555;
 }
 
 .box {

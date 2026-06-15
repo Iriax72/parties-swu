@@ -1,7 +1,12 @@
+body {
+    background-color: #502090;
+}
+
 #back-btn {
     position: absolute;
     top: 20px;
     left: 20px;
+    font-size: 0.6rem;
 }
 
 form {
@@ -25,12 +30,12 @@ form {
 #submitBtn {grid-area: btn;}
 
 form select {
-    min-width: 200px;
+    min-width: 160px;
     height: 60px;
-    margin: 50px;
+    margin: 20px;
     border: 5px solid #ee5555;
     border-radius: 4px;
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: #ee5555;
 }
 
