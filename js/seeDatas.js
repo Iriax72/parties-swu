@@ -16,7 +16,7 @@ const datasPromise = (async () => {
         throw new Error(`Impossible de lire /datas.json: ${response.status}`);
     }
     return response.json();
-}).then((loadedDatas) => {
+})().then((loadedDatas) => {
     datas = loadedDatas;
     return loadedDatas;
 })
