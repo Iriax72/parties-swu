@@ -33,15 +33,15 @@ $leader_names = $decoded_datas->leaders;
 </head>
 <body>
     <button class="btn btn2" type="button" id="back-btn">BACK</button>
-    <form action="/traitement.php" method="POST">
-        <select name="winner" id="winner">
+    <form action="/traitement.php" method="POST" class="form">
+        <select name="winner" id="winner" class="select">
             <?php
             foreach ($leader_names as $id => $name) {
                 echo "<option value=\"$id\">$name</option>";
             }
             ?>
         </select>
-        <select name="loser" id="loser">
+        <select name="loser" id="loser" class="select">
             <?php
             foreach ($leader_names as $id => $name) {
                 echo "<option value=\"$id\">$name</option>";
@@ -49,9 +49,9 @@ $leader_names = $decoded_datas->leaders;
             ?>
         </select>
         <input type="radio" name="winningPlayer" id="Léandre" value="Léandre">
-            <label for="Leandre">Léandre</label>
+        <label for="Leandre" class="label">Léandre</label>
         <input type="radio" name="winningPlayer" id="Lancelot" value="Lancelot">
-            <label for="Lancelot">Lancelot</label>
+        <label for="Lancelot" class="label">Lancelot</label>
         <button type="submit" id="submitBtn" class="btn btn3">Ajouter la partie</button>
     </form>
 </body>

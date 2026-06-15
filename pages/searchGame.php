@@ -14,6 +14,11 @@ try {
     echo '<div class="error">' . htmlspecialschar($error->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
     exit;
 }
+
+// Obtenir la liste des leaders depuis /datas.json
+$datas = file_get_contents(__DIR__ . '/../datas.json');
+$decoded_datas = json_decode($datas);
+$leader_names = $decoded_datas->leaders;
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +32,32 @@ try {
     <script src="/js/searchGame.js"></script>
 </head>
 <body>
-    TODO: Mettre une page ici (En attendant ça marche)
+    <form class="form">
+        <label for="leader1" class="label">Selectionner un leader</label>
+        <select name="leader1" class="select">
+            <option value="all">tous</option>
+            <?php
+            foreach ($leader_names as $id => $name) {
+                echo "<option value=\"id\">$name</option>";
+            }
+            ?>
+        </select>
+        <input type="radio" name="winningLeader" id="l1won">
+        <label for="l1won" class="label">Parties gagnées par ce leader</label>
+        <br>
+        <label for="leader2" class="label">Selectionner un autre leader</label>
+        <select name="leader2" class="select">
+            <option value="all">tous</option>
+            <?php
+            foreach ($leader_names as $id => $name) {
+                echo "<option value=\"$id\">$name</option>";
+            }
+            ?>
+        </select>
+        <input type="radio" name="winningLeader" id="l2won">
+        <label for="l2won" class="label">Parties gagnées par ce leader</label>
+        <br><br><br>
+        <button type="submit" class="btn btn3">RECHERCHER</button>
+    </form>
 </body>
 </html>

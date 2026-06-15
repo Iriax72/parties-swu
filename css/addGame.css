@@ -11,8 +11,6 @@ body {
 }
 
 form {
-    margin: 5vw;
-    padding: 20px;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, 1fr);
@@ -20,7 +18,6 @@ form {
     "selW selL"
     "rad1 rad2"
     "btn btn";
-    background-color: black;
 }
 
 #winner {grid-area: selW;}
@@ -30,25 +27,3 @@ form {
 #lancelot {grid-area: rad2;}
 
 #submitBtn {grid-area: btn;}
-
-form select {
-    min-width: 160px;
-    height: 60px;
-    margin: 5px;
-    border: 5px solid #ee5555;
-    border-radius: 4px;
-    font-size: 1rem;
-    color: #ee5555;
-}
-
-/*
-form input {
-    TODO
-}
-*/
-
-form label {
-    font-size: 1.2rem;
-    color: #ee5555;
-    /*TODO: à completer*/
-}

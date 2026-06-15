@@ -11,6 +11,33 @@ body {
     justify-content: center;
 }
 
+/* Formulaires */
+.form {
+    margin: 5vw;
+    padding: 20px;
+    background-color: black;
+} 
+
+.select {
+    min-width: 160px;
+    height: 60px;
+    margin: 5px;
+    border: 5px solid #ee5555;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #ee5555;
+}
+/*
+form input {
+    TODO
+}
+*/
+.label {
+    font-size: 1.2rem;
+    color: #ee5555;
+    /* TODO: A completer*/
+}
+
 /* Boutons */
 .btn {
     margin: 30px;
