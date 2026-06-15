@@ -142,5 +142,5 @@ playersWinrateBtn.addEventListener('click', () => {
 });
 
 searchGamesBtn.addEventListener('click', () => {
-    //rediriger vers une page de requetes
+    window.location.assign('/pages/searchGame.php');
 });
