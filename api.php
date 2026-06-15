@@ -6,6 +6,7 @@ Renvoie tout en json
 actions possibles:
 - get_leaders_winrate
 - get_players_winrate
+- get_games
 todo passer par une action api pour ajouter les games a la db
 */
 
@@ -78,6 +79,48 @@ switch ($action) {
         $winrateLeandre = $games > 0 ? $victorys / $games : -1;
         $winrateLancelot = 1 - $winrateLeandre;
         echo json_encode(['success' => true, 'winrateLeandre' => $winrateLeandre, 'winrateLancelot' => $winrateLancelot]);
+        break;
+    
+    case 'get_games':
+        // Vérifier que la requete est correcte
+        if (isset($_REQUEST['winningLeader'])) {
+            $winningLeader = $_REQUEST['winningLeader'];
+            if ($winningLeader === 'l1won' && !isset($_REQUEST['leader1'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'parametres incompatibles']);
+                exit;
+            }
+            if ($winningLeader === 'l2won' && !isset($_REQUEST['leader2'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'parametres incompatibles']);
+                exit;
+            }
+        }
+        $request = 'SELECT winner, loser, LeandreWon FROM games WHERE 1=1';
+        if (isset($_REQUEST['leader1'])) {
+            $leader1 = (int) $_REQUEST['leader1'];
+            if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l1won') {
+                $request .= " AND winner = $leader1";
+            } else {
+                $request .= " AND (winner = $leader1 OR loser = $leader1)";
+            }
+        }
+        if (isset($_REQUEST['leader2'])) {
+            if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l2won') {
+                $request .= " AND winner = $leader2";
+            } else {
+                $request .= " AND (winner = $leader2 OR loser = $leader2)";
+            }
+        }
+        try {
+            $stmt = $pdo->query($request);
+            $games = $stmt->fetchAll();
+            echo json_encode(['success' => true, 'data' => $games]);
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => $error->getMessage()]);
+            exit;
+        }
         break;
     
     default:

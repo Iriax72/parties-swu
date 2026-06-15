@@ -57,32 +57,37 @@ function createBox(elements) {
 }
 
 /**
- * @param {string} uri - L'uri à qui faire la requête
+ * @param {string} action - L'action a requeter auores de l'api
+ * @param {Object} params - Les parametre à envoyer à l'api
  * @param {function} callback - Un callback à executer avec les données (dans la variable data)
  * @returns {boolean} false en cas d'erreur, true dans les autres cas
  */
-function requestApi(uri, callback = () => { }) {
+function requestApi(action, params = {}, callback = (data) => { }) {
+    const uri = `/api?action=${action}`;
+    for (let i = 0 ; i < params.length ; i++) {
+        uri = uri.concat(`&${params.keys()[i]}=${params[i]}`);
+    }
     fetch(uri, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                callback(data);
-                return true;
-            } else {
-                const error = data.error ?? "L'api n'a pas spécifié l'erreur";
-                alert("Erreur lors de la requete: " + error);
-                return false;
-            }
-        })
-        .catch(error => {
-            alert('Erreur lors de la requete: ' + error.message);
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            callback(data);
+            return true;
+        } else {
+            const error = data.error ?? "L'api n'a pas spécifié l'erreur";
+            alert("Erreur lors de la requete: " + error);
             return false;
-        });
+        }
+    })
+    .catch(error => {
+        alert('Erreur lors de la requete: ' + error.message);
+        return false;
+    });
 }
 
 /**
@@ -101,7 +106,7 @@ async function getFileContent(uri) {
 
 //EventListener
 backBtn.addEventListener('click', () => {
-    window.location.assign("/menu.php")
+    window.location.assign("/menu.php");
 });
 
 leadersWinrateBtn.addEventListener('click', () => {
@@ -109,7 +114,7 @@ leadersWinrateBtn.addEventListener('click', () => {
     waitingText.innerText = 'Chargement des données...';
     const popup = createPopup(['Classement des leaders par winrate:', waitingText]);
     document.body.append(popup);
-    datasPromise.then(() => requestApi('/api.php?action=get_leaders_winrate', (data) => {
+    datasPromise.then(() => requestApi('get_leaders_winrate', (data) => {
         waitingText.remove();
         const leaderNames = datas.leaders;
         const sortedWinrates = data.winrates
@@ -134,7 +139,7 @@ playersWinrateBtn.addEventListener('click', () => {
     waitingText.innerText = 'Chargement des données...';
     const popup = createPopup(['Winrate des joueurs:', waitingText])
     document.body.append(popup);
-    requestApi('/api.php?action=get_players_winrate', (data) => {
+    requestApi('get_players_winrate', (data) => {
         waitingText.remove();
         popup.append(createBox(['Léandre : ', String(Math.round(data.winrateLeandre * 100)), '%']));
         popup.append(createBox(['Lancelot : ', String(Math.round(data.winrateLancelot * 100)), '%']));

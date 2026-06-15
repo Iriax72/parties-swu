@@ -32,9 +32,10 @@ $leader_names = $decoded_datas->leaders;
     <script src="/js/searchGame.js"></script>
 </head>
 <body>
+    <button type="button" id="back-btn">BACK</button>
     <form class="form">
         <label for="leader1" class="label">Selectionner un leader</label>
-        <select name="leader1" class="select">
+        <select name="leader1" id="select1" class="select">
             <option value="all">tous</option>
             <?php
             foreach ($leader_names as $id => $name) {
@@ -46,7 +47,7 @@ $leader_names = $decoded_datas->leaders;
         <label for="l1won" class="label">Parties gagnées par ce leader</label>
         <br>
         <label for="leader2" class="label">Selectionner un autre leader</label>
-        <select name="leader2" class="select">
+        <select name="leader2" id="select2" class="select">
             <option value="all">tous</option>
             <?php
             foreach ($leader_names as $id => $name) {
@@ -56,8 +57,11 @@ $leader_names = $decoded_datas->leaders;
         </select>
         <input type="radio" name="winningLeader" id="l2won">
         <label for="l2won" class="label">Parties gagnées par ce leader</label>
+        <br>
+        <input type="radio" name="winningLeader" id="nobodyWon" checked>
+        <label for="nobodyWon" class="label">Chercher indépendament du gagant</label>
         <br><br><br>
-        <button type="submit" class="btn btn3">RECHERCHER</button>
+        <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
     </form>
 </body>
 </html>
