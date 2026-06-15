@@ -2,13 +2,28 @@
 /js/seeDatas
 */
 
-const leaders = JSON.parse(get_file_content('/datas.json'), (content) => {alert(content);});
-
 // Références DOM
 const backBtn = document.querySelector("#back-btn");
 const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
 const playersWinrateBtn = document.querySelector('#players-winrate-btn');
 const searchGamesBtn = document.querySelector('#search-games-btn');
+
+// Charger les datas depuis /datas.json
+let datas = null;
+const datasPromise = (async () => {
+    const response = await fetch('/datas.json');
+    if (!response.ok) {
+        throw new Error(`Impossible de lire /datas.json: ${response.status}`);
+    }
+    return response.json();
+}).then((loadedDatas) => {
+    datas = loadedDatas;
+    return loadedDatas;
+})
+.catch((error) => {
+    alert('Erreur lors du chargement des données: ' + error.message);
+    throw error;
+});
 
 // Fonctions utilitaires
 function createPopup(content) {
@@ -74,10 +89,14 @@ function requestApi(uri, callback = () => { }) {
  * @param {string} uri - L'uri du fichier à lire
  * @param {function} callback - Un callback à executer après la lecture
  */
-async function getFileContent(uri, callback) {
-    fetch(uri)
-        .then(response => response.text())
-        .then(fileContent => callback(fileContent));
+async function getFileContent(uri) {
+    const response = await fetch(uri);
+
+    if (!response.ok) {
+        throw new Error(`Impossible de lire ${uri}: ${response.status}`);
+    }
+
+    return response.text();
 }
 
 //EventListener
@@ -90,21 +109,26 @@ leadersWinrateBtn.addEventListener('click', () => {
     waitingText.innerText = 'Chargement des données...';
     const popup = createPopup(['Classement des leaders par winrate:', waitingText]);
     document.body.append(popup);
-    requestApi('/api.php?action=get_leaders_winrate', (data) => {
-        waitingText.remove();
-        const sorted_winrates = data.winrates.toSorted((a, b) => b - a);
-        for (let i = 0; i < sorted_winrates.length; i++) {
-            if (sorted_winrates[i] === -1) continue;
-            const box = createBox([
-                'leader ',
-                String(i + 1),
-                ' : ',
-                String(Math.round(sorted_winrates[i] * 100)),
-                '%'
-            ]);
-            popup.append(box);
-        }
-    });
+    datasPromise
+        .then(() => requestApi('/api.php?action=get_leaders_winrate', (data) => {
+            waitingText.remove();
+            const leaderNames = datas.leaders;
+            const sortedWinrates = data.winrates
+                .map((winrate, index) => ({ winrate, index }))
+                .filter((item) => item.winrate !== -1)
+                .toSorted((a, b) => b.winrate - a.winrate);
+
+            for (const item of sortedWinrates) {
+                const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
+                const box = createBox([
+                    leaderName,
+                    ' : ',
+                    String(Math.round(item.winrate * 100)),
+                    '%'
+                ]);
+                popup.append(box);
+            }
+        }));
 });
 
 playersWinrateBtn.addEventListener('click', () => {
