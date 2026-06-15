@@ -80,6 +80,7 @@ leadersWinrateBtn.addEventListener('click', () => {
     requestApi('/api.php?action=get_leaders_winrate', (data) => {
         waitingText.remove();
         for (let i = 0 ; i < data.winrates.length ; i++) {
+            if (data.winrates[i] === -1) continue;
             const box = createBox([
                 'leader ',
                 String(i + 1),

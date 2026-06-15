@@ -52,7 +52,7 @@ switch ($action) {
         }
         $winrates = repeat(0, 18);
         for ($i=0 ; $i < 18 ; $i++) {
-            $winrates[$i] = $gamesPlayed[$i] > 0 ? $wins[$i] / $gamesPlayed[$i] : 0;
+            $winrates[$i] = $gamesPlayed[$i] > 0 ? $wins[$i] / $gamesPlayed[$i] : -1;
         }
 
         echo json_encode(['success' => true, 'winrates' => $winrates]);
@@ -75,7 +75,7 @@ switch ($action) {
             }
             $games ++;
         }
-        $winrateLeandre = $games > 0 ? $victorys / $games : 0;
+        $winrateLeandre = $games > 0 ? $victorys / $games : -1;
         $winrateLancelot = 1 - $winrateLeandre;
         echo json_encode(['success' => true, 'winrateLeandre' => $winrateLeandre, 'winrateLancelot' => $winrateLancelot]);
         break;
