@@ -2,7 +2,7 @@
 /js/seeDatas
 */
 
-const leaders = JSOM.parse(get_file_content('/datas.json'));
+const leaders = JSON.parse(get_file_content('/datas.json'));
 //test 
 alert(leaders);
 
