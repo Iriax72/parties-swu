@@ -2,10 +2,7 @@
 /js/seeDatas
 */
 
-const leaders = JSON.parse(get_file_content('/datas.json'));
-//test 
-alert(leaders);
-
+const leaders = JSON.parse(get_file_content('/datas.json'), (content) => {alert(content);});
 
 // Références DOM
 const backBtn = document.querySelector("#back-btn");
@@ -14,7 +11,7 @@ const playersWinrateBtn = document.querySelector('#players-winrate-btn');
 const searchGamesBtn = document.querySelector('#search-games-btn');
 
 // Fonctions utilitaires
-function createPopup (content) {
+function createPopup(content) {
     // content can be an array of strings and/or HTML Nodes to add in the popup
     const popup = document.createElement('div');
     popup.classList.add('popup');
@@ -49,38 +46,38 @@ function createBox(elements) {
  * @param {function} callback - Un callback à executer avec les données (dans la variable data)
  * @returns {boolean} false en cas d'erreur, true dans les autres cas
  */
-function requestApi (uri, callback = ()=>{}) {
+function requestApi(uri, callback = () => { }) {
     fetch(uri, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            callback(data);
-            return true;
-        } else {
-            const error = data.error ?? "L'api n'a pas spécifié l'erreur";
-            alert("Erreur lors de la requete: " + error);
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                callback(data);
+                return true;
+            } else {
+                const error = data.error ?? "L'api n'a pas spécifié l'erreur";
+                alert("Erreur lors de la requete: " + error);
+                return false;
+            }
+        })
+        .catch(error => {
+            alert('Erreur lors de la requete: ' + error.message);
             return false;
-        }
-    })
-    .catch (error => {
-        alert('Erreur lors de la requete: ' + error.message);
-        return false;
-    });
+        });
 }
 
 /**
  * @param {string} uri - L'uri du fichier à lire
- * @param {function} callback - (Facultatif) Un callback à executer après la lecture
+ * @param {function} callback - Un callback à executer après la lecture
  */
 async function getFileContent(uri, callback) {
-    const result = await fetch(uri);
-    const toReturn = await result.text();
-    return callback ? callback(toReturn) : toReturn;
+    fetch(uri)
+        .then(response => response.text())
+        .then(fileContent => callback(fileContent));
 }
 
 //EventListener
@@ -96,7 +93,7 @@ leadersWinrateBtn.addEventListener('click', () => {
     requestApi('/api.php?action=get_leaders_winrate', (data) => {
         waitingText.remove();
         const sorted_winrates = data.winrates.toSorted((a, b) => b - a);
-        for (let i = 0 ; i < sorted_winrates.length ; i++) {
+        for (let i = 0; i < sorted_winrates.length; i++) {
             if (sorted_winrates[i] === -1) continue;
             const box = createBox([
                 'leader ',
