@@ -34,7 +34,7 @@ function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
     elements.forEach(element => {
-        box.innerText += element // TODO : sécuriser contre le XSS
+        box.textContent += element; // TODO : sécuriser contre le XSS
     });
     return box;
 }
@@ -79,8 +79,14 @@ leadersWinrateBtn.addEventListener('click', () => {
     document.body.append(popup);
     requestApi('/api.php?action=get_leaders_winrate', (data) => {
         waitingText.remove();
-        for (i = 0 ; i < data.length ; i++) {
-            const box = createBox(['leader_name: ', data[i]]);
+        for (let i = 0 ; i < data.winrates.length ; i++) {
+            const box = createBox([
+                'leader ',
+                String(i + 1),
+                ' : ',
+                String(Math.round(data.winrates[i] * 100)),
+                '%'
+            ]);
             popup.append(box);
         }
     });
@@ -93,10 +99,8 @@ playersWinrateBtn.addEventListener('click', () => {
     document.body.append(popup);
     requestApi('/api.php?action=get_players_winrate', (data) => {
         waitingText.remove();
-        for (i = 0 ; i < data.length ; i++) {
-            const box = createBox(['player_name: ', data[i]]);
-            popup.append(box);
-        }
+        popup.append(createBox(['Léandre : ', String(Math.round(data.winrateLeandre * 100)), '%']));
+        popup.append(createBox(['Lancelot : ', String(Math.round(data.winrateLancelot * 100)), '%']));
     });
 });
 
