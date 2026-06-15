@@ -54,8 +54,5 @@ $leader_names = $decoded_datas->leaders;
             <label for="Lancelot">Lancelot</label>
         <button type="submit" id="submitBtn" class="btn btn3">Ajouter la partie</button>
     </form>
-    <p style="color: black; backgroud-color: #55ff55; width: 100vw; height: 500px;">
-        <?= $leader_names; // Test?>
-    </p>
 </body>
 </html>

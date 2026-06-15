@@ -2,6 +2,11 @@
 /js/seeDatas
 */
 
+const leaders = JSOM.parse(get_file_content('/datas.json'));
+//test 
+alert(leaders);
+
+
 // Références DOM
 const backBtn = document.querySelector("#back-btn");
 const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
@@ -40,11 +45,12 @@ function createBox(elements) {
 }
 
 /**
- * @param {string} url - L'url à qui faire la requête
+ * @param {string} uri - L'uri à qui faire la requête
  * @param {function} callback - Un callback à executer avec les données (dans la variable data)
+ * @returns {boolean} false en cas d'erreur, true dans les autres cas
  */
-function requestApi (url, callback = ()=>{}) {
-    fetch(url, {
+function requestApi (uri, callback = ()=>{}) {
+    fetch(uri, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -65,6 +71,16 @@ function requestApi (url, callback = ()=>{}) {
         alert('Erreur lors de la requete: ' + error.message);
         return false;
     });
+}
+
+/**
+ * @param {string} uri - L'uri du fichier à lire
+ * @param {function} callback - (Facultatif) Un callback à executer après la lecture
+ */
+async function getFileContent(uri, callback) {
+    const result = await fetch(uri);
+    const toReturn = await result.text();
+    return callback ? callback(toReturn) : toReturn;
 }
 
 //EventListener
