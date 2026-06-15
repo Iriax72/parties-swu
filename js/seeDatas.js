@@ -79,13 +79,14 @@ leadersWinrateBtn.addEventListener('click', () => {
     document.body.append(popup);
     requestApi('/api.php?action=get_leaders_winrate', (data) => {
         waitingText.remove();
-        for (let i = 0 ; i < data.winrates.length ; i++) {
-            if (data.winrates[i] === -1) continue;
+        const sorted_winrates = data.winrates.toSorted((a, b) => b - a);
+        for (let i = 0 ; i < sorted_winrates.length ; i++) {
+            if (sorted_winrates[i] === -1) continue;
             const box = createBox([
                 'leader ',
                 String(i + 1),
                 ' : ',
-                String(Math.round(data.winrates[i] * 100)),
+                String(Math.round(sorted_winrates[i] * 100)),
                 '%'
             ]);
             popup.append(box);
