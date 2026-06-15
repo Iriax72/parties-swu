@@ -46,6 +46,7 @@ switch ($action) {
         foreach ($games as $game) {
             $winner = (int) $game['winner'];
             $loser = (int) $game['loser'];
+            $wins[$winner - 1] ++;
             $gamesPlayed[$winner - 1] ++;
             $gamesPlayed[$loser - 1] ++;
         }
