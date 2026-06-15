@@ -47,6 +47,9 @@ leadersWinrateBtn.addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
         alert(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        alert(`Erreur lors du chargement des leaders: ${error.message}`);
     });
 });
 
@@ -62,6 +65,9 @@ playersWinrateBtn.addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
         alert(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        alert(`Erreur lors du chargement des joueurs: ${error.message}`);
     });
 });
 
