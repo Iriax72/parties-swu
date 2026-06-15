@@ -1,5 +1,6 @@
 body {
     background-color: #502090;
+    padding-top: 50px;
 }
 
 #back-btn {
@@ -11,6 +12,7 @@ body {
 
 form {
     margin: 5vw;
+    padding: 20px;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, 1fr);
@@ -32,7 +34,7 @@ form {
 form select {
     min-width: 160px;
     height: 60px;
-    margin: 20px;
+    margin: 5px;
     border: 5px solid #ee5555;
     border-radius: 4px;
     font-size: 1rem;
