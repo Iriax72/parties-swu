@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 $winner = $_POST['winner'];
 $loser = $_POST['loser'];
-$LeandreWon = $_POST['winningPlayer'] === 'Léandre' ? true : false;
+$LeandreWon = (int) ($_POST['winningPlayer'] === 'Léandre');
 
 require_once __DIR__ . '/config.php';
 $pdo = get_db_connection();
@@ -27,6 +27,7 @@ try {
     $stmt = $pdo->prepare('INSERT INTO games (winner, loser, LeandreWon) VALUES (?, ?, ?);');
     $stmt->execute([$winner, $loser, $LeandreWon]);
     header('Location: /pages/addGame.php');
+    exit;
 } catch (Throwable $error) {
     echo "Erreur lors de l'insertion de la partie: $error";
 }
