@@ -27,22 +27,32 @@ function requestApi (action, params = {}, callback = (data) => { }) {
     });
 
     return fetch(uri, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                callback(data);
-                return true;
-            } else {
-                const error = data.error ?? "L'api n'a pas spécifié l'erreur";
-                alert('Erreur lors de la requete: ' + error);
-                return false;
+        .then(async response => {
+            const rawText = await response.text();
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${rawText || response.statusText}`);
+            }
+
+            try {
+                return JSON.parse(rawText);
+            } catch (error) {
+                throw new Error(`Réponse JSON invalide: ${rawText}`);
             }
         })
+        .then(data => {
+            if (data && data.success) {
+                callback(data);
+                return true;
+            }
+
+            const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
+            alert('Erreur lors de la requete: ' + error);
+            return false;
+        })
         .catch(error => {
-            alert('Erreur lors de la requete: ' + error.message);
+            console.error(error);
+            alert('Erreur lors de la requete: ' + (error.message || String(error)));
             return false;
         });
 }
@@ -81,9 +91,9 @@ submitBtn.addEventListener('click', (event) => {
     if (winningLeader !== 'not_specified') {
         params.winningLeader = winningLeader;
     }
-    requestApi('get_games', params, (data) => {
-        alert(JSON.stringify(data));
-        const games = JSON.parse(data);
+    requestApi('get_games', params, (response) => {
+        const games = Array.isArray(response.data) ? response.data : [];
+        alert('Parties trouvés :\n', games);
         // TODO terminer
     });
 })

@@ -21,7 +21,16 @@ if (!isset($_REQUEST['action'])) {
 }
 $action = $_REQUEST['action'];
 
-$pdo = get_db_connection();
+try {
+    $pdo = get_db_connection();
+} catch (Throwable $error) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Impossible de se connecter à la base de données: ' . $error->getMessage()
+    ]);
+    exit;
+}
 
 // Fonctions utilitaires
 function repeat($value, int $times) {
@@ -106,6 +115,7 @@ switch ($action) {
             }
         }
         if (isset($_REQUEST['leader2'])) {
+            $leader2 = $_REQUEST['leader2'];
             if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l2won') {
                 $request .= " AND winner = $leader2";
             } else {
