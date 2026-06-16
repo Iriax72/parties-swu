@@ -19,6 +19,17 @@ try {
 $datas = file_get_contents(__DIR__ . '/../datas.json');
 $decoded_datas = json_decode($datas);
 $leader_names = $decoded_datas->leaders;
+
+// Élement DOM
+function leader_select (string $name, string $id) {
+    $ret = "<select name=\"$name\" id=\"$id\" class=\"select\">";
+    $ret .= '<option value="all">tous les leaders</option>';
+    foreach ($leader_names as $l_id => $l_name) {
+        $ret .= "<option value=\"$l_id\">$l_name</option>";
+    }
+    $ret .= '</select>';
+    return $ret;
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,28 +44,15 @@ $leader_names = $decoded_datas->leaders;
 </head>
 <body>
     <button type="button" id="back-btn" class="btn btn2">BACK</button>
+    <?php/*
     <form class="form">
         <label for="leader1" class="label">Selectionner un leader</label>
-        <select name="leader1" id="select1" class="select">
-            <option value="all">tous</option>
-            <?php
-            foreach ($leader_names as $id => $name) {
-                echo "<option value=\"$id\">$name</option>";
-            }
-            ?>
-        </select>
+        <?= leader_select('leader1', 'select2') ?>
         <input type="radio" name="winningLeader" id="l1won" value="l1won">
         <label for="l1won" class="label">Parties gagnées par ce leader</label>
         <br>
         <label for="leader2" class="label">Selectionner un autre leader</label>
-        <select name="leader2" id="select2" class="select">
-            <option value="all">tous</option>
-            <?php
-            foreach ($leader_names as $id => $name) {
-                echo "<option value=\"$id\">$name</option>";
-            }
-            ?>
-        </select>
+        <?= leader_select('leader2', 'select3') ?>
         <input type="radio" name="winningLeader" id="l2won" value="l2won">
         <label for="l2won" class="label">Parties gagnées par ce leader</label>
         <br>
@@ -62,6 +60,22 @@ $leader_names = $decoded_datas->leaders;
         <label for="nobodyWon" class="label">Chercher indépendament du gagant</label>
         <br><br><br>
         <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
+    </form>
+    */?>
+    <form>
+        <span class="text">Rechercher les</span>
+        <select name="result" id="select1">
+            <option value="victory">victoires</option>
+            <option value="lose">défaites</option>
+            <option value="games">parties</option>
+        </select>
+        <span class="text">de</span>
+        <?= leader_select('leader1', 'select2'); ?>
+        <span>contre</span>
+        <?= leader_select('leader2', 'select3'); ?>
+        <span class="text">.</span>
+        <br>
+        <button type="submit" id="sumbit-btn" class="btn btn3">RECHERCHER</button>
     </form>
 </body>
 </html>

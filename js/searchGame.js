@@ -7,6 +7,7 @@ const backBtn = document.querySelector('#back-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const select1 = document.querySelector('#select1');
 const select2 = document.querySelector('#select2');
+const select3 = document.querySelector('#select3');
 
 // Fonction utilitaire
 /**
@@ -46,6 +47,17 @@ function requestApi (action, params = {}, callback = (data) => { }) {
         });
 }
 
+function createBox(elements) {
+    const box = document.createElement('div');
+    box.classList.add('box');
+    elements.forEach(element => {
+        const span = document.createElement('span');
+        span.textContent = String(element);
+        box.append(span);
+    });
+    return box;
+}
+
 // EventListeners
 backBtn.addEventListener('click', () => {
     window.location.assign('/menu.php');
@@ -53,21 +65,25 @@ backBtn.addEventListener('click', () => {
 
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    const selectedRadio = document.querySelector('input[name="winningLeader"]:checked');
-    const winningLeader = selectedRadio ? selectedRadio.value : 'nobodyWon';
+    //const selectedRadio = document.querySelector('input[name="winningLeader"]:checked');
+    //const winningLeader = selectedRadio ? selectedRadio.value : 'nobodyWon';
+    const winningLeader = select1.value === 'victory' ? 'l1won'
+    : select1.value === 'lose' ? 'l2won'
+    : 'not_specified';
 
     const params = {};
-    if (select1.value !== 'all') {
-        params.leader1 = select1.value;
-    }
     if (select2.value !== 'all') {
-        params.leader2 = select2.value;
+        params.leader1 = select2.value;
     }
-    if (winningLeader !== 'nobodyWon') {
+    if (select3.value !== 'all') {
+        params.leader2 = select3.value;
+    }
+    if (winningLeader !== 'not_specified') {
         params.winningLeader = winningLeader;
     }
     requestApi('get_games', params, (data) => {
-        console.log('API get_games réponse:', data);
         alert(JSON.stringify(data));
+        const games = JSON.parse(data);
+        // TODO terminer
     });
 })
