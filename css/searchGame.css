@@ -26,7 +26,8 @@ form {
 .results-table th {font-size: 1.3rem;}
 .results-table tr {font-size: 1rem;}
 
-.results-table td {
+.results-table th, td {
+    margin: 0;
     background-color: #ee5555;
     color: black;
     border: 5px solid black;
