@@ -97,15 +97,13 @@ function requestApi(action, params = {}, callback = (data) => { }) {
 
 /**
  * @param {string} uri - L'uri du fichier à lire
- * @param {function} callback - Un callback à executer après la lecture
  */
 async function getFileContent(uri) {
     const response = await fetch(uri);
-
+    // Attraper les erreurs
     if (!response.ok) {
         throw new Error(`Impossible de lire ${uri}: ${response.status}`);
     }
-
     return response.text();
 }
 

@@ -10,6 +10,22 @@ const select2 = document.querySelector('#select2');
 const select3 = document.querySelector('#select3');
 const results = document.querySelector('#results');
 
+// Charger les datas depuis /datas.json
+let datas = null;
+const dataPromise = (async () => {
+    const response = await fetch('/datas.json');
+    if (!response.ok) {
+        throw new Error(`Impossible de lire /datas.json: ${response.status}`)
+    }
+    return response.json()
+})().then((loadedDatas) => {
+    datas = loadedDatas;
+    return loadedDatas;
+}).catch((error) => {
+    alert('Erreur lors du chargement des données: ' + error.message);
+    throw error
+});
+
 // Fonction utilitaire
 /**
  * @param {string} action - L'action à requeter auprès de l'api
@@ -58,6 +74,18 @@ function requestApi (action, params = {}, callback = (data) => { }) {
         });
 }
 
+/**
+ * @param {string} uri - L'uri du fichier à lire
+ */
+async function getFileContent (uri) {
+    const response = await fetch(uri);
+    // Attraper les erreurs
+    if (!response.ok) {
+        throw new Error(`Impossible de lire ${uri}: ${response.status}`);
+    }
+    return response.text();
+}
+
 function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
@@ -70,6 +98,7 @@ function createBox(elements) {
 }
 
 function renderResults(games) {
+    const leaderNames = datas.leaders;
     results.innerHTML = '';
 
     if (!Array.isArray(games) || games.length === 0) {
@@ -83,10 +112,9 @@ function renderResults(games) {
     const thead = document.createElement('thead');
     thead.innerHTML = `
         <tr>
-            <th>ID</th>
-            <th>Winner</th>
-            <th>Loser</th>
-            <th>LeandreWon</th>
+            <th>Leader gagnant</th>
+            <th>Leader perdant</th>
+            <th>Joueur gagnant</th>
         </tr>
     `;
 
@@ -94,10 +122,9 @@ function renderResults(games) {
     games.forEach((game) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${game.id ?? ''}</td>
-            <td>${game.winner ?? ''}</td>
-            <td>${game.loser ?? ''}</td>
-            <td>${game.LeandreWon ?? ''}</td>
+            <td>${game.winner ? leaderNames[game.winner] : 'inconnu'}</td>
+            <td>${game.loser ? leaderNames[game.loser] : 'inconnu'}</td>
+            <td>${game.LeandreWon ? 'Léandre' : 'Lancelot'}</td>
         `;
         tbody.append(row);
     });
