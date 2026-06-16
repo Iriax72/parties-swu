@@ -8,6 +8,7 @@ const submitBtn = document.querySelector('#submit-btn');
 const select1 = document.querySelector('#select1');
 const select2 = document.querySelector('#select2');
 const select3 = document.querySelector('#select3');
+const results = document.querySelector('#results');
 
 // Fonction utilitaire
 /**
@@ -68,6 +69,43 @@ function createBox(elements) {
     return box;
 }
 
+function renderResults(games) {
+    results.innerHTML = '';
+
+    if (!Array.isArray(games) || games.length === 0) {
+        results.textContent = 'Aucune partie trouvée.';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.classList.add('results-table');
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Winner</th>
+            <th>Loser</th>
+            <th>LeandreWon</th>
+        </tr>
+    `;
+
+    const tbody = document.createElement('tbody');
+    games.forEach((game) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${game.id ?? ''}</td>
+            <td>${game.winner ?? ''}</td>
+            <td>${game.loser ?? ''}</td>
+            <td>${game.LeandreWon ?? ''}</td>
+        `;
+        tbody.append(row);
+    });
+
+    table.append(thead, tbody);
+    results.append(table);
+}
+
 // EventListeners
 backBtn.addEventListener('click', () => {
     window.location.assign('/menu.php');
@@ -93,7 +131,6 @@ submitBtn.addEventListener('click', (event) => {
     }
     requestApi('get_games', params, (response) => {
         const games = Array.isArray(response.data) ? response.data : [];
-        alert('Parties trouvés :\n', games);
-        // TODO terminer
+        renderResults(games);
     });
 })

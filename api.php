@@ -115,7 +115,7 @@ switch ($action) {
             }
         }
         if (isset($_REQUEST['leader2'])) {
-            $leader2 = $_REQUEST['leader2'];
+            $leader2 = (int) $_REQUEST['leader2'];
             if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l2won') {
                 $request .= " AND winner = $leader2";
             } else {

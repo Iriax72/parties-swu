@@ -51,5 +51,7 @@ function leader_select(array $leader_names, string $name, string $id): string {
         <br>
         <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
     </form>
+
+    <section id="results" aria-live="polite"></section>
 </body>
 </html>
