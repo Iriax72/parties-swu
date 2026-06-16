@@ -37,17 +37,19 @@ function leader_select(array $leader_names, string $name, string $id): string {
 <body>
     <button type="button" id="back-btn" class="btn btn2">BACK</button>
     <form class="form">
-        <span class="text">Rechercher les</span>
-        <select name="result" id="select1">
-            <option value="victory">victoires</option>
-            <option value="lose">défaites</option>
-            <option value="games">parties</option>
-        </select>
-        <span class="text">de</span>
-        <?= leader_select($leader_names, 'leader1', 'select2'); ?>
-        <span>contre</span>
-        <?= leader_select($leader_names, 'leader2', 'select3'); ?>
-        <span class="text">.</span>
+        <p id="request-p">
+            <span class="text">Rechercher les</span>
+            <select name="result" id="select1">
+                <option value="victory">victoires</option>
+                <option value="lose">défaites</option>
+                <option value="games">parties</option>
+            </select>
+            <span class="text">de</span>
+            <?= leader_select($leader_names, 'leader1', 'select2'); ?>
+            <span>contre</span>
+            <?= leader_select($leader_names, 'leader2', 'select3'); ?>
+            <span class="text">.</span>
+        </p>
         <br>
         <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
     </form>
