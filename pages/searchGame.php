@@ -11,7 +11,7 @@ try {
     init_db();
 } catch (Throwable $error) {
     echo '<link rel="stylesheet" href="/css/main.css">';
-    echo '<div class="error">' . htmlspecialschar($error->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
+    echo '<div class="error">' . htmlspecialchars($error->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
     exit;
 }
 
@@ -21,7 +21,7 @@ $decoded_datas = json_decode($datas);
 $leader_names = $decoded_datas->leaders;
 
 // Élement DOM
-function leader_select (string $name, string $id) {
+function leader_select(array $leader_names, string $name, string $id): string {
     $ret = "<select name=\"$name\" id=\"$id\" class=\"select\">";
     $ret .= '<option value="all">tous les leaders</option>';
     foreach ($leader_names as $l_id => $l_name) {
@@ -62,7 +62,7 @@ function leader_select (string $name, string $id) {
         <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
     </form>
     */?>
-    <form>
+    <form class="form">
         <span class="text">Rechercher les</span>
         <select name="result" id="select1">
             <option value="victory">victoires</option>
@@ -70,12 +70,12 @@ function leader_select (string $name, string $id) {
             <option value="games">parties</option>
         </select>
         <span class="text">de</span>
-        <?= leader_select('leader1', 'select2'); ?>
+        <?= leader_select($leader_names, 'leader1', 'select2'); ?>
         <span>contre</span>
-        <?= leader_select('leader2', 'select3'); ?>
+        <?= leader_select($leader_names, 'leader2', 'select3'); ?>
         <span class="text">.</span>
         <br>
-        <button type="submit" id="sumbit-btn" class="btn btn3">RECHERCHER</button>
+        <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
     </form>
 </body>
 </html>
