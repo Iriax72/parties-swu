@@ -22,3 +22,12 @@ form {
     font-size: 1.2rem;
     color: #ee5555;
 }
+
+.result-table th {font-size: 1.3rem;}
+.result-table tr {font-size: 1rem;}
+
+.result-table td {
+    background-color: #ee5555;
+    color: black;
+    border: 5px solid black;
+}
