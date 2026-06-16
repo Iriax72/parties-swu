@@ -29,7 +29,7 @@ $leader_names = $decoded_datas->leaders;
     <title>Recherche de partie SWU</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/searchGame.css">
-    <script src="/js/searchGame.js"></script>
+    <script src="/js/searchGame.js" defer></script>
 </head>
 <body>
     <button type="button" id="back-btn" class="btn btn2">BACK</button>
@@ -39,11 +39,11 @@ $leader_names = $decoded_datas->leaders;
             <option value="all">tous</option>
             <?php
             foreach ($leader_names as $id => $name) {
-                echo "<option value=\"id\">$name</option>";
+                echo "<option value=\"$id\">$name</option>";
             }
             ?>
         </select>
-        <input type="radio" name="winningLeader" id="l1won">
+        <input type="radio" name="winningLeader" id="l1won" value="l1won">
         <label for="l1won" class="label">Parties gagnées par ce leader</label>
         <br>
         <label for="leader2" class="label">Selectionner un autre leader</label>
@@ -55,10 +55,10 @@ $leader_names = $decoded_datas->leaders;
             }
             ?>
         </select>
-        <input type="radio" name="winningLeader" id="l2won">
+        <input type="radio" name="winningLeader" id="l2won" value="l2won">
         <label for="l2won" class="label">Parties gagnées par ce leader</label>
         <br>
-        <input type="radio" name="winningLeader" id="nobodyWon" checked>
+        <input type="radio" name="winningLeader" id="nobodyWon" value="nobodyWon" checked>
         <label for="nobodyWon" class="label">Chercher indépendament du gagant</label>
         <br><br><br>
         <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
