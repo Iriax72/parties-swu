@@ -23,10 +23,10 @@ form {
     color: #ee5555;
 }
 
-.result-table th {font-size: 1.3rem;}
-.result-table tr {font-size: 1rem;}
+.results-table th {font-size: 1.3rem;}
+.results-table tr {font-size: 1rem;}
 
-.result-table td {
+.results-table td {
     background-color: #ee5555;
     color: black;
     border: 5px solid black;
