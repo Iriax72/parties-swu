@@ -91,37 +91,45 @@ switch ($action) {
         break;
     
     case 'get_games':
-        // Vérifier que la requete est correcte
-        if (isset($_REQUEST['winningLeader'])) {
-            $winningLeader = $_REQUEST['winningLeader'];
-            if ($winningLeader === 'l1won' && !isset($_REQUEST['leader1'])) {
-                http_response_code(400);
-                echo json_encode(['error' => 'parametres incompatibles']);
-                exit;
-            }
-            if ($winningLeader === 'l2won' && !isset($_REQUEST['leader2'])) {
-                http_response_code(400);
-                echo json_encode(['error' => 'parametres incompatibles']);
-                exit;
-            }
-        }
+        $winningLeader = isset($_REQUEST['winningLeader']) ? $_REQUEST['winningLeader'] : null;
         $request = 'SELECT winner, loser, LeandreWon FROM games WHERE 1=1';
         if (isset($_REQUEST['leader1'])) {
             $leader1 = (int) $_REQUEST['leader1'];
-            if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l1won') {
-                $request .= " AND winner = $leader1";
-            } else {
-                $request .= " AND (winner = $leader1 OR loser = $leader1)";
+            switch ($winningLeader) {
+                case 'l1won':
+                    $request .= " AND winner = $leader1";
+                    break;
+                case 'l2won':
+                    $request .= " AND loser = $leader1";
+                    break;
+                case null:
+                    $request .= " AND (winner = $leader1 OR loser = $leader1)";
+                    break;
+                default:
+                    http_response_code(400);
+                    echo json_encode(['error' => 'winningLeader contient une valeur inconnue: ' . $winningLeader]);
+                    exit;
             }
         }
         if (isset($_REQUEST['leader2'])) {
             $leader2 = (int) $_REQUEST['leader2'];
-            if (isset($_REQUEST['winningLeader']) && $_REQUEST['winningLeader'] === 'l2won') {
-                $request .= " AND winner = $leader2";
-            } else {
-                $request .= " AND (winner = $leader2 OR loser = $leader2)";
+            switch ($winningLeader) {
+                case 'l1won':
+                    $request .= " AND loser = $leader2";
+                    break;
+                case 'l2won':
+                    $request .= " AND winner = $leader2";
+                    break;
+                case null:
+                    $request .= " AND (winner = $leader2 OR loser = $leader2)";
+                    break;
+                default:
+                    http_response_code(400);
+                    echo json_encode(['error' => 'winningLeader contient une valeur inconue: ' . $winningLeader]);
+                    exit;
             }
         }
+        $request .= ';';
         try {
             $stmt = $pdo->query($request);
             $games = $stmt->fetchAll();

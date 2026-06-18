@@ -4,6 +4,7 @@
 - Avoir une bonne a11y
 - Virer la page seeDatas.php et mettre ses bouttons directement dans le memu
 - Faire que l'ajout d'entrée dans la db passe par l'api (et pas par traitement.php)
-- Remplir la page searchGame.php (et searchGame.js et searchGame.css)
++ Remplir la page searchGame.php (et searchGame.js et searchGame.css)
+- Ajouter les requetes par joueur dans searchGame
 - Ajouter une vérification des données du form coté client
 - Ajouter une belle gestion des erreurs renvoyée par l'api
