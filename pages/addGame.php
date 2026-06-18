@@ -32,7 +32,7 @@ $leader_names = $decoded_datas->leaders;
     <script src="/js/addGame.js" defer></script>
 </head>
 <body>
-    <button class="btn btn2" type="button" id="back-btn">BACK</button>
+    <button class="btn back-btn" type="button" id="back-btn">BACK</button>
     <form action="/traitement.php" method="POST" class="form">
         <select name="winner" id="winner" class="select">
             <?php
@@ -52,7 +52,7 @@ $leader_names = $decoded_datas->leaders;
         <label for="Leandre" class="label">Léandre</label>
         <input type="radio" name="winningPlayer" id="Lancelot" value="Lancelot">
         <label for="Lancelot" class="label">Lancelot</label>
-        <button type="submit" id="submitBtn" class="btn btn3">Ajouter la partie</button>
+        <button type="submit" id="submitBtn" class="btn">Ajouter la partie</button>
     </form>
 </body>
 </html>

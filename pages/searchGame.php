@@ -35,7 +35,7 @@ function leader_select(array $leader_names, string $name, string $id): string {
     <script src="/js/searchGame.js" defer></script>
 </head>
 <body>
-    <button type="button" id="back-btn" class="btn btn2">BACK</button>
+    <button type="button" id="back-btn" class="btn back-btn">BACK</button>
     <form class="form">
         <p id="request-p">
             <span class="text">Rechercher les</span>
@@ -51,7 +51,7 @@ function leader_select(array $leader_names, string $name, string $id): string {
             <span class="text">.</span>
         </p>
         <br>
-        <button type="submit" id="submit-btn" class="btn btn3">RECHERCHER</button>
+        <button type="submit" id="submit-btn" class="btn">RECHERCHER</button>
     </form>
 
     <section id="results" aria-live="polite"></section>

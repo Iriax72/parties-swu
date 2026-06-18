@@ -11,8 +11,8 @@ body {
 }
 
 #addGameBtn {grid-area: addGame;}
-#leader-winrate-btn {grid-area: leaders;}
-#player-winrate-btn {grid-area: players;}
+#leaders-winrate-btn {grid-area: leaders;}
+#players-winrate-btn {grid-area: players;}
 #search-games-btn {grid-area: search;}
 
 .popup {
