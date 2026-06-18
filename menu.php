@@ -11,5 +11,8 @@
 <body>
     <button class="btn btn1" type="button" id="addGameBtn">Ajouter une partie</button>
     <button class="btn btn1" type="button" id="seeDatasBtn">Voir les données</button>
+    <button class="btn btn3" type="button" id="leaders-winrate-btn">CLASSEMENT DES LEADERS PAR WINRATE</button>
+    <button class="btn btn3" type="button" id="players-winrate-btn">CLASSEMENT DES JOUEURS PAR WINRATE</button>
+    <button class="btn btn3" type="button" id="search-games-btn">RECHERCHER DES PARTIES</button>
 </body>
 </html>

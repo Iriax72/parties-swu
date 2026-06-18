@@ -1,8 +1,45 @@
 body {
     background-color: black;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: 
+    "addGame addGame"
+    "leaders players"
+    "search search";
+    padding: 20px;
+}
+
+#addGameBtn {grid-area: addGame;}
+#leader-winrate-btn {grid-area: leaders;}
+#player-winrate-btn {grid-area: players;}
+#search-games-btn {grid-area: search;}
+
+.popup {
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 90vh;
+    padding: 30px;
+    background-color: #502090;
+    border: 8px solid #ee5555;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    gap: 8px;
+    font-size: 1.5rem;
+    color: #ee5555;
+}
+
+.box {
+    background-color: orange;
+    border: 4px solid purple;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    font-size: 0.9rem;
+    color: black;
 }
