@@ -2,10 +2,11 @@
 js/addGame.js
 */
 
-import { requestApi, createPopup } from "./functions.js";
+import { requestApi, createPopup } from './functions.js';
 
-// Rérénces DOM
-const backBtn = document.querySelector("#back-btn");
+// Références DOM
+const backBtn = document.querySelector('#back-btn');
+const form = document.querySelector('form');
 const winnerSelect = document.querySelector('#winner');
 const loserSelect = document.querySelector('#loser');
 const submitBtn = document.querySelector('#submit-btn');
@@ -15,19 +16,30 @@ backBtn.addEventListener('click', () => {
     window.location.assign('/menu.php');
 });
 
-submitBtn.addEventListener('click', () => {
-    // Obtenir les donnés du form
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
     const winner = winnerSelect.value;
     const loser = loserSelect.value;
     const selectedRadio = document.querySelector('input[name=winningPlayer]:checked');
+
+    if (!selectedRadio) {
+        alert('Veuillez choisir le joueur gagnant.');
+        return;
+    }
+
     const winningPlayer = selectedRadio.value;
     const params = {
-        winner: winner,
-        loser: loser,
-        winningPlayer: winningPlayer
-    }
-    // Envoyer la requête
-    requestApi('add_game', params, (data) => {
-        createPopup(['Partie ajoutée avec succès!']);
+        winner,
+        loser,
+        winningPlayer,
+    };
+
+    const success = await requestApi('add_game', params, () => {
+        document.body.append(createPopup(['Partie ajoutée avec succès !']));
     });
+
+    if (!success) {
+        submitBtn.disabled = false;
+    }
 });

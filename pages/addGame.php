@@ -30,7 +30,7 @@ $leader_names = $decoded_datas->leaders;
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/addGame.css">
     <script type="module" src="/js/functions.js"></script>
-    <script src="/js/addGame.js" defer></script>
+    <script type="module" src="/js/addGame.js"></script>
 </head>
 <body>
     <button class="btn back-btn" type="button" id="back-btn">BACK</button>

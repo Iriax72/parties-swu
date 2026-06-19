@@ -8,51 +8,57 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
     // permettre d'appeler requestApi(uri, callback)
     if (typeof params === 'function') {
         callback = params;
-        params = {}
+        params = {};
     }
+
     // définir l'uri à partir de l'action et des params
     let uri = `/api.php?action=${encodeURIComponent(action)}`;
-    Object.keys(params).forEach(key => {
+    Object.keys(params).forEach((key) => {
         uri += `&${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
     });
+
     // retourner le résultat de la requete
-    return fetch(uri, {method: 'GET'})
-    .then(response => {
-        if (!response.ok) throw new Error(response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (data.succes) {
-            callback(data);
-            return true;
-        } else {
+    return fetch(uri, { method: 'GET' })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.statusText || `HTTP ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                callback(data);
+                return true;
+            }
+
             const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
             alert('Erreur lors de la requete: ' + error);
             return false;
-        }
-    })
-    .catch(error => {
-        alert('Erreur lors de la requete: ' + error.getMessage());
-        return false;
-    });
+        })
+        .catch((error) => {
+            alert('Erreur lors de la requete: ' + error.message);
+            return false;
+        });
 }
 
-function createPopup(content) {
+export function createPopup(content) {
     // content est un array de string / HTMLNodes à mettre dans la popup
     const popup = document.createElement('div');
     popup.classList.add('popup');
-    const crossBtn = document.createElement('btn');
+
+    const crossBtn = document.createElement('button');
     crossBtn.textContent = 'X';
     crossBtn.classList.add('btn', 'back-btn');
     crossBtn.addEventListener('click', () => {
         popup.remove();
-    })
+    });
+
     popup.append(crossBtn);
 
-    content.forEach(element => {
+    content.forEach((element) => {
         popup.append(element); // TODO sécuriser ça
         popup.append(document.createElement('br'));
     });
 
-    return popup
+    return popup;
 }

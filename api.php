@@ -48,14 +48,19 @@ switch ($action) {
             || !isset($_REQUEST['winningPlayer'])
         ) {
             http_response_code(400);
-            echo "Forumlaire incomplet:
-            \nwinner: {$_REQUEST['winner']}
-            \nloser: {$_REQUEST['loser']}
-            \nwinningLeadee: {$_REQUEST['winningLeader']}";
+            echo json_encode([
+                'error' => 'Formulaire incomplet',
+                'details' => [
+                    'winner' => $_REQUEST['winner'] ?? null,
+                    'loser' => $_REQUEST['loser'] ?? null,
+                    'winningPlayer' => $_REQUEST['winningPlayer'] ?? null,
+                ],
+            ]);
             exit;
         }
-        $winnner = $_REQUEST['winner'];
-        $loser = $_REQUEST['loser'];
+
+        $winner = (int) $_REQUEST['winner'];
+        $loser = (int) $_REQUEST['loser'];
         $LeandreWon = (int) ($_REQUEST['winningPlayer'] === 'Léandre');
 
         try {
@@ -66,6 +71,7 @@ switch ($action) {
             echo json_encode(['error' => "Erreur lors de l'insertion dans la db: $error"]);
             exit;
         }
+
         echo json_encode(['success' => true]);
         break;
 
