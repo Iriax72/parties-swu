@@ -4,6 +4,7 @@
 Ne renvoie pas de HTML
 Renvoie tout en json
 actions possibles:
+- add_game
 - get_leaders_winrate
 - get_players_winrate
 - get_games
@@ -25,10 +26,7 @@ try {
     $pdo = get_db_connection();
 } catch (Throwable $error) {
     http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Impossible de se connecter à la base de données: ' . $error->getMessage()
-    ]);
+    echo json_encode(['error' => 'Impossible de se connecter à la base de données: ' . $error->getMessage()]);
     exit;
 }
 
@@ -42,6 +40,35 @@ function repeat($value, int $times) {
 }
 
 switch ($action) {
+    case 'add_game':
+        // vérifier que toutes les données sont fournies
+        if (
+            !isset($_REQUEST['winner'])
+            || !isset($_REQUEST['loser'])
+            || !isset($_REQUEST['winningPlayer'])
+        ) {
+            http_response_code(400);
+            echo "Forumlaire incomplet:
+            \nwinner: {$_REQUEST['winner']}
+            \nloser: {$_REQUEST['loser']}
+            \nwinningLeadee: {$_REQUEST['winningLeader']}";
+            exit;
+        }
+        $winnner = $_REQUEST['winner'];
+        $loser = $_REQUEST['loser'];
+        $LeandreWon = (int) ($_REQUEST['winningPlayer'] === 'Léandre');
+
+        try {
+            $stmt = $pdo->prepare('INSERT INTO games (winner, loser, LeandreWon) VALUES (?, ?, ?);');
+            $stmt->execute([$winner, $loser, $LeandreWon]);
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => "Erreur lors de l'insertion dans la db: $error"]);
+            exit;
+        }
+        echo json_encode(['success' => true]);
+        break;
+
     case 'get_leaders_winrate':
         try {
             $stmt = $pdo->query('SELECT winner, loser FROM games');

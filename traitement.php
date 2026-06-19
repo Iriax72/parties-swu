@@ -1,4 +1,5 @@
 <?php
+/*
 // Vérifier que tous les champs sont remplis
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (
@@ -31,3 +32,4 @@ try {
 } catch (Throwable $error) {
     echo "Erreur lors de l'insertion de la partie: $error";
 }
+*/

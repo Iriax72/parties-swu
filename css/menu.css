@@ -15,7 +15,7 @@ body {
 #players-winrate-btn {grid-area: players;}
 #search-games-btn {grid-area: search;}
 
-.popup {
+/*.popup {
     position: fixed;
     top: 50vh;
     left: 50vw;
@@ -31,7 +31,7 @@ body {
     gap: 8px;
     font-size: 1.5rem;
     color: #ee5555;
-}
+}*/
 
 .box {
     background-color: orange;
