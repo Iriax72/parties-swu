@@ -6,7 +6,8 @@ body {
     grid-template-areas: 
     "addGame addGame"
     "leaders players"
-    "search search";
+    "search search"
+    "seeDeck addDeck";
     padding: 20px;
 }
 
@@ -14,24 +15,8 @@ body {
 #leaders-winrate-btn {grid-area: leaders;}
 #players-winrate-btn {grid-area: players;}
 #search-games-btn {grid-area: search;}
-
-/*.popup {
-    position: fixed;
-    top: 50vh;
-    left: 50vw;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    height: 90vh;
-    padding: 30px;
-    background-color: #502090;
-    border: 8px solid #ee5555;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 1.5rem;
-    color: #ee5555;
-}*/
+#see-decks-btn {grid-area: seeDeck;}
+#add-deck-btn {grid-area: addDeck;}
 
 .box {
     background-color: orange;

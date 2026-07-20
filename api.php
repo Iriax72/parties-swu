@@ -8,6 +8,7 @@ actions possibles:
 - get_leaders_winrate
 - get_players_winrate
 - get_games
+- get_decks
 todo passer par une action api pour ajouter les games a la db
 */
 
@@ -173,6 +174,17 @@ switch ($action) {
             exit;
         }
         break;
+    
+    case 'get_decks':
+        if (!isset($_REQUEST['deck_id'])) {
+            $stmt = pdo->query('SELECT id, name, leader, baseColorId FROM decks');
+            $decks = $stmt->fetchAll();
+            echo json_encode($decks);
+            exit;
+        } else {
+            exit;
+        }
+
     
     default:
         http_response_code(400);

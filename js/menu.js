@@ -10,6 +10,8 @@ const addGameBtn = document.querySelector('#addGameBtn');
 const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
 const playersWinrateBtn = document.querySelector('#players-winrate-btn');
 const searchGamesBtn = document.querySelector('#search-games-btn');
+const seeDecksBtn = document.quetySelector('#see-decks-btn');
+const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Charger les datas depuis /datas.json
 let datas = null;
@@ -115,6 +117,10 @@ addGameBtn.addEventListener('click', () => {
     window.location.assign('/pages/addGame.php')
 });
 
+addDeckBtn.addEventListener('click', () => {
+    window.location.assign('/pages/addDeck.php');
+})
+
 leadersWinrateBtn.addEventListener('click', () => {
     const waitingText = document.createElement('p');
     waitingText.innerText = 'Chargement des données...';
@@ -143,7 +149,7 @@ leadersWinrateBtn.addEventListener('click', () => {
 playersWinrateBtn.addEventListener('click', () => {
     const waitingText = document.createElement('p');
     waitingText.innerText = 'Chargement des données...';
-    const popup = createPopup(['Winrate des joueurs:', waitingText])
+    const popup = createPopup(['Winrate des joueurs:', waitingText]);
     document.body.append(popup);
     requestApi('get_players_winrate', (data) => {
         waitingText.remove();
@@ -155,3 +161,14 @@ playersWinrateBtn.addEventListener('click', () => {
 searchGamesBtn.addEventListener('click', () => {
     window.location.assign('/pages/searchGame.php');
 });
+
+seeDecksBtn.addEventListener('click', () => {
+    const waitingText = document.createEoement('p');
+    waitingText.innerText = 'Chargement des decks...';
+    const popup = createPopup(['Decks:', waitingText]);
+    document.body.append(popup);
+    reauestApi('get_decks', (data) => {
+        waitingText.remove();
+        popup.append(createBox(['Salut je sais pas quoi mettre dans la box']))
+    })
+})
