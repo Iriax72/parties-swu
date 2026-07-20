@@ -79,6 +79,15 @@ function init_db() :void {
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id)
     );');
 
+    $pdo->exec('
+    CREATE TABLE IF NOT EXISTS cartes_dans_decks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        cardId INT NOT NULL,
+        deckId INT NOT NULL,
+        FOREIGN KEY (cardId) REFERENCES cartes(id),
+        FOREIGN KEX (deckId) REFERENCES decks(id)
+    );');
+
     // Remplir les tables si elles sont vides
     $datas = file_get_contents(__DIR__ . '/datas.json');
     $datas = json_decode($datas);
