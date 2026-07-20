@@ -47,6 +47,13 @@ function init_db() :void {
     );');
 
     $pdo->exec('
+    CREATE TABLE IF NOT EXISTS baseColor(
+        id TINYINT PRIMARY KEY,
+        colorName VARCHAR(5) NOT NULL,
+        officialName VARCHAR(12) NOT NULL
+    );');
+
+    $pdo->exec('
     CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
         winner TINYINT NOT NULL,
@@ -56,19 +63,58 @@ function init_db() :void {
         LeandreWon BOOL NOT NULL
     );');
 
-    // Remplir les tables si elles sont vides
+    $pdo->exec('
+    CREATE TABLE IF NOT EXISTS cartes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL
+    );');
 
-    $leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
-    if ((int) $leaders['total'] === 0) {
-        // Lire la liste des leaders depuis le JSON du projet
-        $datas = file_get_contents(__DIR__ . '/datas.json');
-        $decoded_datas = json_decode($datas, false);
-        $leader_names = $decoded_datas->leaders;
+    $pdo->exec('
+    CREATE TABLE IF NOT EXISTS decks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(50),
+        leader TINYINT NOT NULL,
+        baseColorId TINYINT NOT NULL
+        FOREIGN KEY (leader) REFERENCES leader(id),
+        FOREIGN KEY (baseColorId) REFERENCES baseColor(id)
+    );');
+
+    // Remplir les tables si elles sont vides
+    $datas = file_get_contents(__DIR__ . '/datas.json');
+    $datas = json_decode($datas);
+
+    $total_leaders = $pdo->query('SELECT COUNT(*) AS total FROM leaders')->fetch();
+    if ((int) $total_leaders['total'] === 0) {
+        $leader_names = $datas->leaders;
         foreach ($leader_names as $id => $name) {
             $stmt = $pdo->prepare('INSERT INTO leaders (id, name) VALUES (:id, :name)');
             $stmt->execute([
                 ':id' => $id,
                 ':name' => $name,
+            ]);
+        }
+    }
+
+    $totalBase = $pdo->query('SELECT COUNT(*) AS total FROM baseColor');
+    if ((int) $totalBase === 0) {
+        $bases = $datas->bases;
+        foreach ($bases as $colorName => $officialName) {
+            $stmt = $pdo->prepare('INSERT INTO baseColor (colorName, officialName) VALUES (:colorName, :officialName)');
+            $stmt->execute([
+                ':colorName' => $colorName,
+                ':officialName' => $officialName
+            ]);
+        }
+    }
+
+    $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes');
+    if ((int) $totalCards === 0) {
+        $cards = $datas->cartes;
+        foreach ($cartes as $id => $name) {
+            $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUE (:id, :name)');
+            $stmt->execute([
+                ':id' => $id,
+                ':name' => $name
             ]);
         }
     }

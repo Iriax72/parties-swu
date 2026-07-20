@@ -18,5 +18,14 @@
         "16": "Grand Amiral Thrawn",
         "17": "Han Solo",
         "18": "Jyn Erso"
-    }
+    },
+
+    "bases": {
+        "rouge": "agressivité",
+        "bleu": "vigilance",
+        "vert": "commandemant",
+        "jaune": "ruse"
+    },
+
+    "cartes": {}
 }
