@@ -169,6 +169,8 @@ seeDecksBtn.addEventListener('click', () => {
     document.body.append(popup);
     reauestApi('get_decks', (data) => {
         waitingText.remove();
-        popup.append(createBox(['Salut je sais pas quoi mettre dans la box']))
+        json_decode(data).foreach((deck) => {
+            popup.append(createBox([`${deck.leader} ${deck.baseColorName} ${deck.version} (${deck.name})`]));
+        });
     })
 })

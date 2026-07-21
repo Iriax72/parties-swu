@@ -176,8 +176,16 @@ switch ($action) {
         break;
     
     case 'get_decks':
+        // renvoyer tous les decks si l'id n'est pas indiqué
         if (!isset($_REQUEST['deck_id'])) {
-            $stmt = pdo->query('SELECT id, name, leader, baseColorId FROM decks');
+            $stmt = $pdo->query('
+                SELECT decks.id, decks.name, decks.leader, decks.baseColorId, decks.version, decks.lastUpdate,
+                leaders.name AS leaderName,
+                baseColor.colorName AS baseColorName, baseColor.officialName AS baseColorOfficialName
+                FROM decks
+                LEFT JOIN leaders ON decks.leader = leaders.id
+                LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
+            ');
             $decks = $stmt->fetchAll();
             echo json_encode($decks);
             exit;

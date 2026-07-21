@@ -72,9 +72,11 @@ function init_db() :void {
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS decks (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50),
+        name VARCHAR(50) DEFAULT \'\',
         leader TINYINT NOT NULL,
-        baseColorId TINYINT NOT NULL
+        baseColorId TINYINT NOT NULL,
+        version VARCHAR(8) NOT NULL DEFAULT \'1\',
+        lastUpdate DATE DEFAULT CURRENT_DATE,
         FOREIGN KEY (leader) REFERENCES leader(id),
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id)
     );');
@@ -126,5 +128,16 @@ function init_db() :void {
                 ':name' => $name
             ]);
         }
+    }
+
+    // Test
+    foreach ([1, 2, 3, 4] as $test) {
+    $stmt = $pdo->prepare('INSERT INTO decks (name, leader, baseColorId, version) VALUES (:name, :leader, :baseColorId, :version)');
+    $stmt->execute([
+        ':name' => 'Horde Royale',
+        ':leader' => 5,
+        ':baseColorId' => $test,
+        ':version' => '1.02'
+    ]);
     }
 }
