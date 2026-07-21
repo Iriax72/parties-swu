@@ -132,7 +132,7 @@ function init_db() :void {
 
     // Test
     $pdo->exec('DELETE FROM decks;');
-    foreach ([1, 2, 3, 4] as $test) {
+    foreach ([1, 2, 3] as $test) {
         $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (:name, :leaderId, :baseColorId, :version)');
         $stmt->execute([
             ':name' => 'Horde Royale',
