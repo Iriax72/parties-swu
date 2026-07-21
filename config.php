@@ -73,11 +73,11 @@ function init_db() :void {
     CREATE TABLE IF NOT EXISTS decks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) DEFAULT \'\',
-        leader TINYINT NOT NULL,
+        leaderId TINYINT NOT NULL,
         baseColorId TINYINT NOT NULL,
         version VARCHAR(8) NOT NULL DEFAULT \'1\',
         lastUpdate DATE NOT NULL DEFAULT CURRENT_DATE,
-        FOREIGN KEY (leader) REFERENCES leaders(id),
+        FOREIGN KEY (leaderId) REFERENCES leaders(id),
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id)
     );');
 
@@ -87,7 +87,7 @@ function init_db() :void {
         cardId INT NOT NULL,
         deckId INT NOT NULL,
         FOREIGN KEY (cardId) REFERENCES cartes(id),
-        FOREIGN KEX (deckId) REFERENCES decks(id)
+        FOREIGN KEY (deckId) REFERENCES decks(id)
     );');
 
     // Remplir les tables si elles sont vides
