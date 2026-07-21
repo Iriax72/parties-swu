@@ -48,7 +48,7 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS baseColor(
-        id TINYINT PRIMARY KEY,
+        id TINYINT AUTO_INCREMENT PRIMARY KEY,
         colorName VARCHAR(5) NOT NULL,
         officialName VARCHAR(12) NOT NULL
     );');
@@ -121,8 +121,8 @@ function init_db() :void {
     $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes');
     if ((int) $totalCards === 0) {
         $cards = $datas->cartes;
-        foreach ($cartes as $id => $name) {
-            $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUE (:id, :name)');
+        foreach ($cards as $id => $name) {
+            $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUES (:id, :name)');
             $stmt->execute([
                 ':id' => $id,
                 ':name' => $name
@@ -131,13 +131,14 @@ function init_db() :void {
     }
 
     // Test
+    $pdo->exec('DELETE FROM decks;');
     foreach ([1, 2, 3, 4] as $test) {
-    $stmt = $pdo->prepare('INSERT INTO decks (name, leader, baseColorId, version) VALUES (:name, :leader, :baseColorId, :version)');
-    $stmt->execute([
-        ':name' => 'Horde Royale',
-        ':leader' => 5,
-        ':baseColorId' => $test,
-        ':version' => '1.02'
-    ]);
+        $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (:name, :leaderId, :baseColorId, :version)');
+        $stmt->execute([
+            ':name' => 'Horde Royale',
+            ':leaderId' => 5,
+            ':baseColorId' => $test,
+            ':version' => '1.02'
+        ]);
     }
 }
