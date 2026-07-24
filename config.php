@@ -110,7 +110,7 @@ function init_db() :void {
     if ((int) $totalBase['total'] === 0) {
         $bases = $datas->bases;
         foreach ($bases as $colorName => $officialName) {
-            $stmt = $pdo->prepare('INSERT INTO baseColor (colorName, officialName) VALUES (:id, :colorName, :officialName)');
+            $stmt = $pdo->prepare('INSERT INTO baseColor (colorName, officialName) VALUES (:colorName, :officialName)');
             $stmt->execute([
                 ':colorName' => $colorName,
                 ':officialName' => $officialName
@@ -132,6 +132,6 @@ function init_db() :void {
 
     // Test
     $pdo->exec('DELETE FROM decks;');
-    $pdo->exec('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (\'Test\', 6, 2, \'1.02\')');
-    $pdo->exec('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (\'test2\', 2, 1, \'2.1\')');
+    $pdo->exec("INSERT INTO decks (name, leaderId, baseColorId, version) VALUES ('Test', 6, 2, '1.02')");
+    $pdo->exec("INSERT INTO decks (name, leaderId, baseColorId, version) VALUES ('test2', 2, 1, '2.1')");
 }
