@@ -90,11 +90,13 @@ function requestApi(action, params = {}, callback = (data) => { }) {
                 return true;
             } else {
                 const error = data.error ?? "L'api n'a pas spécifié l'erreur";
+                alert('Erreur 1:');
                 alert("Erreur lors de la requete: " + error);
                 return false;
             }
         })
         .catch(error => {
+            alert('Erreur 2:');
             alert('Erreur lors de la requete: ' + error.message);
             return false;
         });
