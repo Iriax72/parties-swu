@@ -131,6 +131,7 @@ function init_db() :void {
     }
 
     // Test
+    /*
     $pdo->exec('DELETE FROM decks;');
     foreach ([1, 2, 3] as $test) {
         $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (:name, :leaderId, :baseColorId, :version)');
@@ -141,4 +142,5 @@ function init_db() :void {
             ':version' => '1.02'
         ]);
     }
+    */
 }
