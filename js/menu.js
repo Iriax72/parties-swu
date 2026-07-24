@@ -80,23 +80,35 @@ function requestApi(action, params = {}, callback = (data) => { }) {
     });
 
     return fetch(uri, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
+        .then(async (response) => {
+            if (!response.ok) {
+                let errorMessage = `Erreur HTTP ${response.status}`;
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody?.error) {
+                        errorMessage = errorBody.error;
+                    }
+                } catch (e) {
+                    // Ignore the parsing error and keep the default HTTP message.
+                }
+                throw new Error(errorMessage);
+            }
+
             return response.json();
         })
         .then(data => {
-            if (data.success) {
+            if (data?.success) {
                 callback(data);
                 return true;
-            } else {
-                const error = data.error ?? "L'api n'a pas spécifié l'erreur";
-                alert("Erreur lors de la requete: " + error);
-                return false;
             }
+
+            const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
+            throw new Error(error);
         })
         .catch(error => {
-            alert(error.message);
-            alert('Erreur lors de la requete: ' + error);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error('Erreur lors de la requête:', error);
+            alert(message || 'Erreur inconnue');
             return false;
         });
 }
