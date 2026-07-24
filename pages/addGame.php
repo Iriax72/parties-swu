@@ -1,7 +1,6 @@
 <?php
 /*
 pages/addGame.php
-
 Permet d'ajouter des parties à la db
 */
 
@@ -29,7 +28,6 @@ $leader_names = $decoded_datas->leaders;
     <title>Parties SWU, Ajouter une partie</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/addGame.css">
-    <script type="module" src="/js/functions.js"></script>
     <script type="module" src="/js/addGame.js"></script>
 </head>
 <body>

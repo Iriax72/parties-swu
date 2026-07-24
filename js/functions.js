@@ -1,3 +1,9 @@
+/*
+/js/functions.js
+
+Contient toutes les fonctions utilitaires
+*/
+
 /**
  * @param {string} action - L'action à requêter auprès de l'api
  * @param {object} params - Des paramètres à fournir à l'api
