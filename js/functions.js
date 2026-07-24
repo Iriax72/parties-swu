@@ -10,7 +10,7 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
         callback = params;
         params = {};
     }
-    
+
     // définir l'uri à partir de l'action et des params
     let uri = `/api.php?action=${encodeURIComponent(action)}`;
     Object.keys(params).forEach((key) => {
@@ -20,7 +20,7 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
     // retourner le résultat de la requete
     return fetch(uri, { method: 'GET' })
         .then(async (response) => {
-            let errorMessage = `Erreur HTTP: ${response.status}`()
+            let errorMessage = `Erreur HTTP: ${response.status}`;
             if (!response.ok) {
                 throw new Error(response.statusText || `HTTP ${response.status}`);
                 try {
