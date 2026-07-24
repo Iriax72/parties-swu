@@ -15,7 +15,7 @@ const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Event Listerners
 backBtn.addEventListener('click', () => {
-    window.location.assign('/menu.js');
+    window.location.assign('/menu.php');
 })
 
 addCardBtn.addEventListener('click', () => {
