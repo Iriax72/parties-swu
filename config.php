@@ -107,17 +107,14 @@ function init_db() :void {
     }
 
     $totalBase = $pdo->query('SELECT COUNT(*) AS total FROM baseColor')->fetch();
-    if ((int) $totalBase === 0) {
+    if ((int) $totalBase['total'] === 0) {
         $bases = $datas->bases;
-        $baseId = 1;
         foreach ($bases as $colorName => $officialName) {
-            $stmt = $pdo->prepare('INSERT INTO baseColor (id, colorName, officialName) VALUES (:id, :colorName, :officialName)');
+            $stmt = $pdo->prepare('INSERT INTO baseColor (colorName, officialName) VALUES (:id, :colorName, :officialName)');
             $stmt->execute([
-                ':id' => $baseId,
                 ':colorName' => $colorName,
                 ':officialName' => $officialName
             ]);
-            $baseId++;
         }
     }
 
