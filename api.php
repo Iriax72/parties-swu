@@ -184,7 +184,7 @@ switch ($action) {
                     leaders.name AS leaderName,
                     baseColor.colorName AS baseColorName, baseColor.officialName AS baseColorOfficialName
                     FROM decks
-                    LEFT JOIN leaders ON decks.leader = leaders.id
+                    LEFT JOIN leaders ON decks.leaderId = leaders.id
                     LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
                 ');
             } catch (Throwable $error) {
