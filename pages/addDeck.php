@@ -1,3 +1,9 @@
+<?php
+/*
+/pages/addDeck.php
+Permet d'ajouter des decks à la db
+*/
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,6 +13,6 @@
     <script src="./addDeck.js" defer></script>
 </head>
 <body>
-    
+    Ceci est la page addDeck.php
 </body>
 </html>

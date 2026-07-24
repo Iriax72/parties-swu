@@ -106,7 +106,7 @@ function init_db() :void {
         }
     }
 
-    $totalBase = $pdo->query('SELECT COUNT(*) AS total FROM baseColor');
+    $totalBase = $pdo->query('SELECT COUNT(*) AS total FROM baseColor')->fetch();
     if ((int) $totalBase === 0) {
         $bases = $datas->bases;
         foreach ($bases as $colorName => $officialName) {
@@ -118,7 +118,7 @@ function init_db() :void {
         }
     }
 
-    $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes');
+    $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes')->fetch();
     if ((int) $totalCards === 0) {
         $cards = $datas->cartes;
         foreach ($cards as $id => $name) {
@@ -131,7 +131,6 @@ function init_db() :void {
     }
 
     // Test
-    /*
     $pdo->exec('DELETE FROM decks;');
     foreach ([1, 2, 3] as $test) {
         $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (:name, :leaderId, :baseColorId, :version)');
@@ -142,5 +141,4 @@ function init_db() :void {
             ':version' => '1.02'
         ]);
     }
-    */
 }

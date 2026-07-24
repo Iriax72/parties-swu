@@ -9,7 +9,7 @@
     <script src="/js/menu.js" defer></script>
 </head>
 <body>
-    <button class="btn" type="button" id="addGameBtn">AJOUTER UNE PARTIE'</button>
+    <button class="btn" type="button" id="addGameBtn">AJOUTER UNE PARTIE</button>
     <button class="btn" type="button" id="leaders-winrate-btn">CLASSEMENT DES LEADERS PAR WINRATE</button>
     <button class="btn" type="button" id="players-winrate-btn">CLASSEMENT DES JOUEURS PAR WINRATE</button>
     <button class="btn" type="button" id="search-games-btn">RECHERCHER DES PARTIES</button>

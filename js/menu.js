@@ -10,7 +10,7 @@ const addGameBtn = document.querySelector('#addGameBtn');
 const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
 const playersWinrateBtn = document.querySelector('#players-winrate-btn');
 const searchGamesBtn = document.querySelector('#search-games-btn');
-const seeDecksBtn = document.quetySelector('#see-decks-btn');
+const seeDecksBtn = document.querySelector('#see-decks-btn');
 const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Charger les datas depuis /datas.json
