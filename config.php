@@ -118,16 +118,20 @@ function init_db() :void {
         }
     }
 
-    $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes')->fetch();
-    if ((int) $totalCards === 0) {
-        $cards = $datas->cartes;
-        foreach ($cards as $id => $name) {
-            $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUES (:id, :name)');
-            $stmt->execute([
-                ':id' => $id,
-                ':name' => $name
-            ]);
+    try {
+        $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes')->fetch();
+        if ((int) $totalCards === 0) {
+            $cards = $datas->cartes;
+            foreach ($cards as $id => $name) {
+                $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUES (:id, :name)');
+                $stmt->execute([
+                    ':id' => $id,
+                    ':name' => $name
+                ]);
+            }
         }
+    } catch (Throwable $e) {
+        echo 'Erreur d\'inserstion des cartes en db: '. $e->getMessage();
     }
 
     // Test
