@@ -163,13 +163,13 @@ searchGamesBtn.addEventListener('click', () => {
 });
 
 seeDecksBtn.addEventListener('click', () => {
-    const waitingText = document.createEoement('p');
+    const waitingText = document.createElement('p');
     waitingText.innerText = 'Chargement des decks...';
     const popup = createPopup(['Decks:', waitingText]);
     document.body.append(popup);
-    reauestApi('get_decks', (data) => {
+    requestApi('get_decks', (data) => {
         waitingText.remove();
-        json_decode(data).foreach((deck) => {
+        json_decode(data).forEach((deck) => {
             popup.append(createBox([`${deck.leader} ${deck.baseColorName} ${deck.version} (${deck.name})`]));
         });
     })
