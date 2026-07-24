@@ -169,8 +169,8 @@ seeDecksBtn.addEventListener('click', () => {
     document.body.append(popup);
     requestApi('get_decks', (data) => {
         waitingText.remove();
-        json_decode(data).forEach((deck) => {
-            popup.append(createBox([`${deck.leader} ${deck.baseColorName} ${deck.version} (${deck.name})`]));
+        (data.decks ?? []).forEach((deck) => {
+            popup.append(createBox([`${deck.leaderName ?? deck.leader} ${deck.baseColorName ?? ''} ${deck.version ?? ''} (${deck.name ?? ''})`.trim()]));
         });
     })
 })

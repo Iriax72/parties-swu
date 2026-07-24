@@ -178,16 +178,22 @@ switch ($action) {
     case 'get_decks':
         // renvoyer tous les decks si l'id n'est pas indiqué
         if (!isset($_REQUEST['deck_id'])) {
-            $stmt = $pdo->query('
-                SELECT decks.id, decks.name, decks.leader, decks.baseColorId, decks.version, decks.lastUpdate,
-                leaders.name AS leaderName,
-                baseColor.colorName AS baseColorName, baseColor.officialName AS baseColorOfficialName
-                FROM decks
-                LEFT JOIN leaders ON decks.leader = leaders.id
-                LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
-            ');
+            try {
+                $stmt = $pdo->query('
+                    SELECT decks.*,
+                    leaders.name AS leaderName,
+                    baseColor.colorName AS baseColorName, baseColor.officialName AS baseColorOfficialName
+                    FROM decks
+                    LEFT JOIN leaders ON decks.leader = leaders.id
+                    LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
+                ');
+            } catch (Throwable $error) {
+                http_response_code(500);
+                echo json_encode(['error' => $error->getMessage()]);
+                exit;
+            }
             $decks = $stmt->fetchAll();
-            echo json_encode($decks);
+            echo json_encode(['success' => true, 'decks' => $decks]);
             exit;
         } else {
             exit;
