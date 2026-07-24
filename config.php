@@ -65,7 +65,7 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS cartes (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id INT PRIMARY KEY,
         name VARCHAR(50) NOT NULL
     );');
 

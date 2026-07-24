@@ -27,5 +27,13 @@
         "jaune": "ruse"
     },
 
-    "cartes": {}
+    "cartes": {
+        "31": "Inferno Quatre",
+        "32": "Poursuivant en Motojet",
+        "33": "Death Trooper",
+        "34": "Del Meeko",
+        "35": "Lieutenant Childsen",
+        "36": "Gideon Hask",
+        "37": "Marcheur de défense de l'académie"
+    }
 }

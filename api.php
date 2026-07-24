@@ -175,6 +175,18 @@ switch ($action) {
         }
         break;
     
+    case 'get_cards':
+        try {
+            $stmt = $pdo->query('SELECT id, name FROM cartes ORDER BY name ASC');
+            $cards = $stmt->fetchAll();
+            echo json_encode(['success' => true, 'cards' => $cards]);
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => $error->getMessage()]);
+            exit;
+        }
+        break;
+
     case 'get_decks':
         // renvoyer tous les decks si l'id n'est pas indiqué
         if (!isset($_REQUEST['deck_id'])) {
