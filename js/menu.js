@@ -4,6 +4,8 @@
 s'occupe de la redirection via les bouttons
 S'occupe de l'affichage des classements par winrates
 */
+// Imports
+import { requestApi, createPopup } from './functions.js';
 
 // Références DOM
 const addGameBtn = document.querySelector('#addGameBtn');
@@ -31,6 +33,7 @@ const datasPromise = (async () => {
 });
 
 // Fonctions utilitaires
+/*
 function createPopup(content) {
     // content can be an array of strings and/or HTML Nodes to add in the popup
     const popup = document.createElement('div');
@@ -51,6 +54,7 @@ function createPopup(content) {
 
     return popup;
 }
+*/
 
 function createBox(elements) {
     const box = document.createElement('div');
@@ -69,6 +73,7 @@ function createBox(elements) {
  * @param {function} callback - Un callback à executer avec les données (dans la variable data)
  * @returns {boolean} false en cas d'erreur, true dans les autres cas
  */
+/*
 function requestApi(action, params = {}, callback = (data) => { }) {
     if (typeof params === 'function') {
         callback = params;
@@ -112,7 +117,7 @@ function requestApi(action, params = {}, callback = (data) => { }) {
             return false;
         });
 }
-
+*/
 /**
  * @param {string} uri - L'uri du fichier à lire
  */

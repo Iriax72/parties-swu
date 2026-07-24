@@ -32,7 +32,7 @@ function leader_select(array $leader_names, string $name, string $id): string {
     <title>Recherche de partie SWU</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/searchGame.css">
-    <script src="/js/searchGame.js" defer></script>
+    <script type="module" src="/js/searchGame.js" defer></script>
 </head>
 <body>
     <button type="button" id="back-btn" class="btn back-btn">BACK</button>

@@ -10,7 +10,7 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
         callback = params;
         params = {};
     }
-
+    
     // définir l'uri à partir de l'action et des params
     let uri = `/api.php?action=${encodeURIComponent(action)}`;
     Object.keys(params).forEach((key) => {
@@ -19,9 +19,19 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
 
     // retourner le résultat de la requete
     return fetch(uri, { method: 'GET' })
-        .then((response) => {
+        .then(async (response) => {
+            let errorMessage = `Erreur HTTP: ${response.status}`()
             if (!response.ok) {
                 throw new Error(response.statusText || `HTTP ${response.status}`);
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody?.error) {
+                        errorMessage = errorBody.error;
+                    }
+                } catch (e) {
+                    // Ignorer
+                }
+                throw new Error(errorMessage)
             }
             return response.json();
         })
@@ -32,11 +42,13 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
             }
 
             const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
-            alert('Erreur lors de la requete: ' + error);
-            return false;
+            throw new Error(error);
         })
         .catch((error) => {
-            alert('Erreur lors de la requete: ' + error.message);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error('Erreur lors de la requete: ', error);
+
+            alert(message || 'Erreur inconnue');
             return false;
         });
 }

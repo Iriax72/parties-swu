@@ -6,7 +6,7 @@
     <title>Parties SWU, Menu</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/menu.css">
-    <script src="/js/menu.js" defer></script>
+    <script type="module" src="/js/menu.js" defer></script>
 </head>
 <body>
     <button class="btn" type="button" id="addGameBtn">AJOUTER UNE PARTIE</button>

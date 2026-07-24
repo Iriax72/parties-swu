@@ -1,6 +1,8 @@
 /*
 /js/searchGame.js
 */
+// Imports
+import {requestApi} from './functions.js';
 
 // Références DOM
 const backBtn = document.querySelector('#back-btn');
@@ -33,6 +35,7 @@ const dataPromise = (async () => {
  * @param {function} callback - Un callback à executer avec la réponse api
  * @returns {boolean} false en cas d'erreur, true en cas de réussite
  */
+/*
 function requestApi (action, params = {}, callback = (data) => { }) {
     if (typeof params === 'function') {
         callback = params;
@@ -73,7 +76,7 @@ function requestApi (action, params = {}, callback = (data) => { }) {
             return false;
         });
 }
-
+*/
 /**
  * @param {string} uri - L'uri du fichier à lire
  */
