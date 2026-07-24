@@ -22,7 +22,7 @@ try {
     <title>Parties swu, ajouter un deck</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/addDeck.css">
-    <script type="module" src="./addDeck.js" defer></script>
+    <script type="module" src="/js/addDeck.js" defer></script>
 </head>
 <body>
     <button class="btn back-btn" type="button" id="back-btn">BACK</button>
