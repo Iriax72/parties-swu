@@ -131,19 +131,7 @@ function init_db() :void {
     }
 
     // Test
-    $test = [
-        1 => 'Horde Royale',
-        2 => 'Combattants des cieux',
-        3 => 'Armée des mages'
-    ];
     $pdo->exec('DELETE FROM decks;');
-    foreach ($test as $baseColorId => $name) {
-        $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (:name, :leaderId, :baseColorId, :version)');
-        $stmt->execute([
-            ':name' => $name,
-            ':leaderId' => 5,
-            ':baseColorId' => $baseColorId,
-            ':version' => '1.02'
-        ]);
-    }
+    $pdo->exec('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (\'Test\', 6, 2, \'1.02\')');
+    $pdo->exec('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (\'test2\', 2, 1, \'2.1\')');
 }
