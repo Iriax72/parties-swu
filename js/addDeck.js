@@ -60,15 +60,17 @@ addCardBtn.addEventListener('click', () => {
     });
 });
 
-form.addEventListener('submit', () => {
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    alert('form submité')
     const currentDeck = {}
-    const entryWrappers = cardArea.childNodes;
-    for (i = 0; i < entryWrappers.length; i++) {
-        const cardName = entryWrappers[i][0];
-        const exemplaires = entryWrappers[i][1];
-        currentDeck[cardName] = exemplaires;
-    }
-
+    const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
+    entryWrappers.forEach((wrapper) => {
+        const cardId = wrapper.querySelector('select[name="card[]"]').value;
+        const exemplaires = wrapper.querySelector('select[name="quantity[]"]').value;
+        currentDeck[cardId] = Number(exemplaires);
+    });
+    // temp
     alert(JSON.stringify(currentDeck));
 
     requestApi(
