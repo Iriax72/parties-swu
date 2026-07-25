@@ -32,7 +32,7 @@ try {
 }
 
 // Fonctions utilitaires
-function repeat($value, int $times) {
+function repeat(mixed $value, int $times) {
     $array = [];
     for ($i = 0 ; $i < $times ; $i++) {
         $array[] = $value;

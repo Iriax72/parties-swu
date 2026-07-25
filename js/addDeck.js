@@ -34,7 +34,7 @@ addCardBtn.addEventListener('click', () => {
         });
 
         const quantitySelect = document.createElement('select');
-        quantitySelect.classList.add('quantity-select');
+        quantitySelect.classList.add('select');
         quantitySelect.setAttribute('name', 'quantity[]');
 
         [1, 2, 3].forEach((quantity) => {
@@ -44,9 +44,17 @@ addCardBtn.addEventListener('click', () => {
             quantitySelect.append(option);
         });
 
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.textContent = 'X';
+        removeBtn.classList.add('btn');
+        removeBtn.addEventListener('click', () => {
+            entryWrapper.remove();
+        });
+
         const entryWrapper = document.createElement('div');
-        entryWrapper.classList.add('card-entry');
-        entryWrapper.append(cardSelect, quantitySelect);
+        entryWrapper.classList.add('entry-wrapper');
+        entryWrapper.append(cardSelect, quantitySelect, removeBtn);
 
         cardArea.append(entryWrapper);
     });
