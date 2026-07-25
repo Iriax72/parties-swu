@@ -62,7 +62,8 @@ addCardBtn.addEventListener('click', () => {
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    alert('form submité')
+
+    // Définir le deck
     const currentDeck = {}
     const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
     entryWrappers.forEach((wrapper) => {
@@ -70,13 +71,13 @@ form.addEventListener('submit', (event) => {
         const exemplaires = wrapper.querySelector('select[name="quantity[]"]').value;
         currentDeck[cardId] = Number(exemplaires);
     });
-    // temp
-    alert(JSON.stringify(currentDeck));
-
+    
+    // Ajouter le deck à l'api
     requestApi(
         'add_deck',
         {deck: currentDeck}, 
         (data) => {
+            // Indiquer une validation à l'user
             createPopup('Le deck à été ajouté avec succès !');
         }
     )

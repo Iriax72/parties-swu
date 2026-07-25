@@ -40,10 +40,20 @@ function repeat(mixed $value, int $times) {
     return $array;
 }
 
+function verifyParams(array $params) {
+    foreach ($params as $param) {
+        if (!isset($_REQUEST[$param])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'paramètre' . $param . 'mamquant']);
+            exit;
+        }
+    }
+}
+
 switch ($action) {
     case 'add_game':
         // vérifier que toutes les données sont fournies
-        if (
+        /*if (
             !isset($_REQUEST['winner'])
             || !isset($_REQUEST['loser'])
             || !isset($_REQUEST['winningPlayer'])
@@ -59,6 +69,8 @@ switch ($action) {
             ]);
             exit;
         }
+        */
+        verifyParams(['winner', 'loser', 'winningPlayer']);
 
         $winner = (int) $_REQUEST['winner'];
         $loser = (int) $_REQUEST['loser'];
@@ -211,6 +223,54 @@ switch ($action) {
             // TODO
             exit;
         }
+    
+    case 'add_deck':
+        /*if (
+            !isset($_REQUEST['deck'])
+            || !isset($_REQUEST['name'])
+            || !isset($_REQUEST['leaderId'])
+            || !isset($_REQUEST['baseColorId'])
+        ) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Tous les paramètres pas fourni (deck, name, leaderId, baseColorId, version?)']);
+            exit;
+        }
+        */
+        verifyParams(['deck', 'name', 'leaderId', 'baseColorId']);
+        $deck = $_REQUEST['deck'];
+        $name = $_REQUEST['name'];
+        $leader_id = $_REQUEST['leaderId'];
+        $base_color_id = $_REQUEST['baseColorId'];
+        $version = $_REQUEST['version'] ?? 1;
+
+        try {
+            // Ajouter le deck à la db
+            $stmt = $pdo->prepare('INSERT INTO decks (name, leaderId, baseColorId, version) VALUES (?, ?, ?, ?);');
+            $stmt->execute([
+                $name,
+                $leader_id,
+                $base_color_id,
+                $version
+            ]);
+            $deck_id = (int) $pdo->lastInsertId();
+
+            // Ajouter les cartes à la db
+            foreach ($deck as $card_id => $quantity) {
+                $stmt = $pdo->prepare('INSERT INTO cartes_dans_decks (cardId, deckId, exemplaires) VALUES (?, ?, ?);');
+                $stmt->execute([
+                    $card_id,
+                    $deck_id,
+                    $quantity
+                ]);
+            }
+            
+            echo json_encode(['success' => true, 'deck_id' => $deck_id]);
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => 'erreur lors de l\'insersion du deck: '. $error->getMessage()]);
+            exit;
+        }
+        break;
 
     
     default:

@@ -86,6 +86,7 @@ function init_db() :void {
         id INT AUTO_INCREMENT PRIMARY KEY,
         cardId INT NOT NULL,
         deckId INT NOT NULL,
+        exemplaires TINYINT NOT NULL DEFAULT 1,
         FOREIGN KEY (cardId) REFERENCES cartes(id),
         FOREIGN KEY (deckId) REFERENCES decks(id)
     );');
