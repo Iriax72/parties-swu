@@ -11,7 +11,7 @@ const backBtn = document.querySelector('#back-btn');
 const form = document.querySelector('form');
 const cardArea = document.querySelector('#cards-area');
 const addCardBtn = document.querySelector('#add-card-btn');
-const addDeckBtn = document.querySelector('#add-deck-btn');
+// const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Event Listerners
 backBtn.addEventListener('click', () => {
@@ -60,6 +60,22 @@ addCardBtn.addEventListener('click', () => {
     });
 });
 
-addDeckBtn.addEventListener('click', () => {
-    // TODO
+form.addEventListener('submit', () => {
+    const currentDeck = {}
+    const entryWrappers = cardArea.childNodes;
+    for (i = 0; i < entryWrappers.length; i++) {
+        const cardName = entryWrappers[i][0];
+        const exemplaires = entryWrappers[i][1];
+        currentDeck[cardName] = exemplaires;
+    }
+
+    alert(JSON.stringify(currentDeck));
+
+    requestApi(
+        'add_deck',
+        {deck: currentDeck}, 
+        (data) => {
+            createPopup('Le deck à été ajouté avec succès !');
+        }
+    )
 });

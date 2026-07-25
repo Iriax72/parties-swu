@@ -9,7 +9,7 @@ const backBtn = document.querySelector('#back-btn');
 const form = document.querySelector('form');
 const winnerSelect = document.querySelector('#winner');
 const loserSelect = document.querySelector('#loser');
-const submitBtn = document.querySelector('#submit-btn');
+// const submitBtn = document.querySelector('#submit-btn');
 
 // EventListeners
 backBtn.addEventListener('click', () => {

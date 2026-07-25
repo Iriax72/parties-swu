@@ -40,6 +40,7 @@ $leader_names = $decoded_datas->leaders;
             }
             ?>
         </select>
+        <span>contre</span>
         <select name="loser" id="loser" class="select">
             <?php
             foreach ($leader_names as $id => $name) {
@@ -47,6 +48,7 @@ $leader_names = $decoded_datas->leaders;
             }
             ?>
         </select>
+        <p>Gagnant:</p>
         <input type="radio" name="winningPlayer" id="Léandre" value="Léandre">
         <label for="Leandre" class="label">Léandre</label>
         <input type="radio" name="winningPlayer" id="Lancelot" value="Lancelot">
