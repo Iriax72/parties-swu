@@ -12,6 +12,7 @@ define('DB_PASS', getenv('DB_PASSWORD'));
 define('DB_CHARSET', 'utf8mb4');
 
 // temporaire
+/*
 function debug(mixed $message): void {
     $output = is_scalar($message)
         ? (string) $message
@@ -19,6 +20,7 @@ function debug(mixed $message): void {
 
     echo '<pre style="background:#111;color:#fff;padding:1rem;white-space:pre-wrap;">' . htmlspecialchars($output, ENT_QUOTES, 'UTF-8') . '</pre>';
 }
+*/
 
 function get_db_connection() :PDO {
     static $pdo = null;
@@ -45,7 +47,7 @@ function get_db_connection() :PDO {
 }
 
 function init_db() :void {
-    debug('init_db appelé');
+    // debug('init_db appelé');
     $pdo = get_db_connection();
 
     // Créer les tables
@@ -130,21 +132,23 @@ function init_db() :void {
 
     try {
         $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes')->fetch();
-        debug((string) $totalCards);
-        if ((int) $totalCards === 0) {
+        // debug($totalCards);
+        if ((int) $totalCards['total'] === 0) {
             $cards = $datas->cartes;
-            debug($cards);
+            // debug($cards);
             foreach ($cards as $id => $name) {
                 $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUES (:id, :name)');
                 $stmt->execute([
                     ':id' => $id,
                     ':name' => $name
                 ]);
-                debug("Insertion effectuée avec $id => $name");
+                // debug("Insertion effectuée avec $id => $name");
             }
         }
     } catch (Throwable $e) {
-        debug("Erreur d'insersion des cartes dans la db: {$e->getMessage()}");
+        //debug("Erreur d'insersion des cartes dans la db: {$e->getMessage()}");
+        echo '<link rel="stylesheet" href="/css/main.css">';
+        echo '<div class="error">' . htmlspecialchars($e, ENT_QUOTES, 'UTF-8') . '</div>';
     }
 
     // Test
