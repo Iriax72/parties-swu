@@ -11,6 +11,11 @@ define('DB_USER', getenv('DB_USERNAME'));
 define('DB_PASS', getenv('DB_PASSWORD'));
 define('DB_CHARSET', 'utf8mb4');
 
+// temporaire
+function debug(string | object $message) {
+    echo "<script>alert($message);</script>";
+}
+
 function get_db_connection() :PDO {
     static $pdo = null;
 
@@ -120,18 +125,21 @@ function init_db() :void {
 
     try {
         $totalCards = $pdo->query('SELECT COUNT(*) AS total FROM cartes')->fetch();
+        debug((string) $totalCards);
         if ((int) $totalCards === 0) {
             $cards = $datas->cartes;
+            debug($cards);
             foreach ($cards as $id => $name) {
                 $stmt = $pdo->prepare('INSERT INTO cartes (id, name) VALUES (:id, :name)');
                 $stmt->execute([
                     ':id' => $id,
                     ':name' => $name
                 ]);
+                debug("Insertion effectuée avec $id => $name");
             }
         }
     } catch (Throwable $e) {
-        echo 'Erreur d\'inserstion des cartes en db: '. $e->getMessage();
+        debug("Erreur d'insersion des cartes dans la db: {$e->getMessage()}");
     }
 
     // Test
