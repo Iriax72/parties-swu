@@ -12,8 +12,12 @@ define('DB_PASS', getenv('DB_PASSWORD'));
 define('DB_CHARSET', 'utf8mb4');
 
 // temporaire
-function debug(string | object $message) {
-    echo "<script>alert($message);</script>";
+function debug(mixed $message): void {
+    $output = is_scalar($message)
+        ? (string) $message
+        : print_r($message, true);
+
+    echo '<pre style="background:#111;color:#fff;padding:1rem;white-space:pre-wrap;">' . htmlspecialchars($output, ENT_QUOTES, 'UTF-8') . '</pre>';
 }
 
 function get_db_connection() :PDO {
@@ -41,6 +45,7 @@ function get_db_connection() :PDO {
 }
 
 function init_db() :void {
+    debug('init_db appelé');
     $pdo = get_db_connection();
 
     // Créer les tables
