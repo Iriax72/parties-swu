@@ -5,7 +5,7 @@ s'occupe de la redirection via les bouttons
 S'occupe de l'affichage des classements par winrates
 */
 // Imports
-import { requestApi, createPopup } from './functions.js';
+import { requestApi, getDatas, createPopup } from './functions.js';
 
 // Références DOM
 const addGameBtn = document.querySelector('#addGameBtn');
@@ -16,7 +16,8 @@ const seeDecksBtn = document.querySelector('#see-decks-btn');
 const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Charger les datas depuis /datas.json
-let datas = null;
+let datas = getDatas();
+/*
 const datasPromise = (async () => {
     const response = await fetch('/datas.json');
     if (!response.ok) {
@@ -31,31 +32,9 @@ const datasPromise = (async () => {
     alert('Erreur lors du chargement des données: ' + error.message);
     throw error;
 });
-
-// Fonctions utilitaires
-/*
-function createPopup(content) {
-    // content can be an array of strings and/or HTML Nodes to add in the popup
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-
-    const crossBtn = document.createElement('button');
-    crossBtn.innerText = 'X';
-    crossBtn.classList.add('btn', 'back-btn');
-    crossBtn.addEventListener('click', () => {
-        popup.remove();
-    });
-    popup.append(crossBtn);
-
-    content.forEach((element) => {
-        popup.append(element); // TODO : sécuriser ça contre le XSS
-        popup.append(document.createElement('br'));
-    });
-
-    return popup;
-}
 */
 
+// Fonctions utilitaires
 function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
@@ -68,59 +47,10 @@ function createBox(elements) {
 }
 
 /**
- * @param {string} action - L'action a requeter auores de l'api
- * @param {Object} params - Les parametre à envoyer à l'api
- * @param {function} callback - Un callback à executer avec les données (dans la variable data)
- * @returns {boolean} false en cas d'erreur, true dans les autres cas
- */
-/*
-function requestApi(action, params = {}, callback = (data) => { }) {
-    if (typeof params === 'function') {
-        callback = params;
-        params = {};
-    }
-    let uri = `/api.php?action=${encodeURIComponent(action)}`;
-    Object.keys(params).forEach(key => {
-        uri += `&${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
-    });
-
-    return fetch(uri, { method: 'GET' })
-        .then(async (response) => {
-            if (!response.ok) {
-                let errorMessage = `Erreur HTTP ${response.status}`;
-                try {
-                    const errorBody = await response.json();
-                    if (errorBody?.error) {
-                        errorMessage = errorBody.error;
-                    }
-                } catch (e) {
-                    // Ignore the parsing error and keep the default HTTP message.
-                }
-                throw new Error(errorMessage);
-            }
-
-            return response.json();
-        })
-        .then(data => {
-            if (data?.success) {
-                callback(data);
-                return true;
-            }
-
-            const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
-            throw new Error(error);
-        })
-        .catch(error => {
-            const message = error instanceof Error ? error.message : String(error);
-            console.error('Erreur lors de la requête:', error);
-            alert(message || 'Erreur inconnue');
-            return false;
-        });
-}
-*/
-/**
- * @param {string} uri - L'uri du fichier à lire
- */
+ * 
+ * @param {String} uri - L'uri de fichier à lire
+ * @returns {String} Le contenu du fichier
+ */ 
 async function getFileContent(uri) {
     const response = await fetch(uri);
     // Attraper les erreurs

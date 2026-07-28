@@ -4,7 +4,7 @@ Le js de la page addDeck.php
 */
 
 // Imports
-import { requestApi, createPopup } from "./functions.js";
+import { requestApi, getDatas, createPopup } from "./functions.js";
 
 // Références DOM
 const backBtn = document.querySelector('#back-btn');
@@ -62,8 +62,39 @@ addCardBtn.addEventListener('click', () => {
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
+    const datas = getDatas();
+    // Vérifier les valeurs
+
 
     // Définir le deck
+    const name = form.querySelector('#name-input').value;
+    const version = form.querySelector('#version-input').value;
+
+    // Convertir leaderName en leaderId
+    const leaderName = form.querySelector('#leader-input').value;
+    datas.leaders.foreach((leader) => {
+        if (leader[1].toLowerCase().includes(leaderName.toLowerCase())) {
+            const leaderId = leader[0];
+        }
+    });
+    if (!leaderId) {
+        document.body.append(createPopup(['Leader non-trouvé. Leader réglé par défaut:\n 1: Directeur Krennic']));
+        const leaderId = 1;
+    }
+
+    // Convertir baseColor en baseColorId
+    const baseInput = form.querySelector('#base-input').value;
+    for (let i = 0; i < datas.bases.length; i++) {
+        const base = datas.bases[i].toLowerCase()
+        if (baseInput.toLowerCase() === base[0] || baseInput.toLowerCase() === base[1]) {
+            const baseColorId = i
+        }
+    }
+    if (!baseColorId) {
+        document.body.append(createPopup(['Base non-trouvée. Base réglée par défaut: Rouge, Agressivité']));
+        const baseColorId = 1;
+    }
+
     const currentDeck = {}
     const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
     entryWrappers.forEach((wrapper) => {
@@ -75,10 +106,16 @@ form.addEventListener('submit', (event) => {
     // Ajouter le deck à l'api
     requestApi(
         'add_deck',
-        {deck: currentDeck}, 
+        {
+            deck: currentDeck,
+            name: name,
+            leader_id: leaderId,
+            base_color_id: baseColorId,
+            version: version
+        }, 
         (data) => {
             // Indiquer une validation à l'user
-            createPopup('Le deck à été ajouté avec succès !');
+            document.body.append(createPopup('Le deck à été ajouté avec succès !'));
         }
     )
 });

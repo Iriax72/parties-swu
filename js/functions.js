@@ -59,8 +59,29 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
         });
 }
 
+/**
+ * @returns {JSON} Le fichier json /datas.json
+ */
+export function getDatas() {
+    const dataPromise = (async () => {
+        const response = await fetch('/datas.json');
+        if (!response.ok) {
+            throw new Error(`Impossible de lire /datas.json: ${response.status}`);
+        }
+        return response.json();
+    })().then((loadedDatas) => {
+        return loadedDatas;
+    }).catch((error) => {
+        throw new Error('erreur lors du chargement des données' + error.message);
+    });
+}
+
+/**
+ * 
+ * @param {Array} content - Un array de string ou d'HTMLNodes enfants de la popup
+ * @returns {HTMLElement} La popup créée
+ */
 export function createPopup(content) {
-    // content est un array de string / HTMLNodes à mettre dans la popup
     const popup = document.createElement('div');
     popup.classList.add('popup');
 
