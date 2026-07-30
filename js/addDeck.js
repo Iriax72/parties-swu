@@ -7,11 +7,9 @@ Le js de la page addDeck.php
 import { requestApi, getDatas, createPopup } from "./functions.js";
 
 // Références DOM
-const backA = document.querySelector('#back-a');
 const form = document.querySelector('form');
 const cardArea = document.querySelector('#cards-area');
 const addCardBtn = document.querySelector('#add-card-btn');
-// const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Event Listerners
 addCardBtn.addEventListener('click', () => {
@@ -44,79 +42,102 @@ addCardBtn.addEventListener('click', () => {
         removeBtn.type = 'button';
         removeBtn.textContent = 'X';
         removeBtn.classList.add('btn');
-        removeBtn.addEventListener('click', () => {
-            entryWrapper.remove();
-        });
 
         const entryWrapper = document.createElement('div');
         entryWrapper.classList.add('entry-wrapper');
         entryWrapper.append(cardSelect, quantitySelect, removeBtn);
 
+        removeBtn.addEventListener('click', () => {
+            entryWrapper.remove();
+        });
+
         cardArea.append(entryWrapper);
     });
 });
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const datas = getDatas();
-    // Vérifier les valeurs
 
+    const name = form.querySelector('#name-input').value.trim();
+    const version = form.querySelector('#version-input').value.trim();
+    const leaderName = form.querySelector('#leader-input').value.trim();
+    const baseInput = form.querySelector('#base-input').value.trim();
 
-    // Définir le deck
-    const name = form.querySelector('#name-input').value;
-    const version = form.querySelector('#version-input').value;
+    if (!name) {
+        document.body.append(createPopup(['Le nom du deck est obligatoire.']));
+        return;
+    }
 
-    // Convertir leaderName en leaderId
-    const leaderName = form.querySelector('#leader-input').value;
-    const leadersCorrespondent = [];
-    datas.leaders.foreach((leader) => {
-        if (!leader[1].toLowerCase().includes(leaderName.toLowerCase())) {
-            continue;
-        }
-        leadersCorrespondent.push(leader[0]);
-    });
+    if (!leaderName) {
+        document.body.append(createPopup(['Le nom du leader est obligatoire.']));
+        return;
+    }
+
+    let datas;
+    try {
+        datas = await getDatas();
+    } catch (error) {
+        document.body.append(createPopup([error instanceof Error ? error.message : String(error)]));
+        return;
+    }
+
+    let leaderId = 1;
+    const leadersCorrespondent = Object.entries(datas.leaders ?? {})
+        .filter(([, leaderValue]) => leaderValue.toLowerCase().includes(leaderName.toLowerCase()))
+        .map(([leaderIdValue]) => Number(leaderIdValue));
+
     if (leadersCorrespondent.length === 0) {
-        document.body.append(createPopup(['Leader non-trouvé. Leader réglé par défaut:\n 1: Directeur Krennic']));
-        const leaderId = 1;
+        document.body.append(createPopup(['Leader non trouvé. Leader réglé par défaut : Directeur Krennic']));
     } else if (leadersCorrespondent.length > 1) {
-        document.body.append(createPopup(['Plusieurs leaders trouvés: ' + leadersCorrespondent + 'leader reglé par défaut: ' + leadersCorrespondent[0] + '.']));
+        document.body.append(createPopup(['Plusieurs leaders trouvés. Leader réglé par défaut : ' + leadersCorrespondent[0]]));
+        leaderId = leadersCorrespondent[0];
+    } else {
+        leaderId = leadersCorrespondent[0];
     }
 
-    // Convertir baseColor en baseColorId
-    const baseInput = form.querySelector('#base-input').value;
-    const basesCorrespondent = [];
-    for (let i = 0; i < datas.bases.length; i++) {
-        const base = datas.bases[i].toLowerCase()
-        if (baseInput.toLowerCase() === base[0] || baseInput.toLowerCase() === base[1]) {
-            const baseColorId = i
+    let baseColorId = 1;
+    const basesCorrespondent = Object.entries(datas.bases ?? {})
+        .map(([colorName, officialName], index) => ({ id: index + 1, colorName, officialName }))
+        .filter(({ colorName, officialName }) => {
+            const normalizedBaseInput = baseInput.toLowerCase();
+            return normalizedBaseInput === colorName.toLowerCase() || normalizedBaseInput === officialName.toLowerCase();
+        });
+
+    if (baseInput) {
+        if (basesCorrespondent.length === 0) {
+            document.body.append(createPopup(['Base non trouvée. Base réglée par défaut : Rouge, Agressivité']));
+        } else if (basesCorrespondent.length > 1) {
+            document.body.append(createPopup(['Plusieurs bases trouvées. Base réglée par défaut : ' + basesCorrespondent[0].colorName]));
+            baseColorId = basesCorrespondent[0].id;
+        } else {
+            baseColorId = basesCorrespondent[0].id;
         }
     }
-    if (!baseColorId) {
-        document.body.append(createPopup(['Base non-trouvée. Base réglée par défaut: Rouge, Agressivité']));
-        const baseColorId = 1;
+
+    const currentDeck = {};
+    const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
+    if (entryWrappers.length === 0) {
+        document.body.append(createPopup(['Ajoutez au moins une carte avant de créer le deck.']));
+        return;
     }
 
-    const currentDeck = {}
-    const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
     entryWrappers.forEach((wrapper) => {
         const cardId = wrapper.querySelector('select[name="card[]"]').value;
-        const exemplaires = wrapper.querySelector('select[name="quantity[]"]').value;
-        currentDeck[cardId] = Number(exemplaires);
+        const exemplaires = Number(wrapper.querySelector('select[name="quantity[]"]').value);
+        currentDeck[cardId] = exemplaires;
     });
-    
-    // Ajouter le deck à l'api
-    requestApi(
+
+    await requestApi(
         'add_deck',
         {
-            deck: currentDeck,
+            deck: JSON.stringify(currentDeck),
             name: name,
             leader_id: leaderId,
             base_color_id: baseColorId,
             version: version
         }, 
         (data) => {
-            // Indiquer une validation à l'user
-            document.body.append(createPopup('Le deck à été ajouté avec succès !'));
+            document.body.append(createPopup(['Le deck a été ajouté avec succes !']));
         }
-    )
+    );
 });

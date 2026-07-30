@@ -237,7 +237,13 @@ switch ($action) {
         }
         */
         verifyParams(['deck', 'name', 'leaderId', 'baseColorId']);
-        $deck = $_REQUEST['deck'];
+        $deck = json_decode($_REQUEST['deck'], true);
+        if (!is_array($deck)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Le paramètre deck doit être un objet JSON valide.']);
+            exit;
+        }
+
         $name = $_REQUEST['name'];
         $leader_id = $_REQUEST['leaderId'];
         $base_color_id = $_REQUEST['baseColorId'];
