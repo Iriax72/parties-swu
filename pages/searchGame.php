@@ -35,7 +35,7 @@ function leader_select(array $leader_names, string $name, string $id): string {
     <script type="module" src="/js/searchGame.js" defer></script>
 </head>
 <body>
-    <button type="button" id="back-btn" class="btn back-btn">BACK</button>
+    <a href="/menu.php" id="back-a" class="btn back-a">BACK</a>
     <form class="form">
         <p id="request-p">
             <span class="text">Rechercher les</span>

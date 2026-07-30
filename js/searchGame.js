@@ -5,7 +5,7 @@
 import {requestApi} from './functions.js';
 
 // Références DOM
-const backBtn = document.querySelector('#back-btn');
+const backA = document.querySelector('#back-a');
 const submitBtn = document.querySelector('#submit-btn');
 const select1 = document.querySelector('#select1');
 const select2 = document.querySelector('#select2');
@@ -137,10 +137,6 @@ function renderResults(games) {
 }
 
 // EventListeners
-backBtn.addEventListener('click', () => {
-    window.location.assign('/menu.php');
-});
-
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
     //const selectedRadio = document.querySelector('input[name="winningLeader"]:checked');

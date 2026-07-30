@@ -5,17 +5,13 @@ js/addGame.js
 import { requestApi, createPopup } from './functions.js';
 
 // Références DOM
-const backBtn = document.querySelector('#back-btn');
+const backA = document.querySelector('#back-a');
 const form = document.querySelector('form');
 const winnerSelect = document.querySelector('#winner');
 const loserSelect = document.querySelector('#loser');
 // const submitBtn = document.querySelector('#submit-btn');
 
 // EventListeners
-backBtn.addEventListener('click', () => {
-    window.location.assign('/menu.php');
-});
-
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
 

@@ -7,17 +7,13 @@ Le js de la page addDeck.php
 import { requestApi, getDatas, createPopup } from "./functions.js";
 
 // Références DOM
-const backBtn = document.querySelector('#back-btn');
+const backA = document.querySelector('#back-a');
 const form = document.querySelector('form');
 const cardArea = document.querySelector('#cards-area');
 const addCardBtn = document.querySelector('#add-card-btn');
 // const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Event Listerners
-backBtn.addEventListener('click', () => {
-    window.location.assign('/menu.php');
-})
-
 addCardBtn.addEventListener('click', () => {
     requestApi('get_cards', (data) => {
         const cards = Array.isArray(data.cards) ? data.cards : [];
@@ -72,18 +68,23 @@ form.addEventListener('submit', (event) => {
 
     // Convertir leaderName en leaderId
     const leaderName = form.querySelector('#leader-input').value;
+    const leadersCorrespondent = [];
     datas.leaders.foreach((leader) => {
-        if (leader[1].toLowerCase().includes(leaderName.toLowerCase())) {
-            const leaderId = leader[0];
+        if (!leader[1].toLowerCase().includes(leaderName.toLowerCase())) {
+            continue;
         }
+        leadersCorrespondent.push(leader[0]);
     });
-    if (!leaderId) {
+    if (leadersCorrespondent.length === 0) {
         document.body.append(createPopup(['Leader non-trouvé. Leader réglé par défaut:\n 1: Directeur Krennic']));
         const leaderId = 1;
+    } else if (leadersCorrespondent.length > 1) {
+        document.body.append(createPopup(['Plusieurs leaders trouvés: ' + leadersCorrespondent + 'leader reglé par défaut: ' + leadersCorrespondent[0] + '.']));
     }
 
     // Convertir baseColor en baseColorId
     const baseInput = form.querySelector('#base-input').value;
+    const basesCorrespondent = [];
     for (let i = 0; i < datas.bases.length; i++) {
         const base = datas.bases[i].toLowerCase()
         if (baseInput.toLowerCase() === base[0] || baseInput.toLowerCase() === base[1]) {
