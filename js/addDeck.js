@@ -81,6 +81,8 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
+    alert(datas);
+
     let leaderId = 1;
     const leadersCorrespondent = Object.entries(datas.leaders ?? {})
         .filter(([, leaderValue]) => leaderValue.toLowerCase().includes(leaderName.toLowerCase()))
@@ -94,6 +96,8 @@ form.addEventListener('submit', async (event) => {
     } else {
         leaderId = leadersCorrespondent[0];
     }
+
+    alert(leaderId);
 
     let baseColorId = 1;
     const basesCorrespondent = Object.entries(datas.bases ?? {})
@@ -114,6 +118,8 @@ form.addEventListener('submit', async (event) => {
         }
     }
 
+    alert(baseColorId);
+
     const currentDeck = {};
     const entryWrappers = cardArea.querySelectorAll('.entry-wrapper');
     if (entryWrappers.length === 0) {
@@ -126,6 +132,8 @@ form.addEventListener('submit', async (event) => {
         const exemplaires = Number(wrapper.querySelector('select[name="quantity[]"]').value);
         currentDeck[cardId] = exemplaires;
     });
+
+    alert('pret pour la requete api')
 
     await requestApi(
         'add_deck',
