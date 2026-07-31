@@ -63,17 +63,15 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
  * @returns {JSON} Le fichier json /datas.json
  */
 export async function getDatas() {
-    const dataPromise = (async () => {
+    try {
         const response = await fetch('/datas.json');
         if (!response.ok) {
             throw new Error(`Impossible de lire /datas.json: ${response.status}`);
         }
-        return response.json();
-    })().then((loadedDatas) => {
-        return loadedDatas;
-    }).catch((error) => {
-        throw new Error('erreur lors du chargement des données' + error.message);
-    });
+        return await response.json();
+    } catch (error) {
+        throw new Error(`erreur lors du chargement des données: ${error instanceof Error ? error.message : String(error)}`);
+    }
 }
 
 /**
