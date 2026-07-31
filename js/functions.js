@@ -62,7 +62,7 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
 /**
  * @returns {JSON} Le fichier json /datas.json
  */
-export function getDatas() {
+export async function getDatas() {
     const dataPromise = (async () => {
         const response = await fetch('/datas.json');
         if (!response.ok) {
