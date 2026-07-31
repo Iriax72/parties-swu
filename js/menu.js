@@ -16,7 +16,13 @@ const seeDecksBtn = document.querySelector('#see-decks-btn');
 const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Charger les datas depuis /datas.json
-let datas = getDatas();
+let datas;
+try {
+    datas = await getDatas();
+} catch (error) {
+    document.body.append(createPopup([error instanceof Error ? error.message : String(error)]));
+    return;
+}
 /*
 const datasPromise = (async () => {
     const response = await fetch('/datas.json');

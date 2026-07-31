@@ -26,35 +26,34 @@ export function requestApi(action, params = {}, callback = (data)=>{ }) {
     // retourner le résultat de la requete
     return fetch(uri, { method: 'GET' })
         .then(async (response) => {
-            let errorMessage = `Erreur HTTP: ${response.status}`;
-            if (!response.ok) {
-                throw new Error(response.statusText || `HTTP ${response.status}`);
-                try {
-                    const errorBody = await response.json();
-                    if (errorBody?.error) {
-                        errorMessage = errorBody.error;
-                    }
-                } catch (e) {
-                    // Ignorer
-                }
-                throw new Error(errorMessage)
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.success) {
-                callback(data);
-                return true;
+            let data;
+            try {
+                data = await response.json();
+            } catch (error) {
+                data = null;
             }
 
-            const error = data?.error ?? "L'api n'a pas spécifié l'erreur";
-            throw new Error(error);
+            if (!response.ok) {
+                const serverError = data?.error ?? data?.message ?? response.statusText ?? `HTTP ${response.status}`;
+                throw new Error(`Échec de la requête "${action}" (${response.status}) : ${serverError}`);
+            }
+
+            if (!data?.success) {
+                const serverError = data?.error ?? data?.message ?? "L'api n'a pas spécifié l'erreur";
+                throw new Error(`La requête "${action}" a échoué : ${serverError}`);
+            }
+
+            return data;
+        })
+        .then((data) => {
+            callback(data);
+            return true;
         })
         .catch((error) => {
             const message = error instanceof Error ? error.message : String(error);
-            console.error('Erreur lors de la requete: ', error);
+            console.error(`Erreur lors de la requete "${action}":`, error);
 
-            alert(message || 'Erreur inconnue');
+            alert(`Erreur API (${action}) : ${message || 'Erreur inconnue'}`);
             return false;
         });
 }
