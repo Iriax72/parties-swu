@@ -1,8 +1,7 @@
 /*
 /js/menu.js
 
-s'occupe de la redirection via les bouttons
-S'occupe de l'affichage des classements par winrates
+S'occupe de l'affichage des classements par winrates et des decks
 */
 // Imports
 import { requestApi, getDatas, createPopup } from './functions.js';
@@ -16,29 +15,16 @@ const seeDecksBtn = document.querySelector('#see-decks-btn');
 const addDeckBtn = document.querySelector('#add-deck-btn');
 
 // Charger les datas depuis /datas.json
-let datas;
-try {
-    datas = await getDatas();
-} catch (error) {
-    document.body.append(createPopup([error instanceof Error ? error.message : String(error)]));
-    return;
-}
-/*
-const datasPromise = (async () => {
-    const response = await fetch('/datas.json');
-    if (!response.ok) {
-        throw new Error(`Impossible de lire /datas.json: ${response.status}`);
-    }
-    return response.json();
-})().then((loadedDatas) => {
-    datas = loadedDatas;
-    return loadedDatas;
-})
-.catch((error) => {
-    alert('Erreur lors du chargement des données: ' + error.message);
-    throw error;
-});
-*/
+let datas = null;
+let datasError = null;
+const datasPromise = getDatas()
+    .then((loadedDatas) => {
+        datas = loadedDatas;
+    })
+    .catch((error) => {
+        datasError = error instanceof Error ? error.message : String(error);
+        console.error('Erreur lors du chargement des données:', error);
+    });
 
 // Fonctions utilitaires
 function createBox(elements) {
@@ -67,37 +53,40 @@ async function getFileContent(uri) {
 }
 
 //EventListeners
-addGameBtn.addEventListener('click', () => {
-    window.location.assign('/pages/addGame.php')
-});
-
-addDeckBtn.addEventListener('click', () => {
-    window.location.assign('/pages/addDeck.php');
-})
-
-leadersWinrateBtn.addEventListener('click', () => {
+leadersWinrateBtn.addEventListener('click', async () => {
     const waitingText = document.createElement('p');
     waitingText.innerText = 'Chargement des données...';
     const popup = createPopup(['Classement des leaders par winrate:', waitingText]);
     document.body.append(popup);
-    datasPromise.then(() => requestApi('get_leaders_winrate', (data) => {
-        waitingText.remove();
-        const leaderNames = datas.leaders;
-        const sortedWinrates = data.winrates
-            .map((winrate, index) => ({ winrate, index }))
-            .filter((item) => item.winrate !== -1)
-            .sort((a, b) => b.winrate - a.winrate);
-        for (const item of sortedWinrates) {
-            const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
-            const box = createBox([
-                leaderName,
-                ' : ',
-                String(Math.round(item.winrate * 100)),
-                '%'
-            ]);
-            popup.append(box);
+
+    try {
+        await datasPromise;
+        if (!datas) {
+            throw new Error(datasError ?? 'Les données ne sont pas disponibles');
         }
-    }));
+
+        waitingText.remove();
+        requestApi('get_leaders_winrate', (data) => {
+            const leaderNames = datas.leaders;
+            const sortedWinrates = data.winrates
+                .map((winrate, index) => ({ winrate, index }))
+                .filter((item) => item.winrate !== -1)
+                .sort((a, b) => b.winrate - a.winrate);
+            for (const item of sortedWinrates) {
+                const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
+                const box = createBox([
+                    leaderName,
+                    ' : ',
+                    String(Math.round(item.winrate * 100)),
+                    '%'
+                ]);
+                popup.append(box);
+            }
+        });
+    } catch (error) {
+        waitingText.remove();
+        popup.append(createBox([error instanceof Error ? error.message : String(error)]));
+    }
 });
 
 playersWinrateBtn.addEventListener('click', () => {
@@ -110,10 +99,6 @@ playersWinrateBtn.addEventListener('click', () => {
         popup.append(createBox(['Léandre : ', String(Math.round(data.winrateLeandre * 100)), '%']));
         popup.append(createBox(['Lancelot : ', String(Math.round(data.winrateLancelot * 100)), '%']));
     });
-});
-
-searchGamesBtn.addEventListener('click', () => {
-    window.location.assign('/pages/searchGame.php');
 });
 
 seeDecksBtn.addEventListener('click', () => {
