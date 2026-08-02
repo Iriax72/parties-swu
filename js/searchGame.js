@@ -89,6 +89,7 @@ async function getFileContent (uri) {
     return response.text();
 }
 
+/*
 function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
@@ -99,6 +100,7 @@ function createBox(elements) {
     });
     return box;
 }
+*/
 
 function renderResults(games) {
     const leaderNames = datas.leaders;

@@ -4,7 +4,7 @@
 S'occupe de l'affichage des classements par winrates et des decks
 */
 // Imports
-import { requestApi, getDatas, createPopup } from './functions.js';
+import { requestApi, getDatas, createPopup, createBox } from './functions.js';
 
 // Références DOM
 const addGameBtn = document.querySelector('#addGameBtn');
@@ -27,6 +27,7 @@ const datasPromise = getDatas()
     });
 
 // Fonctions utilitaires
+/*
 function createBox(elements) {
     const box = document.createElement('div');
     box.classList.add('box');
@@ -37,6 +38,7 @@ function createBox(elements) {
     });
     return box;
 }
+    */
 
 /**
  * 
@@ -109,7 +111,10 @@ seeDecksBtn.addEventListener('click', () => {
     requestApi('get_decks', (data) => {
         waitingText.remove();
         (data.decks ?? []).forEach((deck) => {
-            popup.append(createBox([`${deck.leaderName ?? deck.leader} ${deck.baseColorName ?? ''} ${deck.version ?? ''} (${deck.name ?? ''})`.trim()]));
+            popup.append(createBox(
+                [`${deck.leaderName} ${deck.baseColorName} ${deck.version} (${deck.name})`.trim()],
+                '/pages/seeDeck.php?deck_id=' + encodeURIComponent(deck.id)
+            ));
         });
     })
 })

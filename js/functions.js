@@ -74,7 +74,6 @@ export async function getDatas() {
 }
 
 /**
- * 
  * @param {Array} content - Un array de string ou d'HTMLNodes enfants de la popup
  * @returns {HTMLElement} La popup créée
  */
@@ -97,4 +96,23 @@ export function createPopup(content) {
     });
 
     return popup;
+}
+
+/**
+ * @param {Array} elements - Un array d'éléments à mettre dans la box
+ * @param {String | null} href - Un lien vers lequel rediriger quand la box est cliquée, facultatif
+ * @returns {HTMLElement} La box créée
+ */
+export function createBox(elements, href = null) {
+    const box = document.createElement(href ? 'a' : 'div');
+    box.classList.add('box');
+    if (href) {
+        box.href = href;
+    }
+    elements.forEach(element => {
+        const span = document.createElement('span');
+        span.textContent = String(element);
+        box.append(span);
+    });
+    return box;
 }
