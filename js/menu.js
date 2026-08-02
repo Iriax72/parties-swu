@@ -27,19 +27,6 @@ const datasPromise = getDatas()
     });
 
 // Fonctions utilitaires
-/*
-function createBox(elements) {
-    const box = document.createElement('div');
-    box.classList.add('box');
-    elements.forEach(element => {
-        const span = document.createElement('span');
-        span.textContent = String(element);
-        box.append(span);
-    });
-    return box;
-}
-    */
-
 /**
  * 
  * @param {String} uri - L'uri de fichier à lire

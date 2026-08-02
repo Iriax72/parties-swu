@@ -52,24 +52,6 @@ function verifyParams(array $params) {
 
 switch ($action) {
     case 'add_game':
-        // vérifier que toutes les données sont fournies
-        /*if (
-            !isset($_REQUEST['winner'])
-            || !isset($_REQUEST['loser'])
-            || !isset($_REQUEST['winningPlayer'])
-        ) {
-            http_response_code(400);
-            echo json_encode([
-                'error' => 'Formulaire incomplet',
-                'details' => [
-                    'winner' => $_REQUEST['winner'] ?? null,
-                    'loser' => $_REQUEST['loser'] ?? null,
-                    'winningPlayer' => $_REQUEST['winningPlayer'] ?? null,
-                ],
-            ]);
-            exit;
-        }
-        */
         verifyParams(['winner', 'loser', 'winningPlayer']);
 
         $winner = (int) $_REQUEST['winner'];
@@ -225,17 +207,6 @@ switch ($action) {
         }
     
     case 'add_deck':
-        /*if (
-            !isset($_REQUEST['deck'])
-            || !isset($_REQUEST['name'])
-            || !isset($_REQUEST['leaderId'])
-            || !isset($_REQUEST['baseColorId'])
-        ) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Tous les paramètres pas fourni (deck, name, leaderId, baseColorId, version?)']);
-            exit;
-        }
-        */
         verifyParams(['deck', 'name', 'leader_id', 'base_color_id']);
         $deck = json_decode($_REQUEST['deck'], true);
         if (!is_array($deck)) {
