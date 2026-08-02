@@ -44,7 +44,7 @@ function verifyParams(array $params) {
     foreach ($params as $param) {
         if (!isset($_REQUEST[$param])) {
             http_response_code(400);
-            echo json_encode(['error' => 'paramètre' . $param . 'mamquant']);
+            echo json_encode(['error' => 'paramètre ' . $param . ' manquant']);
             exit;
         }
     }
@@ -236,7 +236,7 @@ switch ($action) {
             exit;
         }
         */
-        verifyParams(['deck', 'name', 'leaderId', 'baseColorId']);
+        verifyParams(['deck', 'name', 'leader_id', 'base_color_id']);
         $deck = json_decode($_REQUEST['deck'], true);
         if (!is_array($deck)) {
             http_response_code(400);
@@ -245,8 +245,8 @@ switch ($action) {
         }
 
         $name = $_REQUEST['name'];
-        $leader_id = $_REQUEST['leaderId'];
-        $base_color_id = $_REQUEST['baseColorId'];
+        $leader_id = $_REQUEST['leader_id'];
+        $base_color_id = $_REQUEST['base_color_id'];
         $version = $_REQUEST['version'] ?? 1;
 
         try {
