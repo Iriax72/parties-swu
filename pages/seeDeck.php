@@ -87,7 +87,7 @@ $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
         (Mis à jour le <?= convertHTML($deck['lastUpdate']) ?>)
     </p>
     <h2>Cartes:</h2>
-    <ul>
+    <ul id="card-list">
         <?php
         foreach ($cards as $card) {
             echo '<li>';
