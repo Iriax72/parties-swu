@@ -70,6 +70,8 @@ $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>parties swu - voir le deck <?= $deck['deckName'] ?></title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/seeDeck.css">
 </head>
 <body>
     <a href="/menu.php" class="btn back-anchor">BACK</a>
