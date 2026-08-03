@@ -43,16 +43,21 @@ $stmt = $pdo->prepare('
     FROM decks
     JOIN leaders ON decks.leaderId = leaders.id
     JOIN baseColor ON decks.baseColorId = baseColor.id
-    WHERE id = :deck_id;
+    WHERE decks.id = :deck_id;
 ');
 $stmt->execute([':deck_id' => $deck_id]);
 $deck = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Vérifier qu'un deck a été trouvé
+if ($deck === false) {
+    error('Deck introuvable');
+}
+
 // Récupérer la liste des cartes et leur quantité
 $stmt = $pdo->prepare('
-    SELECT cards.id AS cardId, cards.name AS name, cd.exemplaires AS quantity
-    FROM cards 
-    JOIN cartes_dans_decks AS cd ON cards.id = cd.cardId
+    SELECT cartes.id AS cardId, cartes.name AS name, cd.exemplaires AS quantity
+    FROM cartes 
+    JOIN cartes_dans_decks AS cd ON cartes.id = cd.cardId
     WHERE cd.deckId = :deck_id;
 ');
 $stmt->execute([':deck_id' => $deck_id]);
