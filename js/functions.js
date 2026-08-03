@@ -83,7 +83,7 @@ export function createPopup(content) {
 
     const crossBtn = document.createElement('button');
     crossBtn.textContent = 'X';
-    crossBtn.classList.add('btn', 'back-a');
+    crossBtn.classList.add('btn', 'back-anchor');
     crossBtn.addEventListener('click', () => {
         popup.remove();
     });

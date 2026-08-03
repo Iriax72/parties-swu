@@ -25,7 +25,7 @@ try {
     <script type="module" src="/js/addDeck.js" defer></script>
 </head>
 <body>
-    <a href="/menu.php" class="btn back-a" id="back-a">BACK</a>
+    <a href="/menu.php" class="btn back-anchor">BACK</a>
     <form class="form">
         <input type="text" id="name-input" placeholder="nom du deck">
         <input type="text" id="leader-input" placeholder="nom du leader">

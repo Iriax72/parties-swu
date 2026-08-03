@@ -67,6 +67,7 @@ $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>parties swu - voir le deck <?= $deck['deckName'] ?></title>
 </head>
 <body>
+    <a href="/menu.php" class="btn back-anchor">BACK</a>
     <h1>
         <?= convertHTML($deck['leaderName']) ?>
         <?= convertHTML($deck['baseColorName']) ?>

@@ -31,7 +31,7 @@ $leader_names = $decoded_datas->leaders;
     <script type="module" src="/js/addGame.js"></script>
 </head>
 <body>
-    <a href="/menu.php" class="btn back-a" id="back-a">BACK</a>
+    <a href="/menu.php" class="btn back-anchor">BACK</a>
     <form class="form">
         <select name="winner" id="winner" class="select">
             <?php

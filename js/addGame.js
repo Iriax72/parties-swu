@@ -5,7 +5,6 @@ js/addGame.js
 import { requestApi, createPopup } from './functions.js';
 
 // Références DOM
-const backA = document.querySelector('#back-a');
 const form = document.querySelector('form');
 const winnerSelect = document.querySelector('#winner');
 const loserSelect = document.querySelector('#loser');

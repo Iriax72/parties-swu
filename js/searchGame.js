@@ -5,7 +5,6 @@
 import {requestApi} from './functions.js';
 
 // Références DOM
-const backA = document.querySelector('#back-a');
 const submitBtn = document.querySelector('#submit-btn');
 const select1 = document.querySelector('#select1');
 const select2 = document.querySelector('#select2');
