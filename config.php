@@ -57,9 +57,9 @@ function init_db() :void {
     CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
         winner TINYINT NOT NULL,
-        FOREIGN KEY (winner) REFERENCES leaders(id),
+        FOREIGN KEY (winner) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         loser TINYINT NOT NULL,
-        FOREIGN KEY (loser) REFERENCES leaders(id),
+        FOREIGN KEY (loser) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         LeandreWon BOOL NOT NULL
     );');
 
@@ -77,8 +77,8 @@ function init_db() :void {
         baseColorId TINYINT NOT NULL,
         version VARCHAR(8) NOT NULL DEFAULT \'1\',
         lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (leaderId) REFERENCES leaders(id),
-        FOREIGN KEY (baseColorId) REFERENCES baseColor(id)
+        FOREIGN KEY (leaderId) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        FOREIGN KEY (baseColorId) REFERENCES baseColor(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');
 
     $pdo->exec('
@@ -87,8 +87,8 @@ function init_db() :void {
         cardId INT NOT NULL,
         deckId INT NOT NULL,
         exemplaires TINYINT NOT NULL DEFAULT 1,
-        FOREIGN KEY (cardId) REFERENCES cartes(id),
-        FOREIGN KEY (deckId) REFERENCES decks(id)
+        FOREIGN KEY (cardId) REFERENCES cartes(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        FOREIGN KEY (deckId) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');
 
     // Remplir les tables si elles sont vides
@@ -135,9 +135,4 @@ function init_db() :void {
         echo '<link rel="stylesheet" href="/css/main.css">';
         echo '<div class="error">' . htmlspecialchars($e, ENT_QUOTES, 'UTF-8') . '</div>';
     }
-
-    // Test
-    $pdo->exec('DELETE FROM decks;');
-    $pdo->exec("INSERT INTO decks (name, leaderId, baseColorId, version) VALUES ('Test', 6, 2, '1.02')");
-    $pdo->exec("INSERT INTO decks (name, leaderId, baseColorId, version) VALUES ('test2', 2, 1, '2.1')");
 }
