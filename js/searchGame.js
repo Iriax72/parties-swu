@@ -28,6 +28,7 @@ const dataPromise = (async () => {
 });
 
 // Fonction utilitaire
+/*
 /**
  * @param {string} action - L'action à requeter auprès de l'api
  * @param {Object} params - Les parametres à passer à l'api
@@ -48,7 +49,6 @@ async function getFileContent (uri) {
 }
 
 function renderResults(games) {
-    const leaderNames = datas.leaders;
     results.innerHTML = '';
 
     if (!Array.isArray(games) || games.length === 0) {
@@ -62,8 +62,8 @@ function renderResults(games) {
     const thead = document.createElement('thead');
     thead.innerHTML = `
         <tr>
-            <th>Leader gagnant</th>
-            <th>Leader perdant</th>
+            <th>Deck gagnant</th>
+            <th>Deck perdant</th>
             <th>Joueur gagnant</th>
         </tr>
     `;
@@ -72,8 +72,8 @@ function renderResults(games) {
     games.forEach((game) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${game.winner ? leaderNames[game.winner] : 'inconnu'}</td>
-            <td>${game.loser ? leaderNames[game.loser] : 'inconnu'}</td>
+            <td>${game.winnerName ?? 'inconnu'}</td>
+            <td>${game.loserName ?? 'inconnu'}</td>
             <td>${game.LeandreWon ? 'Léandre' : 'Lancelot'}</td>
         `;
         tbody.append(row);
@@ -86,20 +86,18 @@ function renderResults(games) {
 // EventListeners
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    //const selectedRadio = document.querySelector('input[name="winningLeader"]:checked');
-    //const winningLeader = selectedRadio ? selectedRadio.value : 'nobodyWon';
     const winningLeader = select1.value === 'victory' ? 'l1won'
-    : select1.value === 'lose' ? 'l2won'
-    : 'not_specified';
+        : select1.value === 'lose' ? 'l2won'
+        : null;
 
     const params = {};
     if (select2.value !== 'all') {
-        params.leader1 = select2.value;
+        params.deck1 = select2.value;
     }
     if (select3.value !== 'all') {
-        params.leader2 = select3.value;
+        params.deck2 = select3.value;
     }
-    if (winningLeader !== 'not_specified') {
+    if (winningLeader !== null) {
         params.winningLeader = winningLeader;
     }
     requestApi('get_games', params, (response) => {

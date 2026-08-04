@@ -5,10 +5,12 @@ Ne renvoie pas de HTML
 Renvoie tout en json
 actions possibles:
 - add_game
-- get_leaders_winrate
+(- get_leaders_winrate)
+- get_decks_winrate
 - get_players_winrate
 - get_games
 - get_decks
+- add_deck
 todo passer par une action api pour ajouter les games a la db
 */
 
@@ -70,7 +72,7 @@ switch ($action) {
         echo json_encode(['success' => true]);
         break;
 
-    case 'get_leaders_winrate':
+    /* case 'get_leaders_winrate':
         try {
             $stmt = $pdo->query('SELECT winner, loser FROM games');
             $games = $stmt->fetchAll();
@@ -95,6 +97,52 @@ switch ($action) {
 
         echo json_encode(['success' => true, 'winrates' => $winrates]);
         break;
+    */
+    case 'get_decks_winrate':
+        try {
+            $stmt = $pdo->query('
+            WITH decks_games AS (
+                SELECT
+                    winning_deck.id AS deck_id,
+                    winning_deck.name AS deck_name,
+                    1 AS isWin
+                FROM games g
+                JOIN decks winning_deck ON g.winner = winning_deck.id
+
+                UNION ALL
+
+                SELECT
+                    losing_deck.id AS deck_id,
+                    losing_deck.name AS deck_name,
+                    0 AS isWin
+                FROM games g
+                JOIN decks losing_deck ON g.loser = losing_deck.id
+            )
+
+            SELECT
+                dg.deck_id AS deck_id,
+                dg.deck_name AS deck_name,
+                COUNT(*) AS total_games,
+                SUM(dg.isWin) AS total_wins,
+                COUNT(*) - SUM(dg.isWin) AS total_losses,
+                ROUND(SUM(dg.isWin) / COUNT(*), 4) AS winrate
+            FROM decks_games dg
+            GROUP BY dg.deck_id, dg.deck_name
+            ORDER BY winrate DESC
+            ');
+            $games = $stmt->fetchAll();
+            $winrates = [];
+            foreach ($games as $game) {
+                $winrates[$game['deck_id']] = (float) $game['winrate'];
+            }
+
+            echo json_encode(['success' => true, 'winrates' => $winrates]);
+            break;
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => "erreur lors de la requete du winrate: $error"]);
+            exit;
+        }
     
     case 'get_players_winrate':
         try {
@@ -120,18 +168,33 @@ switch ($action) {
     
     case 'get_games':
         $winningLeader = isset($_REQUEST['winningLeader']) ? $_REQUEST['winningLeader'] : null;
-        $request = 'SELECT winner, loser, LeandreWon FROM games WHERE 1=1';
-        if (isset($_REQUEST['leader1'])) {
-            $leader1 = (int) $_REQUEST['leader1'];
+        $query = '
+            SELECT
+                g.winner,
+                g.loser,
+                g.LeandreWon,
+                winner_deck.name AS winnerName,
+                loser_deck.name AS loserName
+            FROM games g
+            JOIN decks winner_deck ON g.winner = winner_deck.id
+            JOIN decks loser_deck ON g.loser = loser_deck.id
+            WHERE 1=1';
+        $params = [];
+
+        if (isset($_REQUEST['deck1'])) {
+            $deck1 = (int) $_REQUEST['deck1'];
             switch ($winningLeader) {
                 case 'l1won':
-                    $request .= " AND winner = $leader1";
+                    $query .= ' AND g.winner = :deck1';
+                    $params[':deck1'] = $deck1;
                     break;
                 case 'l2won':
-                    $request .= " AND loser = $leader1";
+                    $query .= ' AND g.loser = :deck1';
+                    $params[':deck1'] = $deck1;
                     break;
                 case null:
-                    $request .= " AND (winner = $leader1 OR loser = $leader1)";
+                    $query .= ' AND (g.winner = :deck1 OR g.loser = :deck1)';
+                    $params[':deck1'] = $deck1;
                     break;
                 default:
                     http_response_code(400);
@@ -139,17 +202,20 @@ switch ($action) {
                     exit;
             }
         }
-        if (isset($_REQUEST['leader2'])) {
-            $leader2 = (int) $_REQUEST['leader2'];
+        if (isset($_REQUEST['deck2'])) {
+            $deck2 = (int) $_REQUEST['deck2'];
             switch ($winningLeader) {
                 case 'l1won':
-                    $request .= " AND loser = $leader2";
+                    $query .= ' AND g.loser = :deck2';
+                    $params[':deck2'] = $deck2;
                     break;
                 case 'l2won':
-                    $request .= " AND winner = $leader2";
+                    $query .= ' AND g.winner = :deck2';
+                    $params[':deck2'] = $deck2;
                     break;
                 case null:
-                    $request .= " AND (winner = $leader2 OR loser = $leader2)";
+                    $query .= ' AND (g.winner = :deck2 OR g.loser = :deck2)';
+                    $params[':deck2'] = $deck2;
                     break;
                 default:
                     http_response_code(400);
@@ -157,9 +223,10 @@ switch ($action) {
                     exit;
             }
         }
-        $request .= ';';
+        $query .= ';';
         try {
-            $stmt = $pdo->query($request);
+            $stmt = $pdo->prepare($query);
+            $stmt->execute($params);
             $games = $stmt->fetchAll();
             echo json_encode(['success' => true, 'data' => $games]);
         } catch (Throwable $error) {

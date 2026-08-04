@@ -5,6 +5,21 @@
 Permet un questionement approfondi de la db
 */
 
+// Fonction utilitaire
+function error(string $message) {
+    // TODO
+    echo $message;
+    exit;
+}
+
+require_once __DIR__ . '/../config.php';
+
+try {
+    init_db();
+} catch (Throwable $error) {
+    error('Impossible d\'initialiser la base de données : ' . $error->getMessage());
+}
+
 // Obtenir la liste des leaders depuis /datas.json
 $datas = file_get_contents(__DIR__ . '/../datas.json');
 $decoded_datas = json_decode($datas, true);
@@ -12,12 +27,25 @@ $leader_names = is_array($decoded_datas['leaders'] ?? null)
     ? $decoded_datas['leaders']
     : [];
 
+// Obtenir la liste des decks
+try {
+    $pdo = get_db_connection();
+    $stmt = $pdo->query('SELECT id, name FROM decks');
+    $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $decks_names = [];
+    foreach ($decks as $deck) {
+        $decks_names[$deck['id']] = $deck['name'];
+    }
+} catch (Throwable $error) {
+    error('Impossible d\'obtnir les decks depuis la db: ' . $error->getMessage());
+}
+
 // Élement DOM
-function leader_select(array $leader_names, string $name, string $id): string {
+function deck_select(array $decks_names, string $name, string $id): string {
     $ret = "<select name=\"$name\" id=\"$id\" class=\"select\">";
-    $ret .= '<option value="all">tous les leaders</option>';
-    foreach ($leader_names as $l_id => $l_name) {
-        $ret .= "<option value=\"$l_id\">$l_name</option>";
+    $ret .= '<option value="all">tous les decks</option>';
+    foreach ($decks_names as $d_id => $d_name) {
+        $ret .= "<option value=\"$d_id\">$d_name</option>";
     }
     $ret .= '</select>';
     return $ret;
@@ -45,9 +73,9 @@ function leader_select(array $leader_names, string $name, string $id): string {
                 <option value="games">parties</option>
             </select>
             <span class="text">de</span>
-            <?= leader_select($leader_names, 'leader1', 'select2'); ?>
+            <?= deck_select($decks_names, 'deck1', 'select2'); ?>
             <span>contre</span>
-            <?= leader_select($leader_names, 'leader2', 'select3'); ?>
+            <?= deck_select($decks_names, 'deck2', 'select3'); ?>
             <span class="text">.</span>
         </p>
         <br>

@@ -8,11 +8,20 @@ import { requestApi, getDatas, createPopup, createBox } from './functions.js';
 
 // Références DOM
 const addGameBtn = document.querySelector('#addGameBtn');
-const leadersWinrateBtn = document.querySelector('#leaders-winrate-btn');
+const decksWinrateBtn = document.querySelector('#decks-winrate-btn');
 const playersWinrateBtn = document.querySelector('#players-winrate-btn');
 const searchGamesBtn = document.querySelector('#search-games-btn');
 const seeDecksBtn = document.querySelector('#see-decks-btn');
 const addDeckBtn = document.querySelector('#add-deck-btn');
+
+// Obtenir les noms des decks depuis l'api
+let decksNames = {};
+requestApi('get_decks', (data) => {
+    const decks = data.decks ?? [];
+    for (const deck of decks) {
+        decksNames[String(deck.id)] = `${deck.leaderName} ${deck.baseColorName} ${deck.version} (${deck.name})`.trim();
+    }
+});
 
 // Charger les datas depuis /datas.json
 let datas = null;
@@ -42,10 +51,10 @@ async function getFileContent(uri) {
 }
 
 //EventListeners
-leadersWinrateBtn.addEventListener('click', async () => {
+decksWinrateBtn.addEventListener('click', async () => {
     const waitingText = document.createElement('p');
     waitingText.innerText = 'Chargement des données...';
-    const popup = createPopup(['Classement des leaders par winrate:', waitingText]);
+    const popup = createPopup(['Classement des decks par winrate:', waitingText]);
     document.body.append(popup);
 
     try {
@@ -55,16 +64,16 @@ leadersWinrateBtn.addEventListener('click', async () => {
         }
 
         waitingText.remove();
-        requestApi('get_leaders_winrate', (data) => {
-            const leaderNames = datas.leaders;
-            const sortedWinrates = data.winrates
-                .map((winrate, index) => ({ winrate, index }))
+        requestApi('get_decks_winrate', (data) => {
+            const deckNames = decksNames;
+            const sortedWinrates = Object.entries(data.winrates ?? {})
+                .map(([deckId, winrate]) => ({ deckId: Number(deckId), winrate: Number(winrate) }))
                 .filter((item) => item.winrate !== -1)
                 .sort((a, b) => b.winrate - a.winrate);
             for (const item of sortedWinrates) {
-                const leaderName = leaderNames[String(item.index + 1)] ?? `Leader ${item.index + 1}`;
+                const deckName = deckNames[String(item.deckId)] ?? `Deck ${item.deckId}`;
                 const box = createBox([
-                    leaderName,
+                    deckName,
                     ' : ',
                     String(Math.round(item.winrate * 100)),
                     '%'
