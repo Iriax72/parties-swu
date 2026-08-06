@@ -59,9 +59,15 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const name = form.querySelector('#name-input').value.trim();
-    const version = form.querySelector('#version-input').value.trim();
+    const versionInput = form.querySelector('#version-input').value.trim();
     const leaderName = form.querySelector('#leader-input').value.trim();
     const baseInput = form.querySelector('#base-input').value.trim();
+
+    const version = versionInput === '' ? 1 : Number(versionInput);
+    if (!Number.isInteger(version) || version < 1) {
+        document.body.append(createPopup(['La version doit être un entier positif.']));
+        return;
+    }
 
     if (!name) {
         document.body.append(createPopup(['Le nom du deck est obligatoire.']));

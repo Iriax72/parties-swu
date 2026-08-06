@@ -30,7 +30,7 @@ try {
         <input type="text" id="name-input" placeholder="nom du deck">
         <input type="text" id="leader-input" placeholder="nom du leader">
         <input type="text" id="base-input" placeholder="couleur de la base">
-        <input type="text" id="version-input" placeholder="version du deck">
+        <input type="number" id="version-input" placeholder="version du deck" min="1" step="1">
         <div id="cards-area">Il n'y a pas encore de carte dans le deck</div>
         <button id="add-card-btn" class="btn" type="button">Ajouter une carte</button>
         <button id="add-deck-btn" class="btn" type="submit">Ajouter le deck</button>

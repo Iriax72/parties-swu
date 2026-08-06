@@ -77,7 +77,7 @@ function init_db() :void {
         name VARCHAR(50) DEFAULT \'\',
         leaderId TINYINT NOT NULL,
         baseColorId TINYINT NOT NULL,
-        version VARCHAR(8) NOT NULL DEFAULT \'1\',
+        version INT NOT NULL DEFAULT 1,
         lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (leaderId) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id) ON DELETE RESTRICT ON UPDATE RESTRICT

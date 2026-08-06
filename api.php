@@ -176,7 +176,7 @@ switch ($action) {
             try {
                 $findDeckInfoStmt = $pdo->prepare('SELECT leaderId, baseColorId, name FROM decks WHERE id = :id LIMIT 1');
                 $findLatestDeckStmt = $pdo->prepare(
-                    'SELECT id FROM decks WHERE leaderId = :leaderId AND baseColorId = :baseColorId AND name = :name ORDER BY CAST(version AS UNSIGNED) DESC, version DESC LIMIT 1'
+                    'SELECT id FROM decks WHERE leaderId = :leaderId AND baseColorId = :baseColorId AND name = :name ORDER BY version DESC LIMIT 1'
                 );
 
                 if ($deck1 !== null) {
@@ -232,8 +232,9 @@ switch ($action) {
                     $params[':deck1'] = $deck1;
                     break;
                 case null:
-                    $query .= ' AND (g.winner = :deck1 OR g.loser = :deck1)';
-                    $params[':deck1'] = $deck1;
+                    $query .= ' AND (g.winner = :deck1A OR g.loser = :deck1B)';
+                    $params[':deck1A'] = $deck1;
+                    $params[':deck1B'] = $deck1;
                     break;
                 default:
                     http_response_code(400);
@@ -252,8 +253,9 @@ switch ($action) {
                     $params[':deck2'] = $deck2;
                     break;
                 case null:
-                    $query .= ' AND (g.winner = :deck2 OR g.loser = :deck2)';
-                    $params[':deck2'] = $deck2;
+                    $query .= ' AND (g.winner = :deck2A OR g.loser = :deck2B)';
+                    $params[':deck2A'] = $deck2;
+                    $params[':deck2B'] = $deck2;
                     break;
                 default:
                     http_response_code(400);
@@ -321,9 +323,9 @@ switch ($action) {
         }
 
         $name = $_REQUEST['name'];
-        $leader_id = $_REQUEST['leader_id'];
-        $base_color_id = $_REQUEST['base_color_id'];
-        $version = $_REQUEST['version'] ?? 1;
+        $leader_id = (int) $_REQUEST['leader_id'];
+        $base_color_id = (int) $_REQUEST['base_color_id'];
+        $version = isset($_REQUEST['version']) ? (int) $_REQUEST['version'] : 1;
 
         try {
             // Ajouter le deck à la db
