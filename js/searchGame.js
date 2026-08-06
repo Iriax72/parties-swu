@@ -6,6 +6,8 @@ import {requestApi} from './functions.js';
 
 // Références DOM
 const submitBtn = document.querySelector('#submit-btn');
+const historicalRadio = document.querySelector('#historical');
+const lastVersionRadio = document.querySelector('#last-version');
 const select1 = document.querySelector('#select1');
 const select2 = document.querySelector('#select2');
 const select3 = document.querySelector('#select3');
@@ -28,14 +30,6 @@ const dataPromise = (async () => {
 });
 
 // Fonction utilitaire
-/*
-/**
- * @param {string} action - L'action à requeter auprès de l'api
- * @param {Object} params - Les parametres à passer à l'api
- * @param {function} callback - Un callback à executer avec la réponse api
- * @returns {boolean} false en cas d'erreur, true en cas de réussite
- */
-
 /**
  * @param {string} uri - L'uri du fichier à lire
  */
@@ -48,6 +42,11 @@ async function getFileContent (uri) {
     return response.text();
 }
 
+/**
+ * @param {Array} games - Un tableau des parties à afficher
+ * @description Affiche les parties dans le tableau des résultats
+ * @returns nothing
+ */
 function renderResults(games) {
     results.innerHTML = '';
 
@@ -86,6 +85,13 @@ function renderResults(games) {
 // EventListeners
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
+    if (historicalRadio.checked && lastVersionRadio.checked) {
+        alert('Veuillez ne choisir qu\'un mode de recherche');
+        return;
+    }
+
+    const historicalModeActive = historicalRadio.checked ? true : false;
+
     const winningLeader = select1.value === 'victory' ? 'l1won'
         : select1.value === 'lose' ? 'l2won'
         : null;
@@ -100,6 +106,7 @@ submitBtn.addEventListener('click', (event) => {
     if (winningLeader !== null) {
         params.winningLeader = winningLeader;
     }
+    params.historicalModeActive = historicalModeActive;
     requestApi('get_games', params, (response) => {
         const games = Array.isArray(response.data) ? response.data : [];
         renderResults(games);

@@ -167,7 +167,47 @@ switch ($action) {
         break;
     
     case 'get_games':
+        $deck1 = isset($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
+        $deck2 = isset($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
         $winningLeader = isset($_REQUEST['winningLeader']) ? $_REQUEST['winningLeader'] : null;
+        $historical = isset($_REQUEST['historicalModeActive']) ? (bool) $_REQUEST['historicalModeActive'] : true;
+
+        if (!$historical) {
+            try {
+                $findDeckInfoStmt = $pdo->prepare('SELECT leaderId, baseColorId, name FROM decks WHERE id = :id LIMIT 1');
+                $findLatestDeckStmt = $pdo->prepare(
+                    'SELECT id FROM decks WHERE leaderId = :leaderId AND baseColorId = :baseColorId AND name = :name ORDER BY CAST(version AS UNSIGNED) DESC, version DESC LIMIT 1'
+                );
+
+                if ($deck1 !== null) {
+                    $findDeckInfoStmt->execute([':id' => $deck1]);
+                    $deckInfo = $findDeckInfoStmt->fetch(PDO::FETCH_ASSOC);
+                    if ($deckInfo !== false) {
+                        $findLatestDeckStmt->execute($deckInfo);
+                        $latestDeckId = $findLatestDeckStmt->fetchColumn();
+                        if ($latestDeckId !== false) {
+                            $deck1 = (int) $latestDeckId;
+                        }
+                    }
+                }
+                if ($deck2 !== null) {
+                    $findDeckInfoStmt->execute([':id' => $deck2]);
+                    $deckInfo = $findDeckInfoStmt->fetch(PDO::FETCH_ASSOC);
+                    if ($deckInfo !== false) {
+                        $findLatestDeckStmt->execute($deckInfo);
+                        $latestDeckId = $findLatestDeckStmt->fetchColumn();
+                        if ($latestDeckId !== false) {
+                            $deck2 = (int) $latestDeckId;
+                        }
+                    }
+                }
+            } catch (Throwable $error) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Impossible de déterminer la version la plus récente des decks: ' . $error->getMessage()]);
+                exit;
+            }
+        }
+
         $query = '
             SELECT
                 g.winner,
@@ -181,8 +221,7 @@ switch ($action) {
             WHERE 1=1';
         $params = [];
 
-        if (isset($_REQUEST['deck1'])) {
-            $deck1 = (int) $_REQUEST['deck1'];
+        if ($deck1) {
             switch ($winningLeader) {
                 case 'l1won':
                     $query .= ' AND g.winner = :deck1';
@@ -202,8 +241,7 @@ switch ($action) {
                     exit;
             }
         }
-        if (isset($_REQUEST['deck2'])) {
-            $deck2 = (int) $_REQUEST['deck2'];
+        if ($deck2) {
             switch ($winningLeader) {
                 case 'l1won':
                     $query .= ' AND g.loser = :deck2';

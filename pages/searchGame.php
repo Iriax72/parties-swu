@@ -65,6 +65,10 @@ function deck_select(array $decks_names, string $name, string $id): string {
 <body>
     <a href="/menu.php" class="btn back-anchor">BACK</a>
     <form class="form">
+        <input type="radio" name="search-mode" id="historical" checked>
+        <label for="historical">Historique</label>
+        <input type="radio" name="search-mode" id="last-version">
+        <label for="last-version">Dernière version</label>
         <p id="request-p">
             <span class="text">Rechercher les</span>
             <select name="result" id="select1">
