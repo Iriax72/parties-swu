@@ -86,8 +86,8 @@ function init_db() :void {
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        winner TINYINT NOT NULL,
-        loser TINYINT NOT NULL,
+        winner INT NOT NULL,
+        loser INT NOT NULL,
         LeandreWon BOOL NOT NULL,
         FOREIGN KEY (winner) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (loser) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
