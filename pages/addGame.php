@@ -25,17 +25,29 @@ $decoded_datas = json_decode($datas, false);
 $leader_names = $decoded_datas->leaders;
 
 // Obtenir la liste des decks
+$decks = [];
 try {
     $pdo = get_db_connection();
     $stmt = $pdo->query('
         SELECT decks.id AS deck_id, decks.name AS deck_name, leaders.name AS leaderName, baseColor.colorName AS baseColorName, decks.version AS version
         FROM decks
-        JOIN leaders ON decks.leaderId = leaders.id
-        JOIN baseColor ON decks.baseColorId = baseColor.id
+        LEFT JOIN leaders ON decks.leaderId = leaders.id
+        LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
+        ORDER BY decks.name ASC, leaders.name ASC
     ');
     $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $error ) {
     error('Impossible d\'obtenir les donées de la db: ' . $error->getMessage());
+}
+
+if (empty($decks)) {
+    $decks = [[
+        'deck_id' => '',
+        'deck_name' => 'Aucun deck disponible',
+        'leaderName' => '',
+        'baseColorName' => '',
+        'version' => ''
+    ]];
 }
 ?>
 
@@ -53,19 +65,45 @@ try {
     <a href="/menu.php" class="btn back-anchor">BACK</a>
     <form class="form">
         <select name="winner" id="winner" class="select">
-            <?php
-            foreach ($decks as $deck) {
-                echo "<option value=\"{$deck['deck_id']}\">{$deck['leaderName']} {$deck['baseColorName']} ({$deck['deck_name']})</option>";
-            }
-            ?>
+            <?php foreach ($decks as $deck): ?>
+                <?php
+                $deckId = (string) ($deck['deck_id'] ?? '');
+                $labelParts = array_filter([
+                    $deck['leaderName'] ?? '',
+                    $deck['baseColorName'] ?? '',
+                    !empty($deck['deck_name']) ? '(' . $deck['deck_name'] . ')' : ''
+                ]);
+                $label = trim(implode(' ', $labelParts));
+                if ($label === '') {
+                    $label = 'Aucun deck disponible';
+                }
+                $isPlaceholder = $deckId === '';
+                ?>
+                <option value="<?= htmlspecialchars($deckId, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" <?= $isPlaceholder ? 'disabled selected' : '' ?>>
+                    <?= htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                </option>
+            <?php endforeach; ?>
         </select>
         <span>contre</span>
         <select name="loser" id="loser" class="select">
-            <?php
-            foreach ($decks as $deck) {
-                echo "<option value=\"{$deck['deck_id']}\">{$deck['leaderName']} {$deck['baseColorName']} ({$deck['deck_name']})</option>";
-            }
-            ?>
+            <?php foreach ($decks as $deck): ?>
+                <?php
+                $deckId = (string) ($deck['deck_id'] ?? '');
+                $labelParts = array_filter([
+                    $deck['leaderName'] ?? '',
+                    $deck['baseColorName'] ?? '',
+                    !empty($deck['deck_name']) ? '(' . $deck['deck_name'] . ')' : ''
+                ]);
+                $label = trim(implode(' ', $labelParts));
+                if ($label === '') {
+                    $label = 'Aucun deck disponible';
+                }
+                $isPlaceholder = $deckId === '';
+                ?>
+                <option value="<?= htmlspecialchars($deckId, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" <?= $isPlaceholder ? 'disabled selected' : '' ?>>
+                    <?= htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                </option>
+            <?php endforeach; ?>
         </select>
         <p>Gagnant:</p>
         <input type="radio" name="winningPlayer" id="Léandre" value="Léandre">

@@ -18,6 +18,11 @@ form.addEventListener('submit', async (event) => {
     const loser = loserSelect.value;
     const selectedRadio = document.querySelector('input[name=winningPlayer]:checked');
 
+    if (!winner || !loser) {
+        alert('Ajoutez d’abord un deck avant de créer une partie.');
+        return;
+    } 
+
     if (!selectedRadio) {
         alert('Veuillez choisir le joueur gagnant.');
         return;
