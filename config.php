@@ -53,6 +53,7 @@ function init_db() :void {
         officialName VARCHAR(12) NOT NULL
     );');
 
+    /*
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS games (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,6 +63,7 @@ function init_db() :void {
         FOREIGN KEY (loser) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         LeandreWon BOOL NOT NULL
     );');
+    */
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS cartes (
@@ -79,6 +81,16 @@ function init_db() :void {
         lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (leaderId) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id) ON DELETE RESTRICT ON UPDATE RESTRICT
+    );');
+
+    $pdo->exec('
+    CREATE TABLE IF NOT EXISTS games (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        winner TINYINT NOT NULL,
+        loser TINYINT NOT NULL,
+        LeandreWon BOOL NOT NULL,
+        FOREIGN KEY (winner) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        FOREIGN KEY (loser) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');
 
     $pdo->exec('
