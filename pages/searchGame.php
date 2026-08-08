@@ -71,15 +71,15 @@ function deck_select(array $decks_names, string $name, string $id): string {
         <label for="last-version">Dernière version</label>
         <p id="request-p">
             <span class="text">Rechercher les</span>
-            <select name="result" id="select1">
+            <select name="result" id="resultSelect">
                 <option value="victory">victoires</option>
                 <option value="lose">défaites</option>
                 <option value="games">parties</option>
             </select>
             <span class="text">de</span>
-            <?= deck_select($decks_names, 'deck1', 'select2'); ?>
+            <?= deck_select($decks_names, 'deck1', 'deck1select'); ?>
             <span>contre</span>
-            <?= deck_select($decks_names, 'deck2', 'select3'); ?>
+            <?= deck_select($decks_names, 'deck2', 'deck2select'); ?>
             <span class="text">.</span>
         </p>
         <br>

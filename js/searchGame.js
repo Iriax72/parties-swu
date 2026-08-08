@@ -8,9 +8,9 @@ import {requestApi} from './functions.js';
 const submitBtn = document.querySelector('#submit-btn');
 const historicalRadio = document.querySelector('#historical');
 const lastVersionRadio = document.querySelector('#last-version');
-const select1 = document.querySelector('#select1');
-const select2 = document.querySelector('#select2');
-const select3 = document.querySelector('#select3');
+const resultSelect = document.querySelector('#resultSelect');
+const deck1select = document.querySelector('#deck1select');
+const deck2select = document.querySelector('#deck2select');
 const results = document.querySelector('#results');
 
 // Charger les datas depuis /datas.json
@@ -85,28 +85,24 @@ function renderResults(games) {
 // EventListeners
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
+    
     if (historicalRadio.checked && lastVersionRadio.checked) {
         alert('Veuillez ne choisir qu\'un mode de recherche');
         return;
     }
 
-    const historicalModeActive = historicalRadio.checked ? true : false;
-
-    const winningLeader = select1.value === 'victory' ? 'l1won'
-        : select1.value === 'lose' ? 'l2won'
+    const winningLeader = 
+        resultSelect.value === 'victory' ? 'l1won'
+        : resultSelect.value === 'lose' ? 'l2won'
         : null;
 
-    const params = {};
-    if (select2.value !== 'all') {
-        params.deck1 = select2.value;
-    }
-    if (select3.value !== 'all') {
-        params.deck2 = select3.value;
-    }
-    if (winningLeader !== null) {
-        params.winningLeader = winningLeader;
-    }
-    params.historicalModeActive = historicalModeActive;
+    const params = {
+        deck1 : deck1select.value !== 'all' ? deck1select.value : null,
+        deck2 : deck2select.value !== 'all' ? deck2select.value : null,
+        winningLeader : winningLeader,
+        historicalModeActive : historicalRadio.checked
+    };
+
     requestApi('get_games', params, (response) => {
         const games = Array.isArray(response.data) ? response.data : [];
         renderResults(games);
