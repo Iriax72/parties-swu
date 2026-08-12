@@ -91,16 +91,16 @@ submitBtn.addEventListener('click', (event) => {
         return;
     }
 
-    const winningLeader = 
-        resultSelect.value === 'victory' ? 'l1won'
-        : resultSelect.value === 'lose' ? 'l2won'
+    const winningDeck = 
+        resultSelect.value === 'victory' ? 1
+        : resultSelect.value === 'lose' ? 2
         : null;
 
     const params = {
         deck1 : deck1select.value !== 'all' ? deck1select.value : null,
         deck2 : deck2select.value !== 'all' ? deck2select.value : null,
-        winningLeader : winningLeader,
-        historicalModeActive : historicalRadio.checked
+        winningDeck : winningDeck,
+        lastVersionOnly : lastVersionRadio.checked
     };
 
     requestApi('get_games', params, (response) => {

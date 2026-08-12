@@ -167,11 +167,13 @@ switch ($action) {
         break;
     
     case 'get_games':
-        $deck1 = isset($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
-        $deck2 = isset($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
-        $winningLeader = isset($_REQUEST['winningLeader']) ? $_REQUEST['winningLeader'] : null;
-        $historical = isset($_REQUEST['historicalModeActive']) ? (bool) $_REQUEST['historicalModeActive'] : true;
+        verifyParams(['deck1', 'deck2', 'winningLeader', 'lastVersionOnly']);
+        $deck1 = $_REQUEST['deck1'];
+        $deck2 = $_REQUEST['deck2'];
+        $winning_deck = $_REQUEST['winningDeck'];
+        $last_version_only = $_REQUEST['lastVersionOnly'];
 
+        /*
         if (!$historical) {
             try {
                 $findDeckInfoStmt = $pdo->prepare('SELECT leaderId, baseColorId, name FROM decks WHERE id = :id LIMIT 1');
@@ -264,6 +266,7 @@ switch ($action) {
             }
         }
         $query .= ';';
+
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute($params);
@@ -274,6 +277,22 @@ switch ($action) {
             echo json_encode(['error' => $error->getMessage()]);
             exit;
         }
+        */
+        try {
+            $request = file_get_contents(__DIR__ . '/sql/search_games.sql');
+            $stmt = $pdo->prepare($request);
+            $stmt->execute([
+                'deck1' => $deck1,
+                'deck2' => $deck2,
+                'winning_deck' => $winning_deck
+            ]);
+            $games = $stmt->fetchAll();
+        } catch (Throwable $error) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Erreur lors de la requete SQL: ' . $error->getMessage()]);
+            exit;
+        }
+        echo json_encode(['success' => true, 'data' => $games]);
         break;
     
     case 'get_cards':
