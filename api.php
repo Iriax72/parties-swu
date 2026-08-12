@@ -284,7 +284,8 @@ switch ($action) {
             $stmt->execute([
                 'deck1' => $deck1,
                 'deck2' => $deck2,
-                'winning_deck' => $winning_deck
+                'winning_deck' => $winning_deck,
+                'last_version_only' => $last_version_only
             ]);
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {

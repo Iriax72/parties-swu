@@ -13,7 +13,7 @@ WITH last_decks_versions AS (
 )
 
 SELECT
-    games.*
+    games.*,
     winner_deck.id AS winner_deck_id,
     loser_deck.id AS loser_deck_id
 FROM games
@@ -22,7 +22,7 @@ LEFT JOIN decks AS loser_deck ON games.loser = loser_deck.id
 WHERE
     -- Filtre optionnel last_version_only
     (
-        only_last_version = false
+        :only_last_version = 0
         OR (
             games.winner IN (SELECT id FROM last_decks_versions)
             AND
@@ -31,24 +31,23 @@ WHERE
     )
 
     -- Filtres dynamiques sur les decks et le gagnant
-    AND CASE (
-        WHEN winning_deck = 1 THEN 
-            deck1 IS NULL OR games.winner = deck1
+    AND CASE
+        WHEN :winning_deck = 1 THEN 
+            (:deck1 IS NULL OR games.winner = :deck1)
             AND 
-            deck2 IS NULL OR games.loser = deck2
-        WHEN winning_deck = 2 THEN
-            deck2 IS NULL OR games.winner = deck2
+            (:deck2 IS NULL OR games.loser = :deck2)
+        WHEN :winning_deck = 2 THEN
+            (:deck2 IS NULL OR games.winner = :deck2)
             AND
-            deck1 IS NULL OR games.loser = deck1
+            (:deck1 IS NULL OR games.loser = :deck1)
         ELSE (
-            (deck1 IS NULL OR games.winner = deck1)
+            (:deck1 IS NULL OR games.winner = :deck1)
             AND
-            (deck2 IS NULL OR games.loser = deck2)
+            (:deck2 IS NULL OR games.loser = :deck2)
         ) OR (
-            (deck2 IS NULL OR games.winner = deck2)
+            (:deck2 IS NULL OR games.winner = :deck2)
             AND
-            (deck1 IS NULL OR games.loser = deck1)
+            (:deck1 IS NULL OR games.loser = :deck1)
         )
-        END
-    )
+    END
 ;
