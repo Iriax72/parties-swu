@@ -168,10 +168,10 @@ switch ($action) {
     
     case 'get_games':
         verifyParams(['deck1', 'deck2', 'winningDeck', 'lastVersionOnly']);
-        $deck1 = $_REQUEST['deck1'];
-        $deck2 = $_REQUEST['deck2'];
-        $winning_deck = $_REQUEST['winningDeck'];
-        $last_version_only = $_REQUEST['lastVersionOnly'];
+        $deck1 = $_REQUEST['deck1'] === 'all' ? null : $_REQUEST['deck1'];
+        $deck2 = $_REQUEST['deck2'] === 'all' ? null : $_REQUEST['deck2'];
+        $winning_deck = $_REQUEST['winningDeck'] === 'null' ? null : (int) $_REQUEST['winningDeck'];
+        $last_version_only = $_REQUEST['lastVersionOnly'] === 'true' || $_REQUEST['lastVersionOnly'] === true ? 1 : 0;
 
         /*
         if (!$historical) {
