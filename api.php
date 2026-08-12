@@ -167,7 +167,7 @@ switch ($action) {
         break;
     
     case 'get_games':
-        verifyParams(['deck1', 'deck2', 'winningLeader', 'lastVersionOnly']);
+        verifyParams(['deck1', 'deck2', 'winningDeck', 'lastVersionOnly']);
         $deck1 = $_REQUEST['deck1'];
         $deck2 = $_REQUEST['deck2'];
         $winning_deck = $_REQUEST['winningDeck'];
