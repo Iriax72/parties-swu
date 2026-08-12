@@ -6,10 +6,10 @@ WITH last_decks_versions AS (
             ROW_NUMBER() OVER (
                 PARTITION BY name, leaderId, baseColorId
                 ORDER BY version DESC
-            ) AS row_number
+            ) AS rn
         FROM decks
     ) sub
-    WHERE row_number = 1
+    WHERE rn = 1
 )
 
 SELECT
