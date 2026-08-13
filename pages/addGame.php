@@ -93,6 +93,7 @@ if (empty($decks)) {
                 $labelParts = array_filter([
                     $deck['leaderName'] ?? '',
                     $deck['baseColorName'] ?? '',
+                    $deck['version'] ?? '',
                     !empty($deck['deck_name']) ? '(' . $deck['deck_name'] . ')' : ''
                 ]);
                 $label = trim(implode(' ', $labelParts));

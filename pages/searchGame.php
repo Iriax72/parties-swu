@@ -30,11 +30,17 @@ $leader_names = is_array($decoded_datas['leaders'] ?? null)
 // Obtenir la liste des decks
 try {
     $pdo = get_db_connection();
-    $stmt = $pdo->query('SELECT id, name FROM decks');
+    $stmt = $pdo->query('
+        SELECT d.id, d.name, d.version,
+        leaders.name, baseColor.colorName
+        FROM decks d
+        LEFT JOIN leaders ON d.leaderId = leaders.id
+        LEFT JOIN baseColor ON d.baseColorId = baseColor.id
+    ');
     $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $decks_names = [];
+    $decks_slugs = [];
     foreach ($decks as $deck) {
-        $decks_names[$deck['id']] = $deck['name'];
+        $decks_slugs[$deck['id']] = $deck['leaderId'] . ' ' . $deck['baseColorId'] . ' ' . $deck['version'] . ' ('. $deck['name'] . ')';
     }
 } catch (Throwable $error) {
     error('Impossible d\'obtnir les decks depuis la db: ' . $error->getMessage());
@@ -44,8 +50,8 @@ try {
 function deck_select(array $decks_names, string $name, string $id): string {
     $ret = "<select name=\"$name\" id=\"$id\" class=\"select\">";
     $ret .= '<option value="all">tous les decks</option>';
-    foreach ($decks_names as $d_id => $d_name) {
-        $ret .= "<option value=\"$d_id\">$d_name</option>";
+    foreach ($decks_names as $d_id => $d_slug) {
+        $ret .= "<option value=\"$d_id\">$d_slug</option>";
     }
     $ret .= '</select>';
     return $ret;
@@ -77,9 +83,9 @@ function deck_select(array $decks_names, string $name, string $id): string {
                 <option value="games">parties</option>
             </select>
             <span class="text">de</span>
-            <?= deck_select($decks_names, 'deck1', 'deck1select'); ?>
+            <?= deck_select($decks_slugs, 'deck1', 'deck1select'); ?>
             <span>contre</span>
-            <?= deck_select($decks_names, 'deck2', 'deck2select'); ?>
+            <?= deck_select($decks_slugs, 'deck2', 'deck2select'); ?>
             <span class="text">.</span>
         </p>
         <br>
