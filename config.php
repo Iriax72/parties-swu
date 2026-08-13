@@ -42,13 +42,13 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS leaders (
-        id TINYINT PRIMARY KEY,
+        id TINYINT UNSIGNED PRIMARY KEY,
         name VARCHAR(25) NOT NULL
     );');
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS baseColor(
-        id TINYINT AUTO_INCREMENT PRIMARY KEY,
+        id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         colorName VARCHAR(5) NOT NULL,
         officialName VARCHAR(12) NOT NULL
     );');
@@ -67,17 +67,17 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS cartes (
-        id INT PRIMARY KEY,
+        id INT UNSIGNED PRIMARY KEY,
         name VARCHAR(50) NOT NULL
     );');
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS decks (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) DEFAULT \'\',
-        leaderId TINYINT NOT NULL,
-        baseColorId TINYINT NOT NULL,
-        version INT NOT NULL DEFAULT 1,
+        leaderId TINYINT UNSIGNED NOT NULL,
+        baseColorId TINYINT UNSIGNED NOT NULL,
+        version INT UNSIGNED NOT NULL DEFAULT 1,
         lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (leaderId) REFERENCES leaders(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (baseColorId) REFERENCES baseColor(id) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -85,9 +85,9 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS games (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        winner INT NOT NULL,
-        loser INT NOT NULL,
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        winner INT UNSIGNED NOT NULL,
+        loser INT UNSIGNED NOT NULL,
         LeandreWon BOOL NOT NULL,
         FOREIGN KEY (winner) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (loser) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -95,10 +95,10 @@ function init_db() :void {
 
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS cartes_dans_decks (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        cardId INT NOT NULL,
-        deckId INT NOT NULL,
-        exemplaires TINYINT NOT NULL DEFAULT 1,
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        cardId INT UNSIGNED NOT NULL,
+        deckId INT UNSIGNED NOT NULL,
+        exemplaires TINYINT UNSIGNED NOT NULL DEFAULT 1,
         FOREIGN KEY (cardId) REFERENCES cartes(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (deckId) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');

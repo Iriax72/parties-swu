@@ -14,31 +14,28 @@ actions possibles:
 todo passer par une action api pour ajouter les games a la db
 */
 
+function error(int $code, string $message) {
+    http_response_code($code);
+    echo json_encode(['error' => $message]);
+    exit;
+}
+
 require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 if (!isset($_REQUEST['action'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'pas d\'action fournie']);
-    exit;
+    error(400, 'pas d\'action fournie');
 }
 $action = $_REQUEST['action'];
 
 try {
     $pdo = get_db_connection();
 } catch (Throwable $error) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Impossible de se connecter à la base de données: ' . $error->getMessage()]);
-    exit;
+    error(500, 'Impossible de se connecter à la base de données: ' . $error->getMessage());
 }
 
-// Fonctions utilitaires
-function error(int $code, string $message) {
-    http_response_code($code);
-    echo json_encode(['error' => $message]);
-    exit;
-}
+// Fonctions utilitaires 
 
 function repeat(mixed $value, int $times) {
     $array = [];
@@ -51,9 +48,7 @@ function repeat(mixed $value, int $times) {
 function verifyParams(array $params) {
     foreach ($params as $param) {
         if (!isset($_REQUEST[$param])) {
-            http_response_code(400);
-            echo json_encode(['error' => 'paramètre ' . $param . ' manquant']);
-            exit;
+            error(400, 'paramètre ' . $param . ' manquant');
         }
     }
 }
@@ -70,9 +65,7 @@ switch ($action) {
             $stmt = $pdo->prepare('INSERT INTO games (winner, loser, LeandreWon) VALUES (?, ?, ?);');
             $stmt->execute([$winner, $loser, $LeandreWon]);
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => "Erreur lors de l'insertion dans la db: $error"]);
-            exit;
+            error(500, "Erreur lors de l'insertion dans la db: $error");
         }
 
         echo json_encode(['success' => true]);
@@ -83,9 +76,7 @@ switch ($action) {
             $stmt = $pdo->query('SELECT winner, loser FROM games');
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => "erreur lors de la requete du winrate: $error"]);
-            exit;
+            error(500, "erreur lors de la requete du winrate: $error");
         }
         $wins = repeat(0, 18);
         $gamesPlayed = repeat(0, 18);
@@ -145,9 +136,8 @@ switch ($action) {
             echo json_encode(['success' => true, 'winrates' => $winrates]);
             break;
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => "erreur lors de la requete du winrate: $error"]);
-            exit;
+            error(500,  "erreur lors de la requete du winrate: $error");
+            
         }
     
     case 'get_players_winrate':
@@ -155,9 +145,7 @@ switch ($action) {
             $stmt = $pdo->query('SELECT LeandreWon FROM games');
             $rows = $stmt->fetchAll();
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => "erreur lors de la requete du winrate: $error"]);
-            exit;
+            error(500, "erreur lors de la requete du winrate: $error");
         }
         $victorys = 0;
         $games = 0;
@@ -214,9 +202,7 @@ switch ($action) {
                     }
                 }
             } catch (Throwable $error) {
-                http_response_code(500);
-                echo json_encode(['error' => 'Impossible de déterminer la version la plus récente des decks: ' . $error->getMessage()]);
-                exit;
+                error(500, 'Impossible de déterminer la version la plus récente des decks: ' . $error->getMessage());
             }
         }
 
@@ -249,9 +235,7 @@ switch ($action) {
                     $params[':deck1B'] = $deck1;
                     break;
                 default:
-                    http_response_code(400);
-                    echo json_encode(['error' => 'winningLeader contient une valeur inconnue: ' . $winningLeader]);
-                    exit;
+                    error(400, 'winningLeader contient une valeur inconnue: ' . $winningLeader);
             }
         }
         if ($deck2) {
@@ -270,9 +254,7 @@ switch ($action) {
                     $params[':deck2B'] = $deck2;
                     break;
                 default:
-                    http_response_code(400);
-                    echo json_encode(['error' => 'winningLeader contient une valeur inconue: ' . $winningLeader]);
-                    exit;
+                    error(400, 'winningLeader contient une valeur inconue: ' . $winningLeader);
             }
         }
         $query .= ';';
@@ -283,9 +265,7 @@ switch ($action) {
             $games = $stmt->fetchAll();
             echo json_encode(['success' => true, 'data' => $games]);
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => $error->getMessage()]);
-            exit;
+            error(500, $error->getMessage());
         }
         */
         try {
@@ -302,9 +282,7 @@ switch ($action) {
             ]);
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => 'Erreur lors de la requete SQL: ' . $error->getMessage()]);
-            exit;
+            error(500, 'Erreur lors de la requete SQL: ' . $error->getMessage());
         }
         echo json_encode(['success' => true, 'data' => $games]);
         break;
@@ -315,9 +293,7 @@ switch ($action) {
             $cards = $stmt->fetchAll();
             echo json_encode(['success' => true, 'cards' => $cards]);
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => $error->getMessage()]);
-            exit;
+            error(500, $error->getMessage());
         }
         break;
 
@@ -334,13 +310,11 @@ switch ($action) {
                     LEFT JOIN baseColor ON decks.baseColorId = baseColor.id
                 ');
             } catch (Throwable $error) {
-                http_response_code(500);
-                echo json_encode(['error' => $error->getMessage()]);
-                exit;
+                error(500, $error->getMessage());
             }
             $decks = $stmt->fetchAll();
             echo json_encode(['success' => true, 'decks' => $decks]);
-            exit;
+            break;
         } else {
             // TODO
             exit;
@@ -350,9 +324,7 @@ switch ($action) {
         verifyParams(['deck', 'name', 'leader_id', 'base_color_id']);
         $deck = json_decode($_REQUEST['deck'], true);
         if (!is_array($deck)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Le paramètre deck doit être un objet JSON valide.']);
-            exit;
+            error(400, 'Le paramètre deck doit être un objet JSON valide.');
         }
 
         $name = $_REQUEST['name'];
@@ -383,15 +355,11 @@ switch ($action) {
             
             echo json_encode(['success' => true, 'deck_id' => $deck_id]);
         } catch (Throwable $error) {
-            http_response_code(500);
-            echo json_encode(['error' => 'erreur lors de l\'insersion du deck: '. $error->getMessage()]);
-            exit;
+            error(500, 'erreur lors de l\'insersion du deck: ' . $error->getMessage());
         }
         break;
 
     
     default:
-        http_response_code(400);
-        echo json_encode(['error' => 'action inconnue']);
-        exit;
+        error(400, 'action inconnue');
 }
