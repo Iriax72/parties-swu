@@ -20,7 +20,7 @@ FROM games
 LEFT JOIN decks AS winner_deck ON games.winner = winner_deck.id
 LEFT JOIN decks AS loser_deck ON games.loser = loser_deck.id
 LEFT JOIN leaders AS winning_leader ON winner_deck.leaderId = winning_leader.id
-LEFT JOIN leaders AS losing_leader ON loser_deck.leaderId = losing_deck.id
+LEFT JOIN leaders AS losing_leader ON loser_deck.leaderId = losing_leader.id
 LEFT JOIN baseColor AS winning_base ON winner_deck.baseColorId = winning_base.id
 LEFT JOIN baseColor AS losing_base ON loser_deck.baseColorId = losing_base.id
 WHERE
