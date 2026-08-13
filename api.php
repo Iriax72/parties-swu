@@ -274,6 +274,9 @@ switch ($action) {
                 throw new Error('le fichier est illisible');
             }
             $stmt = $pdo->prepare($request);
+            if (!isset($deck1) || !isset($deck2) || !isset($winning_deck) || !isset($last_version_only)) {
+                throw new Error('params incomolets: ' . $deck1. $deck2 . $winning_deck . $last_version_only);
+            }
             try {
             $stmt->execute([
                 ':deck1' => $deck1,
@@ -282,7 +285,7 @@ switch ($action) {
                 ':only_last_version' => $last_version_only
             ]);
             } catch (Throwable $e) {
-                throw new Error($e->getMessage() . '(erreur à la ligne $stmt->execute([...]);)');
+                throw new Error($e->getMessage() . '(erreur à la ligne $stmt->execute([...]);)' . "\ndeck1: $deck1, deck2: $deck2, winning_deck: $winning_deck, last_version_only: $last_version_only");
             }
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {
