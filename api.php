@@ -174,6 +174,8 @@ switch ($action) {
         $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
         $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
 
+        echo "<script>alert(deck1: $deck1\ndeck2: $deck2\nwinning_deck: $winning_deck\nlast_version_only: $last_version_only);</script>";
+
         /*
         if (!$historical) {
             try {
