@@ -31,8 +31,8 @@ $leader_names = is_array($decoded_datas['leaders'] ?? null)
 try {
     $pdo = get_db_connection();
     $stmt = $pdo->query('
-        SELECT d.id, d.name, d.version,
-        leaders.name, baseColor.colorName
+        SELECT d.id AS id, d.name AS name, d.version AS version,
+        leaders.name AS leader, baseColor.colorName AS baseColor
         FROM decks d
         LEFT JOIN leaders ON d.leaderId = leaders.id
         LEFT JOIN baseColor ON d.baseColorId = baseColor.id
@@ -40,7 +40,7 @@ try {
     $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $decks_slugs = [];
     foreach ($decks as $deck) {
-        $decks_slugs[$deck['id']] = $deck['leaderId'] . ' ' . $deck['baseColorId'] . ' ' . $deck['version'] . ' ('. $deck['name'] . ')';
+        $decks_slugs[$deck['id']] = $deck['leader'] . ' ' . $deck['baseColor'] . ' ' . $deck['version'] . ' ('. $deck['name'] . ')';
     }
 } catch (Throwable $error) {
     error('Impossible d\'obtnir les decks depuis la db: ' . $error->getMessage());
