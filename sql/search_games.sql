@@ -14,10 +14,8 @@ WITH last_decks_versions AS (
 
 SELECT
     games.*,
-    winner_deck.id AS winner_deck_id,
-    winner_deck.name AS winnerName,
-    loser_deck.id AS loser_deck_id,
-    loser_deck.name AS loserName
+    CONCAT(winner_deck.name, ' (', winner_deck.version, ')') AS winner_slug,
+    CONCAT(loser_deck.name, ' (', loser_deck.version, ')') AS loser_slug
 FROM games
 LEFT JOIN decks AS winner_deck ON games.winner = winner_deck.id
 LEFT JOIN decks AS loser_deck ON games.loser = loser_deck.id

@@ -71,8 +71,8 @@ function renderResults(games) {
     games.forEach((game) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${game.winnerName ?? 'inconnu'}</td>
-            <td>${game.loserName ?? 'inconnu'}</td>
+            <td>${game.winner_slug ?? 'inconnu'}</td>
+            <td>${game.loser_slug ?? 'inconnu'}</td>
             <td>${game.LeandreWon ? 'Léandre' : 'Lancelot'}</td>
         `;
         tbody.append(row);
