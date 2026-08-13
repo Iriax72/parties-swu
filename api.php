@@ -274,12 +274,16 @@ switch ($action) {
                 throw new Error('le fichier est illisible');
             }
             $stmt = $pdo->prepare($request);
+            try {
             $stmt->execute([
                 ':deck1' => $deck1,
                 ':deck2' => $deck2,
                 ':winning_deck' => $winning_deck,
                 ':only_last_version' => $last_version_only
             ]);
+            } catch (Throwable $e) {
+                throw new Error($e->getMessage() . '(erreur à la ligne $stmt->execute([...]);)');
+            }
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {
             error(500, 'Erreur lors de la requete SQL: ' . $error->getMessage());
