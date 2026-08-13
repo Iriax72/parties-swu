@@ -91,7 +91,7 @@ submitBtn.addEventListener('click', (event) => {
         return;
     }
 
-    const winningDeck = 
+    const winning_deck = 
         resultSelect.value === 'victory' ? 1
         : resultSelect.value === 'lose' ? 2
         : null;
@@ -99,8 +99,8 @@ submitBtn.addEventListener('click', (event) => {
     const params = {
         deck1: deck1select.value !== 'all' ? Number(deck1select.value) : null,
         deck2: deck2select.value !== 'all' ? Number(deck2select.value) : null,
-        winningDeck: winningDeck,
-        lastVersionOnly: lastVersionRadio.checked ? 1 : 0
+        winning_deck: winning_deck,
+        last_version_vnly: lastVersionRadio.checked ? 1 : 0
     };
 
     requestApi('get_games', params, (response) => {

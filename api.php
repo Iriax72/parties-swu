@@ -167,14 +167,12 @@ switch ($action) {
         break;
     
     case 'get_games':
-        verifyParams(['deck1', 'deck2', 'winningDeck', 'lastVersionOnly']);
+        verifyParams(['deck1', 'deck2', 'winning_deck', 'last_version_only']);
 
-        $deck1 = isset($_REQUEST['deck1']) && $_REQUEST['deck1'] !== '' && $_REQUEST['deck1'] !== 'all' ? (int) $_REQUEST['deck1'] : null;
-        $deck2 = isset($_REQUEST['deck2']) && $_REQUEST['deck2'] !== '' && $_REQUEST['deck2'] !== 'all' ? (int) $_REQUEST['deck2'] : null;
-        $winning_deck = isset($_REQUEST['winningDeck']) && $_REQUEST['winningDeck'] !== '' && $_REQUEST['winningDeck'] !== 'null'
-            ? (int) $_REQUEST['winningDeck']
-            : null;
-        $last_version_only = filter_var($_REQUEST['lastVersionOnly'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        $deck1 = isset($_REQUEST['deck1']) && is_numeric($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
+        $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
+        $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
+        $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
 
         /*
         if (!$historical) {
