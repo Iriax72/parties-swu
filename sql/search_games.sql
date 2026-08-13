@@ -14,11 +14,15 @@ WITH last_decks_versions AS (
 
 SELECT
     games.*,
-    CONCAT(winner_deck.name, ' (', winner_deck.version, ')') AS winner_slug,
-    CONCAT(loser_deck.name, ' (', loser_deck.version, ')') AS loser_slug
+    CONCAT(winning_leader.name, ' ', winning_base.colorName, ' (', winner_deck.version, ') ', winner_deck.name) AS winner_slug,
+    CONCAT(losing_leader.name, ' ', losing_base.colorName, ' (', loser_deck.version, ') ', loser_deck.name) AS loser_slug
 FROM games
 LEFT JOIN decks AS winner_deck ON games.winner = winner_deck.id
 LEFT JOIN decks AS loser_deck ON games.loser = loser_deck.id
+LEFT JOIN leaders AS winning_leader ON winner_deck.leaderId = winning_leader.id
+LEFT JOIN leaders AS losing_leader ON loser_deck.leaderId = losing_deck.id
+LEFT JOIN baseColor AS winning_base ON winner_deck.baseColorId = winning_base.id
+LEFT JOIN baseColor AS losing_base ON loser_deck.baseColorId = losing_base.id
 WHERE
     -- Filtre optionnel last_version_only
     (
