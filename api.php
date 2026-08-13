@@ -34,6 +34,12 @@ try {
 }
 
 // Fonctions utilitaires
+function error(int $code, string $message) {
+    http_response_code($code);
+    echo json_encode(['error' => $message]);
+    exit;
+}
+
 function repeat(mixed $value, int $times) {
     $array = [];
     for ($i = 0 ; $i < $times ; $i++) {
@@ -167,13 +173,16 @@ switch ($action) {
         break;
     
     case 'get_games':
-        verifyParams(['deck1', 'deck2', 'winning_deck', 'last_version_only']);
+            verifyParams(['deck1', 'deck2', 'winning_deck', 'last_version_only']);
+        try {
+            $deck1 = isset($_REQUEST['deck1']) && is_numeric($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
+            $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
+            $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
+            $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
 
-        $deck1 = isset($_REQUEST['deck1']) && is_numeric($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
-        $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
-        $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
-        $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
-
+        } catch (Throwable $error) {
+            error(500, $error->getMessage());
+        }
         /*
         if (!$historical) {
             try {
