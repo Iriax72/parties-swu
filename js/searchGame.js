@@ -100,7 +100,7 @@ submitBtn.addEventListener('click', (event) => {
         deck1: deck1select.value !== 'all' ? Number(deck1select.value) : null,
         deck2: deck2select.value !== 'all' ? Number(deck2select.value) : null,
         winning_deck: winning_deck,
-        last_version_vnly: lastVersionRadio.checked ? 1 : 0
+        last_version_only: lastVersionRadio.checked ? 1 : 0
     };
 
     requestApi('get_games', params, (response) => {
