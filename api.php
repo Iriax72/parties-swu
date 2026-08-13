@@ -274,15 +274,30 @@ switch ($action) {
                 throw new Error('le fichier est illisible');
             }
             $stmt = $pdo->prepare($request);
-            if (!isset($deck1) || !isset($deck2) || !isset($winning_deck) || !isset($last_version_only)) {
+            /*if (!isset($deck1) || !isset($deck2) || !isset($winning_deck) || !isset($last_version_only)) {
                 throw new Error('params incomolets: ' . $deck1. $deck2 . $winning_deck . $last_version_only);
-            }
+            }*/
             try {
             $stmt->execute([
-                ':deck1' => $deck1,
-                ':deck2' => $deck2,
-                ':winning_deck' => $winning_deck,
-                ':only_last_version' => $last_version_only
+                $last_version_only,    // 1: ? = 0
+                $winning_deck,         // 2: WHEN ? = 1
+                $deck1,                // 3: (? IS NULL
+                $deck1,                // 4: OR games.winner = ?)
+                $deck2,                // 5: (? IS NULL
+                $deck2,                // 6: OR games.loser = ?)
+                $winning_deck,         // 7: WHEN ? = 2
+                $deck2,                // 8: (? IS NULL
+                $deck2,                // 9: OR games.winner = ?)
+                $deck1,                // 10: (? IS NULL
+                $deck1,                // 11: OR games.loser = ?)
+                $deck1,                // 12: (? IS NULL
+                $deck1,                // 13: OR games.winner = ?)
+                $deck2,                // 14: (? IS NULL
+                $deck2,                // 15: OR games.loser = ?)
+                $deck2,                // 16: (? IS NULL
+                $deck2,                // 17: OR games.winner = ?)
+                $deck1,                // 18: (? IS NULL
+                $deck1,                // 19: OR games.loser = ?)
             ]);
             } catch (Throwable $e) {
                 throw new Error($e->getMessage() . '(erreur à la ligne $stmt->execute([...]);)' . "\ndeck1: $deck1, deck2: $deck2, winning_deck: $winning_deck, last_version_only: $last_version_only");
