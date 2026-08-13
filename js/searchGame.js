@@ -97,10 +97,10 @@ submitBtn.addEventListener('click', (event) => {
         : null;
 
     const params = {
-        deck1 : deck1select.value !== 'all' ? deck1select.value : null,
-        deck2 : deck2select.value !== 'all' ? deck2select.value : null,
-        winningDeck : winningDeck,
-        lastVersionOnly : lastVersionRadio.checked
+        deck1: deck1select.value !== 'all' ? Number(deck1select.value) : null,
+        deck2: deck2select.value !== 'all' ? Number(deck2select.value) : null,
+        winningDeck: winningDeck,
+        lastVersionOnly: lastVersionRadio.checked ? 1 : 0
     };
 
     requestApi('get_games', params, (response) => {
