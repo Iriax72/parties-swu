@@ -1,4 +1,3 @@
-DELIMITER $$
 CREATE OR REPLACE PROCEDURE search_games(
     IN p_deck1 INT UNSIGNED,
     IN p_deck2 INT UNSIGNED,
@@ -62,6 +61,6 @@ BEGIN
                 (p_winning_player = 'Léandre' AND g.LeandreWon = 1)
                 OR (p_winning_player = 'Lancelot' AND g.LeandreWon = 0)
             )
-        );
-END$$
-DELIMITER ;
+        )
+    ;
+END;
