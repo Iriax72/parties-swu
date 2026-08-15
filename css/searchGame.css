@@ -21,6 +21,12 @@ form {
     justify-content: center;
 }
 
+.label {
+    font-family: 'Gill Sans', 'Gill Sans MT', sans-serif;
+    font-size: 1.4rem;
+    color: #ee5555;
+}
+
 .text {
     font-family:'Gill Sans', 'Gill Sans MT', sans-serif;
     font-size: 1.2rem;

@@ -9,7 +9,7 @@ Contient toutes les fonctions utilitaires
  * @param {object} params - Des paramètres à fournir à l'api
  * @param {function} callback - Un callback à executer avec le réultat
  * @returns {boolean} false en cas d'erreur, true en cas de réussite
-*/
+ */
 export function requestApi(action, params = {}, callback = (data)=>{ }) {
     // permettre d'appeler requestApi(uri, callback)
     if (typeof params === 'function') {
@@ -115,4 +115,17 @@ export function createBox(elements, href = null) {
         box.append(span);
     });
     return box;
+}
+
+/**
+ * @param {string} uri - L'uri du fichier à lire
+ * @returns {string} Le contenu du fichier
+ */
+export async function getFileContent(uri) {
+    const response = await fetch(uri);
+    // Attraper les erreurs
+    if (!response.ok) {
+        throw new Error(`Impossible de lire ${uri}: ${response.status}`)
+    }
+    return response.text();
 }

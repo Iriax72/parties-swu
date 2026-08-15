@@ -2,7 +2,7 @@
 /js/searchGame.js
 */
 // Imports
-import {requestApi} from './functions.js';
+import {requestApi, getFileContent} from './functions.js';
 
 // Références DOM
 const submitBtn = document.querySelector('#submit-btn');
@@ -11,6 +11,7 @@ const lastVersionRadio = document.querySelector('#last-version');
 const resultSelect = document.querySelector('#resultSelect');
 const deck1select = document.querySelector('#deck1select');
 const deck2select = document.querySelector('#deck2select');
+const playerSelect = document.querySelector('#playerSelect');
 const results = document.querySelector('#results');
 
 // Charger les datas depuis /datas.json
@@ -32,7 +33,7 @@ const dataPromise = (async () => {
 // Fonction utilitaire
 /**
  * @param {string} uri - L'uri du fichier à lire
- */
+ */ /*
 async function getFileContent (uri) {
     const response = await fetch(uri);
     // Attraper les erreurs
@@ -40,7 +41,8 @@ async function getFileContent (uri) {
         throw new Error(`Impossible de lire ${uri}: ${response.status}`);
     }
     return response.text();
-}
+} 
+*/
 
 /**
  * @param {Array} games - Un tableau des parties à afficher
@@ -96,11 +98,14 @@ submitBtn.addEventListener('click', (event) => {
         : resultSelect.value === 'lose' ? 2
         : null;
 
+    const winning_player = playerSelect.value === 'all' ? null : playerSelect.value;
+
     const params = {
         deck1: deck1select.value !== 'all' ? Number(deck1select.value) : null,
         deck2: deck2select.value !== 'all' ? Number(deck2select.value) : null,
         winning_deck: winning_deck,
-        last_version_only: lastVersionRadio.checked ? 1 : 0
+        last_version_only: lastVersionRadio.checked ? 1 : 0,
+        winning_player: winning_player
     };
 
     requestApi('get_games', params, (response) => {

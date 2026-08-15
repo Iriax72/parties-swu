@@ -4,7 +4,7 @@
 S'occupe de l'affichage des classements par winrates et des decks
 */
 // Imports
-import { requestApi, getDatas, createPopup, createBox } from './functions.js';
+import { requestApi, getDatas, createPopup, createBox, getFileContent} from './functions.js';
 
 // Références DOM
 const addGameBtn = document.querySelector('#addGameBtn');
@@ -40,7 +40,7 @@ const datasPromise = getDatas()
  * 
  * @param {String} uri - L'uri de fichier à lire
  * @returns {String} Le contenu du fichier
- */ 
+ */ /*
 async function getFileContent(uri) {
     const response = await fetch(uri);
     // Attraper les erreurs
@@ -49,6 +49,7 @@ async function getFileContent(uri) {
     }
     return response.text();
 }
+*/
 
 //EventListeners
 decksWinrateBtn.addEventListener('click', async () => {

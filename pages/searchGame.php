@@ -72,9 +72,9 @@ function deck_select(array $decks_names, string $name, string $id): string {
     <a href="/menu.php" class="btn back-anchor">BACK</a>
     <form class="form">
         <input type="radio" name="search-mode" id="historical" checked>
-        <label for="historical">Historique</label>
+        <label for="historical" class="label">Historique</label>
         <input type="radio" name="search-mode" id="last-version">
-        <label for="last-version">Dernière version</label>
+        <label for="last-version" class="label">Dernière version</label>
         <p id="request-p">
             <span class="text">Rechercher les</span>
             <select name="result" id="resultSelect">
@@ -86,6 +86,12 @@ function deck_select(array $decks_names, string $name, string $id): string {
             <?= deck_select($decks_slugs, 'deck1', 'deck1select'); ?>
             <span>contre</span>
             <?= deck_select($decks_slugs, 'deck2', 'deck2select'); ?>
+            <span class="text">gagnées par</span>
+            <select name="player" id="playerSelect">
+                <option value="Leandre">Léandre</option>
+                <option value="Lancelot">Lancelot</option>
+                <option value="all">Tous les joueurs</option>
+            </select>
             <span class="text">.</span>
         </p>
         <br>

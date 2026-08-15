@@ -103,6 +103,9 @@ function init_db() :void {
         FOREIGN KEY (deckId) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');
 
+    $content = file_get_contents(__DIR__ . '/sql/search_games.sql');
+    $pdo->exec($content);
+
     // Remplir les tables si elles sont vides
     $datas = file_get_contents(__DIR__ . '/datas.json');
     $datas = json_decode($datas);

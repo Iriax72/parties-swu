@@ -9,5 +9,5 @@
 - Ajouter une vérification des données du form coté client
 + Ajouter une belle gestion des erreurs renvoyée par l'api
 + Faire que la table résultat ne garde pas le réultat de la précedentes requetes quand la requete actuelle ne renvoie qu'un tableau vide
-- Mettre toutes les fonctions utilitaires dams /js/functions.js
++ Mettre toutes les fonctions utilitaires dams /js/functions.js
 - Vérifier qu’il y ait pas de problème liés aux fuseaux horaires dans la db

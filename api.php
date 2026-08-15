@@ -161,16 +161,13 @@ switch ($action) {
         break;
     
     case 'get_games':
-            verifyParams(['deck1', 'deck2', 'winning_deck', 'last_version_only']);
-        try {
-            $deck1 = isset($_REQUEST['deck1']) && is_numeric($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
-            $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
-            $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
-            $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
+        verifyParams(['deck1', 'deck2', 'winning_deck', 'last_version_only', 'winning_player']);
 
-        } catch (Throwable $error) {
-            error(500, $error->getMessage());
-        }
+        $deck1 = isset($_REQUEST['deck1']) && is_numeric($_REQUEST['deck1']) ? (int) $_REQUEST['deck1'] : null;
+        $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
+        $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
+        $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
+        $winning_player = $_REQUEST['winning_player'];
         /*
         if (!$historical) {
             try {
@@ -268,7 +265,9 @@ switch ($action) {
             error(500, $error->getMessage());
         }
         */
-        try {
+
+        // TODO: integrer $winning_player a la requete
+            /*
             $request = file_get_contents(__DIR__ . '/sql/search_games.sql');
             if ($request === false) {
                 throw new Error('le fichier est illisible');
@@ -276,7 +275,7 @@ switch ($action) {
             $stmt = $pdo->prepare($request);
             /*if (!isset($deck1) || !isset($deck2) || !isset($winning_deck) || !isset($last_version_only)) {
                 throw new Error('params incomolets: ' . $deck1. $deck2 . $winning_deck . $last_version_only);
-            }*/
+            }*//*
             try {
             $stmt->execute([
                 $last_version_only,    // 1: ? = 0
@@ -299,9 +298,33 @@ switch ($action) {
                 $deck1,                // 18: (? IS NULL
                 $deck1,                // 19: OR games.loser = ?)
             ]);
-            } catch (Throwable $e) {
-                throw new Error($e->getMessage() . '(erreur à la ligne $stmt->execute([...]);)' . "\ndeck1: $deck1, deck2: $deck2, winning_deck: $winning_deck, last_version_only: $last_version_only");
+            */
+        try {
+            $values = [
+                $deck1,
+                $deck2,
+                $winning_deck,
+                $last_version_only,
+                $winning_player,
+            ];
+
+            $quotedValues = array_map(function ($value) use ($pdo) {
+                if ($value === null) {
+                    return 'NULL';
+                }
+
+                if (is_int($value) || is_float($value)) {
+                    return (string) $value;
+                }
+
+                return $pdo->quote((string) $value);
+            }, $values);
+
+            $stmt = $pdo->query('CALL search_games(' . implode(', ', $quotedValues) . ')');
+            if ($stmt === false) {
+                throw new RuntimeException('La procédure search_games a échoué.');
             }
+
             $games = $stmt->fetchAll();
         } catch (Throwable $error) {
             error(500, 'Erreur lors de la requete SQL: ' . $error->getMessage());
