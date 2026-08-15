@@ -35,22 +35,6 @@ const datasPromise = getDatas()
         console.error('Erreur lors du chargement des données:', error);
     });
 
-// Fonctions utilitaires
-/**
- * 
- * @param {String} uri - L'uri de fichier à lire
- * @returns {String} Le contenu du fichier
- */ /*
-async function getFileContent(uri) {
-    const response = await fetch(uri);
-    // Attraper les erreurs
-    if (!response.ok) {
-        throw new Error(`Impossible de lire ${uri}: ${response.status}`);
-    }
-    return response.text();
-}
-*/
-
 //EventListeners
 decksWinrateBtn.addEventListener('click', async () => {
     const waitingText = document.createElement('p');

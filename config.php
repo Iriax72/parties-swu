@@ -53,18 +53,6 @@ function init_db() :void {
         officialName VARCHAR(12) NOT NULL
     );');
 
-    /*
-    $pdo->exec('
-    CREATE TABLE IF NOT EXISTS games (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        winner TINYINT NOT NULL,
-        FOREIGN KEY (winner) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-        loser TINYINT NOT NULL,
-        FOREIGN KEY (loser) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-        LeandreWon BOOL NOT NULL
-    );');
-    */
-
     $pdo->exec('
     CREATE TABLE IF NOT EXISTS cartes (
         id INT UNSIGNED PRIMARY KEY,

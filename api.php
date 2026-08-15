@@ -5,13 +5,11 @@ Ne renvoie pas de HTML
 Renvoie tout en json
 actions possibles:
 - add_game
-(- get_leaders_winrate)
 - get_decks_winrate
 - get_players_winrate
 - get_games
 - get_decks
 - add_deck
-todo passer par une action api pour ajouter les games a la db
 */
 
 function error(int $code, string $message) {
@@ -71,30 +69,6 @@ switch ($action) {
         echo json_encode(['success' => true]);
         break;
 
-    /* case 'get_leaders_winrate':
-        try {
-            $stmt = $pdo->query('SELECT winner, loser FROM games');
-            $games = $stmt->fetchAll();
-        } catch (Throwable $error) {
-            error(500, "erreur lors de la requete du winrate: $error");
-        }
-        $wins = repeat(0, 18);
-        $gamesPlayed = repeat(0, 18);
-        foreach ($games as $game) {
-            $winner = (int) $game['winner'];
-            $loser = (int) $game['loser'];
-            $wins[$winner - 1] ++;
-            $gamesPlayed[$winner - 1] ++;
-            $gamesPlayed[$loser - 1] ++;
-        }
-        $winrates = repeat(0, 18);
-        for ($i=0 ; $i < 18 ; $i++) {
-            $winrates[$i] = $gamesPlayed[$i] > 0 ? $wins[$i] / $gamesPlayed[$i] : -1;
-        }
-
-        echo json_encode(['success' => true, 'winrates' => $winrates]);
-        break;
-    */
     case 'get_decks_winrate':
         try {
             $stmt = $pdo->query('
@@ -171,137 +145,7 @@ switch ($action) {
         if ($winning_player === 'all' || $winning_player === 'null') {
             $winning_player = null;
         }
-        /*
-        if (!$historical) {
-            try {
-                $findDeckInfoStmt = $pdo->prepare('SELECT leaderId, baseColorId, name FROM decks WHERE id = :id LIMIT 1');
-                $findLatestDeckStmt = $pdo->prepare(
-                    'SELECT id FROM decks WHERE leaderId = :leaderId AND baseColorId = :baseColorId AND name = :name ORDER BY version DESC LIMIT 1'
-                );
 
-                if ($deck1 !== null) {
-                    $findDeckInfoStmt->execute([':id' => $deck1]);
-                    $deckInfo = $findDeckInfoStmt->fetch(PDO::FETCH_ASSOC);
-                    if ($deckInfo !== false) {
-                        $findLatestDeckStmt->execute($deckInfo);
-                        $latestDeckId = $findLatestDeckStmt->fetchColumn();
-                        if ($latestDeckId !== false) {
-                            $deck1 = (int) $latestDeckId;
-                        }
-                    }
-                }
-                if ($deck2 !== null) {
-                    $findDeckInfoStmt->execute([':id' => $deck2]);
-                    $deckInfo = $findDeckInfoStmt->fetch(PDO::FETCH_ASSOC);
-                    if ($deckInfo !== false) {
-                        $findLatestDeckStmt->execute($deckInfo);
-                        $latestDeckId = $findLatestDeckStmt->fetchColumn();
-                        if ($latestDeckId !== false) {
-                            $deck2 = (int) $latestDeckId;
-                        }
-                    }
-                }
-            } catch (Throwable $error) {
-                error(500, 'Impossible de déterminer la version la plus récente des decks: ' . $error->getMessage());
-            }
-        }
-
-        $query = '
-            SELECT
-                g.winner,
-                g.loser,
-                g.LeandreWon,
-                winner_deck.name AS winnerName,
-                loser_deck.name AS loserName
-            FROM games g
-            JOIN decks winner_deck ON g.winner = winner_deck.id
-            JOIN decks loser_deck ON g.loser = loser_deck.id
-            WHERE 1=1';
-        $params = [];
-
-        if ($deck1) {
-            switch ($winningLeader) {
-                case 'l1won':
-                    $query .= ' AND g.winner = :deck1';
-                    $params[':deck1'] = $deck1;
-                    break;
-                case 'l2won':
-                    $query .= ' AND g.loser = :deck1';
-                    $params[':deck1'] = $deck1;
-                    break;
-                case null:
-                    $query .= ' AND (g.winner = :deck1A OR g.loser = :deck1B)';
-                    $params[':deck1A'] = $deck1;
-                    $params[':deck1B'] = $deck1;
-                    break;
-                default:
-                    error(400, 'winningLeader contient une valeur inconnue: ' . $winningLeader);
-            }
-        }
-        if ($deck2) {
-            switch ($winningLeader) {
-                case 'l1won':
-                    $query .= ' AND g.loser = :deck2';
-                    $params[':deck2'] = $deck2;
-                    break;
-                case 'l2won':
-                    $query .= ' AND g.winner = :deck2';
-                    $params[':deck2'] = $deck2;
-                    break;
-                case null:
-                    $query .= ' AND (g.winner = :deck2A OR g.loser = :deck2B)';
-                    $params[':deck2A'] = $deck2;
-                    $params[':deck2B'] = $deck2;
-                    break;
-                default:
-                    error(400, 'winningLeader contient une valeur inconue: ' . $winningLeader);
-            }
-        }
-        $query .= ';';
-
-        try {
-            $stmt = $pdo->prepare($query);
-            $stmt->execute($params);
-            $games = $stmt->fetchAll();
-            echo json_encode(['success' => true, 'data' => $games]);
-        } catch (Throwable $error) {
-            error(500, $error->getMessage());
-        }
-        */
-
-        // TODO: integrer $winning_player a la requete
-            /*
-            $request = file_get_contents(__DIR__ . '/sql/search_games.sql');
-            if ($request === false) {
-                throw new Error('le fichier est illisible');
-            }
-            $stmt = $pdo->prepare($request);
-            /*if (!isset($deck1) || !isset($deck2) || !isset($winning_deck) || !isset($last_version_only)) {
-                throw new Error('params incomolets: ' . $deck1. $deck2 . $winning_deck . $last_version_only);
-            }*//*
-            try {
-            $stmt->execute([
-                $last_version_only,    // 1: ? = 0
-                $winning_deck,         // 2: WHEN ? = 1
-                $deck1,                // 3: (? IS NULL
-                $deck1,                // 4: OR games.winner = ?)
-                $deck2,                // 5: (? IS NULL
-                $deck2,                // 6: OR games.loser = ?)
-                $winning_deck,         // 7: WHEN ? = 2
-                $deck2,                // 8: (? IS NULL
-                $deck2,                // 9: OR games.winner = ?)
-                $deck1,                // 10: (? IS NULL
-                $deck1,                // 11: OR games.loser = ?)
-                $deck1,                // 12: (? IS NULL
-                $deck1,                // 13: OR games.winner = ?)
-                $deck2,                // 14: (? IS NULL
-                $deck2,                // 15: OR games.loser = ?)
-                $deck2,                // 16: (? IS NULL
-                $deck2,                // 17: OR games.winner = ?)
-                $deck1,                // 18: (? IS NULL
-                $deck1,                // 19: OR games.loser = ?)
-            ]);
-            */
         try {
             $values = [
                 $deck1,

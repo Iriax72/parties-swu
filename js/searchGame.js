@@ -30,20 +30,6 @@ const dataPromise = (async () => {
     throw error
 });
 
-// Fonction utilitaire
-/**
- * @param {string} uri - L'uri du fichier à lire
- */ /*
-async function getFileContent (uri) {
-    const response = await fetch(uri);
-    // Attraper les erreurs
-    if (!response.ok) {
-        throw new Error(`Impossible de lire ${uri}: ${response.status}`);
-    }
-    return response.text();
-} 
-*/
-
 /**
  * @param {Array} games - Un tableau des parties à afficher
  * @description Affiche les parties dans le tableau des résultats
