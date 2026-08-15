@@ -98,7 +98,7 @@ submitBtn.addEventListener('click', (event) => {
         : resultSelect.value === 'lose' ? 2
         : null;
 
-    const winning_player = playerSelect.value === 'all' ? null : playerSelect.value;
+    const winning_player = playerSelect.value === 'all' ? 'all' : playerSelect.value;
 
     const params = {
         deck1: deck1select.value !== 'all' ? Number(deck1select.value) : null,

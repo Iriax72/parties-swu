@@ -167,7 +167,10 @@ switch ($action) {
         $deck2 = isset($_REQUEST['deck2']) && is_numeric($_REQUEST['deck2']) ? (int) $_REQUEST['deck2'] : null;
         $winning_deck = isset($_REQUEST['winning_deck']) && is_numeric($_REQUEST['winning_deck']) ? (int) $_REQUEST['winning_deck'] : null;
         $last_version_only = in_array($_REQUEST['last_version_only'], [0, 1]) ? $_REQUEST['last_version_only'] : 0;
-        $winning_player = $_REQUEST['winning_player'];
+        $winning_player = $_REQUEST['winning_player'] ?? null;
+        if ($winning_player === 'all' || $winning_player === 'null') {
+            $winning_player = null;
+        }
         /*
         if (!$historical) {
             try {
