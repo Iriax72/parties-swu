@@ -3,7 +3,7 @@ body {
 }
 
 .error {
-    background-color: #ee3535;
+    background-color: #ffbcbc;
     border: 3px solid #ee0000;
     color: #ee0000;
     display: flex;
