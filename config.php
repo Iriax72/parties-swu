@@ -104,6 +104,7 @@ function init_db() :void {
     );');
 
     $content = file_get_contents(__DIR__ . '/sql/search_games.sql');
+    $pdo->exec('DROP PROCEDURE IF EXISTS search_games;');
     $pdo->exec($content);
 
     // Remplir les tables si elles sont vides
