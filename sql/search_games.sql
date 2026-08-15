@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE search_games(
+CREATE OR REPLACE PROCEDURE search_games (
     IN p_deck1 INT UNSIGNED,
     IN p_deck2 INT UNSIGNED,
     IN p_winning_deck TINYINT UNSIGNED,
