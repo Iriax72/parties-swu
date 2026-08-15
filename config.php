@@ -38,6 +38,7 @@ function get_db_connection() :PDO {
 function init_db() :void {
     $pdo = get_db_connection();
 
+    /*
     // Créer les tables
 
     $pdo->exec('
@@ -90,10 +91,11 @@ function init_db() :void {
         FOREIGN KEY (cardId) REFERENCES cartes(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         FOREIGN KEY (deckId) REFERENCES decks(id) ON DELETE RESTRICT ON UPDATE RESTRICT
     );');
+    */
 
-    $content = file_get_contents(__DIR__ . '/sql/search_games.sql');
+    $sql = file_get_contents(__DIR__ . '/sql/init.sql');
     $pdo->exec('DROP PROCEDURE IF EXISTS search_games;');
-    $pdo->exec($content);
+    $pdo->exec($sql);
 
     // Remplir les tables si elles sont vides
     $datas = file_get_contents(__DIR__ . '/datas.json');
