@@ -71,6 +71,7 @@ switch ($action) {
 
     case 'get_decks_winrate':
         try {
+            /*
             $stmt = $pdo->query('
             WITH decks_games AS (
                 SELECT
@@ -101,6 +102,8 @@ switch ($action) {
             GROUP BY dg.deck_id, dg.deck_name
             ORDER BY winrate DESC
             ');
+            */
+            $pdo->query('SELECT deck_id, winrate FROM decks_winrates');
             $games = $stmt->fetchAll();
             $winrates = [];
             foreach ($games as $game) {
@@ -116,11 +119,12 @@ switch ($action) {
     
     case 'get_players_winrate':
         try {
-            $stmt = $pdo->query('SELECT LeandreWon FROM games');
+            $stmt = $pdo->query('SELECT nb_games, winrateLeandre, winrateLancelot FROM players_winrates');
             $rows = $stmt->fetchAll();
         } catch (Throwable $error) {
             error(500, "erreur lors de la requete du winrate: $error");
         }
+        /*
         $victorys = 0;
         $games = 0;
         foreach ($rows as $row) {
@@ -131,7 +135,8 @@ switch ($action) {
         }
         $winrateLeandre = $games > 0 ? $victorys / $games : -1;
         $winrateLancelot = 1 - $winrateLeandre;
-        echo json_encode(['success' => true, 'winrateLeandre' => $winrateLeandre, 'winrateLancelot' => $winrateLancelot]);
+        */
+        echo json_encode(['success' => true, 'winrateLeandre' => $rows['winrateLeandre'], 'winrateLancelot' => $rows['winrateLancelot'], 'nb_games' => $rows['nb_games']]);
         break;
     
     case 'get_games':
@@ -251,7 +256,6 @@ switch ($action) {
         }
         break;
 
-    
     default:
         error(400, 'action inconnue');
 }

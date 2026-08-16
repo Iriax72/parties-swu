@@ -46,6 +46,49 @@ CREATE TABLE IF NOT EXISTS cartes_dans_decks (
 );
 
 
+-- Créer les vues
+
+CREATE VIEW OR REPLACE decks_winrates AS 
+WITH decks_games AS (
+    SELECT
+        winning_deck.id AS deck_id,
+        winning_deck.name AS deck_name,
+        1 AS isWin
+    FROM games g
+    JOIN decks winning_deck ON g.winner = winning_deck.id
+
+    UNION ALL
+    SELECT
+        losing_deck.id AS deck_id,
+        losing_deck.name AS deck_name,
+        0 AS isWin
+    FROM games g
+    JOIN decks losing_decks ON g.loser = losing_deck.id
+)
+SELECT
+    deck_id
+    deck_name
+    COUNT(*) AS total_games
+    SUM(isWin) AS total_wins
+    total_games - total_wins AS total_losses
+    ROUND(total_wins / total_games, 4) AS winrate
+FROM decks_games
+GROUP BY deck_id, deck_name
+ORDER BY winrate DESC;
+
+CREATE VIEW OR REPLACE players_winrates AS
+SELECT
+    COUNT(*) AS nb_games
+    COUNT(LeandreWon) AS LeandreVictory
+    CASE
+        WHEN nb_games > 0 THEN
+            ROUND(LeandreVictory / nb_games, 2) AS winrateLeandre
+            1 - LeandreWinrate AS winrateLancelot
+        ELSE
+            -1 AS winrateLeandre
+            -1 AS winrateLancelot
+FROM games
+
 -- Créer les procédures
 
 CREATE PROCEDURE search_games (

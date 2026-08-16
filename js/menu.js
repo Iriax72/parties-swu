@@ -79,6 +79,7 @@ playersWinrateBtn.addEventListener('click', () => {
     document.body.append(popup);
     requestApi('get_players_winrate', (data) => {
         waitingText.remove();
+        popup.append(`Winrate sur ${data.nb_games} parties:`)
         popup.append(createBox(['Léandre : ', String(Math.round(data.winrateLeandre * 100)), '%']));
         popup.append(createBox(['Lancelot : ', String(Math.round(data.winrateLancelot * 100)), '%']));
     });
