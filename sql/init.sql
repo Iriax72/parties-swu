@@ -65,7 +65,7 @@ WITH decks_games AS (
         losing_deck.name AS deck_name,
         0 AS isWin
     FROM games g
-    JOIN decks losing_decks ON g.loser = losing_deck.id
+    JOIN decks losing_decks ON g.loser = losing_decks.id
 )
 SELECT
     deck_id,
