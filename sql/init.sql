@@ -72,8 +72,8 @@ SELECT
     deck_name,
     COUNT(*) AS total_games,
     SUM(isWin) AS total_wins,
-    total_games - total_wins AS total_losses,
-    ROUND(total_wins / total_games, 4) AS winrate
+    COUNT(*) - SUM(isWin) AS total_losses,
+    ROUND(SUM(isWin) / COUNT(*), 4) AS winrate
 FROM decks_games
 GROUP BY deck_id, deck_name
 ORDER BY winrate DESC;
@@ -87,8 +87,8 @@ SELECT
     COUNT(LeandreWon) AS LeandreVictory,
     CASE
         WHEN nb_games > 0 THEN
-            ROUND(LeandreVictory / nb_games, 2) AS winrateLeandre,
-            1 - LeandreWinrate AS winrateLancelot
+            ROUND(COUNT(LeandreWon) / COUNT(*), 2) AS winrateLeandre,
+            1 - ROUND(COUNT(LeandreWon) / COUNT(*), 2) AS winrateLancelot
         ELSE
             -1 AS winrateLeandre,
             -1 AS winrateLancelot
