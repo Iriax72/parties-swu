@@ -71,72 +71,37 @@ switch ($action) {
 
     case 'get_decks_winrate':
         try {
-            /*
-            $stmt = $pdo->query('
-            WITH decks_games AS (
-                SELECT
-                    winning_deck.id AS deck_id,
-                    winning_deck.name AS deck_name,
-                    1 AS isWin
-                FROM games g
-                JOIN decks winning_deck ON g.winner = winning_deck.id
-
-                UNION ALL
-
-                SELECT
-                    losing_deck.id AS deck_id,
-                    losing_deck.name AS deck_name,
-                    0 AS isWin
-                FROM games g
-                JOIN decks losing_deck ON g.loser = losing_deck.id
-            )
-
-            SELECT
-                dg.deck_id AS deck_id,
-                dg.deck_name AS deck_name,
-                COUNT(*) AS total_games,
-                SUM(dg.isWin) AS total_wins,
-                COUNT(*) - SUM(dg.isWin) AS total_losses,
-                ROUND(SUM(dg.isWin) / COUNT(*), 4) AS winrate
-            FROM decks_games dg
-            GROUP BY dg.deck_id, dg.deck_name
-            ORDER BY winrate DESC
-            ');
-            */
-            $pdo->query('SELECT deck_id, winrate FROM decks_winrates');
-            $games = $stmt->fetchAll();
+            $stmt = $pdo->query('SELECT deck_id, winrate FROM decks_winrates');
+            $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $winrates = [];
             foreach ($games as $game) {
-                $winrates[$game['deck_id']] = (float) $game['winrate'];
+                $winrates[(int) $game['deck_id']] = (float) $game['winrate'];
             }
 
             echo json_encode(['success' => true, 'winrates' => $winrates]);
             break;
         } catch (Throwable $error) {
-            error(500,  "erreur lors de la requete du winrate: $error");
-            
+            error(500, "erreur lors de la requete du winrate: $error");
         }
     
     case 'get_players_winrate':
         try {
             $stmt = $pdo->query('SELECT nb_games, winrateLeandre, winrateLancelot FROM players_winrates');
-            $rows = $stmt->fetchAll();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row === false) {
+                echo json_encode(['success' => true, 'winrateLeandre' => 0, 'winrateLancelot' => 0, 'nb_games' => 0]);
+                break;
+            }
         } catch (Throwable $error) {
             error(500, "erreur lors de la requete du winrate: $error");
         }
-        /*
-        $victorys = 0;
-        $games = 0;
-        foreach ($rows as $row) {
-            if ((bool) $row['LeandreWon']) {
-                $victorys ++;
-            }
-            $games ++;
-        }
-        $winrateLeandre = $games > 0 ? $victorys / $games : -1;
-        $winrateLancelot = 1 - $winrateLeandre;
-        */
-        echo json_encode(['success' => true, 'winrateLeandre' => $rows['winrateLeandre'], 'winrateLancelot' => $rows['winrateLancelot'], 'nb_games' => $rows['nb_games']]);
+
+        echo json_encode([
+            'success' => true,
+            'winrateLeandre' => (float) ($row['winrateLeandre'] ?? 0),
+            'winrateLancelot' => (float) ($row['winrateLancelot'] ?? 0),
+            'nb_games' => (int) ($row['nb_games'] ?? 0),
+        ]);
         break;
     
     case 'get_games':

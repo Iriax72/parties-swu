@@ -71,9 +71,12 @@ SELECT
     deck_id,
     deck_name,
     COUNT(*) AS total_games,
-    SUM(isWin) AS total_wins,
-    COUNT(*) - SUM(isWin) AS total_losses,
-    ROUND(SUM(isWin) / COUNT(*), 4) AS winrate
+    COALESCE(SUM(isWin), 0) AS total_wins,
+    COUNT(*) - COALESCE(SUM(isWin), 0) AS total_losses,
+    CASE
+        WHEN COUNT(*) > 0 THEN ROUND(COALESCE(SUM(isWin), 0) / COUNT(*), 4)
+        ELSE 0
+    END AS winrate
 FROM decks_games
 GROUP BY deck_id, deck_name
 ORDER BY winrate DESC;
@@ -84,14 +87,14 @@ DROP VIEW IF EXISTS players_winrates;
 CREATE VIEW players_winrates AS
 SELECT
     COUNT(*) AS nb_games,
-    SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END) AS LeandreVictory,
+    COALESCE(SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END), 0) AS LeandreVictory,
     CASE
-        WHEN COUNT(*) > 0 THEN ROUND(SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END) / COUNT(*), 2)
-        ELSE -1
+        WHEN COUNT(*) > 0 THEN ROUND(COALESCE(SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END), 0) / COUNT(*), 2)
+        ELSE 0
     END AS winrateLeandre,
     CASE
-        WHEN COUNT(*) > 0 THEN ROUND((COUNT(*) - SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END)) / COUNT(*), 2)
-        ELSE -1
+        WHEN COUNT(*) > 0 THEN ROUND((COUNT(*) - COALESCE(SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END), 0)) / COUNT(*), 2)
+        ELSE 0
     END AS winrateLancelot
 FROM games;
 
