@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS cartes_dans_decks (
 
 -- Créer les vues
 
-CREATE VIEW OR REPLACE decks_winrates AS 
+DROP VIEW OF EXISTS decks_winrates;
+
+CREATE VIEW decks_winrates AS 
 WITH decks_games AS (
     SELECT
         winning_deck.id AS deck_id,
@@ -76,7 +78,10 @@ FROM decks_games
 GROUP BY deck_id, deck_name
 ORDER BY winrate DESC;
 
-CREATE VIEW OR REPLACE players_winrates AS
+
+DROP VIEW OF EXISTS players_winrates;
+
+CREATE VIEW players_winrates AS
 SELECT
     COUNT(*) AS nb_games
     COUNT(LeandreWon) AS LeandreVictory
@@ -90,6 +95,8 @@ SELECT
 FROM games
 
 -- Créer les procédures
+
+DROP PROCEDURE IF EXISTS search_games;
 
 CREATE PROCEDURE search_games (
     IN p_deck1 INT UNSIGNED,
