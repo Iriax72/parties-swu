@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS cartes_dans_decks (
 
 -- Créer les vues
 
-DROP VIEW OF EXISTS decks_winrates;
+DROP VIEW IF EXISTS decks_winrates;
 
 CREATE VIEW decks_winrates AS 
 WITH decks_games AS (
@@ -79,7 +79,7 @@ GROUP BY deck_id, deck_name
 ORDER BY winrate DESC;
 
 
-DROP VIEW OF EXISTS players_winrates;
+DROP VIEW IF EXISTS players_winrates;
 
 CREATE VIEW players_winrates AS
 SELECT
