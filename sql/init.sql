@@ -84,15 +84,16 @@ DROP VIEW IF EXISTS players_winrates;
 CREATE VIEW players_winrates AS
 SELECT
     COUNT(*) AS nb_games,
-    COUNT(LeandreWon) AS LeandreVictory,
+    SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END) AS LeandreVictory,
     CASE
-        WHEN nb_games > 0 THEN
-            ROUND(COUNT(LeandreWon) / COUNT(*), 2) AS winrateLeandre,
-            1 - ROUND(COUNT(LeandreWon) / COUNT(*), 2) AS winrateLancelot
-        ELSE
-            -1 AS winrateLeandre,
-            -1 AS winrateLancelot
-FROM games
+        WHEN COUNT(*) > 0 THEN ROUND(SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END) / COUNT(*), 2)
+        ELSE -1
+    END AS winrateLeandre,
+    CASE
+        WHEN COUNT(*) > 0 THEN ROUND((COUNT(*) - SUM(CASE WHEN LeandreWon = 1 THEN 1 ELSE 0 END)) / COUNT(*), 2)
+        ELSE -1
+    END AS winrateLancelot
+FROM games;
 
 -- Créer les procédures
 
